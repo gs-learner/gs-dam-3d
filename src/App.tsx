@@ -3,6 +3,7 @@ import './App.css';
 import Render from './render';
 
 const App: React.FC = () => {
+  let aa = ''
   return (
     <div className="App">
       <div id='canvas-frame'>
