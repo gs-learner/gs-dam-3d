@@ -1,41 +1,57 @@
+import { WebGLRenderer } from "three"
+
 // import * as THREE from 'three'
 
 // import { MapColorToDiscrete, BeginingPrime, Integration, ComputeTransformMatrix } from './utils'
 
-
 export class CanvasManager {
-    canvas = null
     w = 0
     h = 0
     pickPosition = {
         x: 0,
         y: 0
     }
-    frame = null
+    canvas: HTMLCanvasElement
+    frame : HTMLElement
+    renderer ?: WebGLRenderer
 
-    constructor(frame, canvas) {
+    constructor(frame : HTMLElement, canvas : HTMLCanvasElement, renderer?: WebGLRenderer) {
         this.clearPickPosition()
         this.canvas = canvas
         this.w = frame.clientWidth
         this.h = frame.clientHeight
         frame.appendChild(canvas)
-        frame.mouseout = ()=> this.clearPickPosition()
+        frame.onmouseout = ()=> this.clearPickPosition()
         this.frame = frame
+        this.renderer = renderer
+        if(renderer) {
+            renderer.setSize(this.w, this.h)
+        }
+
+        frame.onresize = (ev)=>{
+            console.log('resize')
+            this.w = frame.clientWidth
+            this.h = frame.clientHeight
+            if(renderer) {
+                renderer.setSize(this.w, this.h)
+            }
+        }
     }
     
-    set onmousemove(fn) {
+    set onmousemove(fn : any) {
         this.frame.onmousemove = fn
     }
 
-    set onmousedown(fn) {
+    
+    set onmousedown(fn : any) {
         this.frame.onmousedown = fn
     }
 
-    set onmouseup(fn) {
+    set onmouseup(fn : any) {
         this.frame.onmouseup = fn
     }
 
-    set onclick(fn) {
+    set onclick(fn : any) {
         this.frame.onclick = fn
     }
 
@@ -43,7 +59,7 @@ export class CanvasManager {
         return this.w / this.h
     }
 
-    getCanvasRelativePosition(event) {
+    getCanvasRelativePosition(event : any) {
         const rect = this.canvas.getBoundingClientRect();
         return {
           x: event.clientX - rect.left,
@@ -51,7 +67,7 @@ export class CanvasManager {
         };
     }
 
-    setPickPosition(event) {
+    setPickPosition(event : any) {
         let pickPosition = this.pickPosition
         const pos = this.getCanvasRelativePosition(event);
         pickPosition.x = (pos.x / this.w) *  2 - 1;
