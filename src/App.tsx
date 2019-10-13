@@ -3,7 +3,8 @@ import './App.css';
 import Render from './render';
 
 const App: React.FC = () => {
-  let aa = 'cccccc'
+  let aa = 'ccc'
+  let q = 'uuu'
   return (
     <div className="App">
       <div id='canvas-frame'>
