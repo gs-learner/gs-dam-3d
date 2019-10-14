@@ -2,13 +2,12 @@ import React, {useState} from 'react';
 import './App.css';
 import Render from './render';
 import CustomizedRatings from "./bits/rate"
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, Theme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-
-
+import Edit from './bits/edit'
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState(createMuiTheme({
@@ -17,6 +16,8 @@ const App: React.FC = () => {
     },
   }));
   const [dark, setDark] = useState(false);
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -42,6 +43,9 @@ const App: React.FC = () => {
         setDark(!dark)
       }}
     >Click me</button>
+    
+      <Edit />
+
     </div>
     
       </CssBaseline>

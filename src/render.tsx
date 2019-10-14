@@ -5,6 +5,16 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Object3D, Box3, Group, MeshStandardMaterial, Mesh } from 'three'
+import Paper from '@material-ui/core/Paper';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles =  makeStyles((theme: Theme)=>
+    createStyles({
+        root: {
+          padding: theme.spacing(3, 2),
+        },
+      })
+)
 interface P {
     url?: string
 }
