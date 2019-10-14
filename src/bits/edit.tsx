@@ -12,7 +12,8 @@ const Edit : React.FC = (props)=>{
         fetch('/api/set_tags', {
             method: 'POST',
             body: JSON.stringify({
-                tags: [tag]
+                tags: [tag],
+                id: id
             })
         })
     };
