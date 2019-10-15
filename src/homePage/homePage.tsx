@@ -91,22 +91,7 @@ const CataIcon: React.FC<iconInfo> = (props) =>{
     )
 }
 
-const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
-    const iconInfos: iconInfos = props;
-    return(
-        <div className="BodyTopHomepage">
-            <div className="centerPanel">
-            {
-                props.cata.map((v, idx)=>{
-                    return(
-                        <CataIcon name={v.name} url={v.url} key={idx}/>
-                    )
-                })
-            }
-            </div>
-        </div>
-    )
-}
+
 const CataPreView: React.FC<iconInfo> = (props)=>{
     return(
         <div className="CataPreView">
@@ -164,6 +149,22 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
         </div>
     )
 }
+const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
+    const iconInfos: iconInfos = props;
+    return(
+        <div className="BodyTopHomepage">
+            <div className="centerPanel">
+            {
+                props.cata.map((v, idx)=>{
+                    return(
+                        <CataIcon name={v.name} url={v.url} key={idx}/>
+                    )
+                })
+            }
+            </div>
+        </div>
+    )
+}
 const BodyMainHomepage: React.FC=()=>{
     const cata:iconInfo = {name:'cata', url:'/image/cin.jpg', disp:'disp catalog'};
     const pkgs:preViewPackages = {preViewPackages:[
@@ -185,7 +186,11 @@ const BodyMainHomepage: React.FC=()=>{
 const BodyHomePage: React.FC = () =>{
     return(
         <div className="BodyHomePage">
-            <BodyTopHomepage cata={[{url:'/image/cin.jpg',name:'建筑'},{url:'/image/cin.jpg',name:'武器'},{url:'/image/cin.jpg',name:'车辆'}]}/>
+            <BodyTopHomepage cata={[
+                {url:'/image/cin.jpg',name:'建筑'},
+                {url:'/image/cin.jpg',name:'武器'},
+                {url:'/image/cin.jpg',name:'车辆'},
+                ]}/>
             <BodyMainHomepage/>
         </div>
     )
