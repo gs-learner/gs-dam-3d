@@ -82,7 +82,7 @@
 .PreViewBar{
     padding: 20px 50px 20px 50px;
     transition: 0.4s;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 .PreViewBar:hover{
     background-color: rgba(204, 204, 204, 0.61);
@@ -121,6 +121,14 @@
     clear: both;
     display: block;
 }
+
+
+
+
+
+
+
+/* the below is most commont componet which has to be refined well */
 .Package{
     float: left;
     position: relative;
@@ -133,12 +141,13 @@
 }
 .Package div.Package-up{
     height: 135px;
+    cursor: pointer;
 }
-.Package div.Package-up:hover{
+.Package div.Package-up:hover > img{
     filter: brightness(50%);
 }
-.Package div.Package-up:hover > div.zoom-icon{
-    display: block;
+.Package div.Package-up:hover > div.icon-mask{
+    display: unset;
 }
 .Package div.Package-up div.icon-mask{
     position: absolute;
@@ -146,13 +155,60 @@
     border-top-right-radius: 10px;
     width: 100%;
     height: 135px;
+    z-index: 20;
+    display: none;
+    /* overflow: hidden; */
 }
 .Package div.Package-up div.zoom-icon{
     position: absolute;
     top: 40%;
     left: 45%;
+    cursor: progress;
+    transition: 0.5s;
 }
-.Package div.Package-up img{
+.Package div.Package-up div.zoom-icon:hover + div.bigger-img{
+    display: unset;
+}
+.icon-mask div.bigger-img{
+    position: absolute;
+    left: 106%;
+    display: none;
+    border-radius: 10px;
+    background: rgb(49, 49, 49);
+    color: white;
+    text-align: center;
+}
+.icon-mask div.bigger-img::before, .icon-mask div.bigger-img::after{
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    right: 100%;
+    position: absolute;
+    width: 0;
+}
+.icon-mask div.bigger-img::after{
+    border-width: 10px;
+    border-right-color: rgb(49, 49, 49);
+    top: 20px;
+}
+.icon-mask div.bigger-img::before{
+    border-width: 12px;
+    border-right-color: rgb(49, 49, 49);
+    top: 18px;
+}
+.icon-mask div.bigger-img img{
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    width:500px;
+    height: 300px;
+}
+.icon-mask div.bigger-img h2{
+    margin: 5px auto 10px auto;
+}
+.Package div.Package-up div.zoom-icon:hover{
+    filter: opacity(30%);
+}
+.Package div.Package-up img.small-img{
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     width:225px;

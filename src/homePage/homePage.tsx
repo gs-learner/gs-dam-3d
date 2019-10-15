@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
 import { Icon } from '@material-ui/core';
@@ -118,13 +118,19 @@ const CataPreView: React.FC<iconInfo> = (props)=>{
     )
 }
 const Package: React.FC<preViewPackage>=(props)=>{
+    // const [action, setAction] = useState(false)
+
     return(
         <div className="Package">
             <div className="Package-up">
-                <div className="icon-mask">
+                <div className="icon-mask"  >
                     <div className="zoom-icon"><ZoomInIcon htmlColor='white' fontSize='large'/></div>
+                    <div className="bigger-img">
+                        <img src={props.imgUrl}></img>
+                        <h2>{props.name}</h2>
+                    </div>
                 </div>
-                <img src={props.imgUrl}></img>
+                <img className="small-img" src={props.imgUrl}></img>
             </div>
             <div className="Package-down">
                 <div className="modelName">    {props.name}</div>
