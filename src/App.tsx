@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import Render from './render';
 import CustomizedRatings from "./bits/rate";
-import HomePage from './homePage/homePage';
+import {HomePage} from './homePage/homePage';
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';

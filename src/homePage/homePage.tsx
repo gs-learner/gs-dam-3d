@@ -17,7 +17,7 @@ interface iconInfo{
     url?: string;
     disp?: string;
 }
-interface iconInfos{
+export interface iconInfos{
     cata:iconInfo[];
 }
 interface preViewPackage{
@@ -40,7 +40,7 @@ const TotalNum: React.FC<TotalNum> = (props) =>{
         </div>
     )
 }
-const LogBar: React.FC = () =>{
+export const LogBar: React.FC = () =>{
     return(
         <div className="LogBar">
             <SignIn/>
@@ -102,7 +102,7 @@ const CataPreView: React.FC<iconInfo> = (props)=>{
         </div>
     )
 }
-const Package: React.FC<preViewPackage>=(props)=>{
+export const Package: React.FC<preViewPackage>=(props)=>{
     // const [action, setAction] = useState(false)
 
     return(
@@ -149,7 +149,7 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
         </div>
     )
 }
-const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
+export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     const iconInfos: iconInfos = props;
     return(
         <div className="BodyTopHomepage">
@@ -195,7 +195,7 @@ const BodyHomePage: React.FC = () =>{
         </div>
     )
 }
-const HomePage: React.FC = () => {
+export const HomePage: React.FC = () => {
 
     return(
         <div>
@@ -204,5 +204,3 @@ const HomePage: React.FC = () => {
         </div>
     )
 }
-
-export default HomePage;
