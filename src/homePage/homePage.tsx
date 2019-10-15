@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
-import { Icon } from '@material-ui/core';
+import { Icon, Grid } from '@material-ui/core';
 import SignIn from '../bits/buttonSignIn'
 import SignUp from '../bits/buttonSignUp'
+import '../fonts/proxima-nova.css'
+
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 
 interface TotalNum{
@@ -118,9 +120,12 @@ export const Package: React.FC<preViewPackage>=(props)=>{
                 <img className="small-img" src={props.imgUrl}></img>
             </div>
             <div className="Package-down">
-                <div className="modelName">    {props.name}</div>
-                <div className="modelFormat">    {props.format}</div>
-                <div className="modelAuthor">   @{props.author}</div>
+                <div>
+                <div className="modelName" style={{display: 'inline-block', width:'50%'}}>    {props.name}</div>
+                <div className="modelFormat" style={{display: 'inline-block', textAlign:'right', width:'50%'}}>{props.format}</div>
+                </div>
+                
+                <div className="modelAuthor">  {props.author}</div>
             </div>
         </div>
     )
@@ -168,13 +173,14 @@ export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
 const BodyMainHomepage: React.FC=()=>{
     const cata:iconInfo = {name:'cata', url:'/image/cin.jpg', disp:'disp catalog'};
     const pkgs:preViewPackages = {preViewPackages:[
-        {imgUrl:'/image/gun.jpeg',name:'gun',format:'.gltm',author:'gltm'},
-        {imgUrl:'/image/gun.jpeg',name:'gun',format:'.gltm',author:'gltm'},
-        {imgUrl:'/image/gun.jpeg',name:'gun',format:'.gltm',author:'gltm'},
-        {imgUrl:'/image/gun.jpeg',name:'gun',format:'.gltm',author:'gltm'},
-        {imgUrl:'/image/gun.jpeg',name:'gun',format:'.gltm',author:'gltm'},
-        {imgUrl:'/image/gun.jpeg',name:'gun',format:'.gltm',author:'gltm'},
-    ]};
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+    ]}
+
     return(
         <div className="BodyMainHomepage">
             <PreViewBar cata={cata} preViewPackages={pkgs}/>

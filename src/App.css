@@ -22,9 +22,3 @@
 .App-link {
   color: #09d3ac;
 }
-
-#canvas-frame {
-  position: absolute;
-  width: 90%;
-  height: 100%;
-}

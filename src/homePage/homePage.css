@@ -132,12 +132,13 @@
 .Package{
     float: left;
     position: relative;
-    border-radius: 10px;
+    border-radius: 5px;
     width: 225px;
-    height: 200px;
+    /* height: 200px; */
     background-color: rgba(255, 255, 255, 0.349);
-    box-shadow: 0 3px 3px 3px rgba(168, 168, 168, 0.349);
+    box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.2), 0px 1px 6px -1px rgba(0,0,0,0.10), 0px 1px 8px 0px rgba(0,0,0,0.04);
     margin: 0px 25px 30px 0px;
+    /* overflow: hidden; */
 }
 .Package div.Package-up{
     height: 135px;
@@ -209,32 +210,37 @@
     filter: opacity(30%);
 }
 .Package div.Package-up img.small-img{
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     width:225px;
     height:135px;
 }
 .Package div.Package-down{
-    padding: 2px 8px;
+    padding: 4px 10px;
     text-align: left;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 .Package div.Package-down div.modelName{
-    font-weight: 800;
+    font-weight: 400;
+    font-size: medium;
 }
 .Package div.Package-down div.modelName::before{
-    content: 'Name';
+    /* content: 'Name'; */
 }
 .Package div.Package-down div.modelFormat{
-    color: grey;
+    font-size: small;
+    color: rgba(0, 0, 0, 0.54);
 }
 .Package div.Package-down div.modelFormat::before{
-    content: 'Format';
+    /* content: 'Format'; */
 }
 .Package div.Package-down div.modelAuthor{
-    font-weight: 600;
-    color: rgb(98, 173, 0);
+    font-size: small;
+    font-weight: 400;
+    color: /* rgb(98, 173, 0); #4db6ac;rgba(0, 0, 0, 0.54);*/#00796b;
+
 }
 .Package div.Package-down div.modelAuthor::before{
-    content: 'Author';
+    /*content: 'Author';*/
 }
 

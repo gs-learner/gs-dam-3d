@@ -4,7 +4,24 @@ import * as THREE from 'three'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Object3D, Box3, Group, MeshStandardMaterial, Mesh } from 'three'
+import { Object3D, Box3, Group, MeshStandardMaterial, Mesh, Vector3 } from 'three'
+import Paper from '@material-ui/core/Paper';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+
+const useStyles =  makeStyles((theme: Theme)=>
+    createStyles({
+        root: {
+          padding: theme.spacing(3, 2),
+          position: 'absolute',
+          left: 0,
+          top: 0
+        },
+      })
+)
 interface P {
     url?: string
     openCtrl?:boolean
@@ -21,15 +38,40 @@ const Render : React.FC<P> = (props)=>{
     }, [props.url])
 
     return (
-        <div>
-            <button
-                onClick={()=>{
-                    if(handle) {
-                        handle.setWireframe(wireFrame)
-                    }
-                    setWireFrame(!wireFrame);
-                }}
-            >Wireframe</button>
+        <div style={{
+            position: 'absolute'
+        }}>
+            <Paper>
+            <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="flex-start"
+            >
+            <Grid item>
+            <FormControlLabel
+                control={
+                <Checkbox
+                    checked={!wireFrame}
+                    onChange={()=>{setWireFrame(!wireFrame); 
+                        if(handle) {
+                            handle.setWireframe(wireFrame)
+                        }
+                    }}
+                />
+                }
+                label="Wireframe"
+            />
+            </Grid>
+            <Grid item>
+            <Button variant="outlined" color="primary" onClick={()=>{
+                if(handle) handle.resetCamara()
+            }}>
+                Reset Camera
+            </Button>
+            </Grid>
+            </Grid>
+            </Paper>
         </div>
     )
 }
@@ -131,6 +173,9 @@ return {
                 }
             })
         }
+    },
+    resetCamara: ()=>{
+        control.reset()
     }
 }
 

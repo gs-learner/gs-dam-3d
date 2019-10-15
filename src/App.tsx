@@ -9,8 +9,8 @@ import blue from '@material-ui/core/colors/blue';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-
-
+import Edit from './bits/edit'
+import DetailPanel from './detail-panel'
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState(createMuiTheme({
@@ -19,6 +19,8 @@ const App: React.FC = () => {
     },
   }));
   const [dark, setDark] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false)
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -44,7 +46,10 @@ const App: React.FC = () => {
         setDark(!dark)
       }}
     >Click me</button> */}
+    <button onClick={()=>setOpenDetail(true)}>Show Detail</button>
+    <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
     <HomePage/>
+
     </div>
     
       </CssBaseline>
