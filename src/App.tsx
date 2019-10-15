@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
 import Render from './render';
-import CustomizedRatings from "./bits/rate"
+import CustomizedRatings from "./bits/rate";
+import HomePage from './homePage/homePage';
+
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -23,7 +25,7 @@ const App: React.FC = () => {
       <CssBaseline>
         
     <div className="App">
-      <div id='canvas-frame'>
+      {/* <div id='canvas-frame'>
         <Render />
       </div>
       <CustomizedRatings />
@@ -41,7 +43,8 @@ const App: React.FC = () => {
         }))
         setDark(!dark)
       }}
-    >Click me</button>
+    >Click me</button> */}
+    <HomePage/>
     </div>
     
       </CssBaseline>

@@ -1,0 +1,184 @@
+*{padding:0; margin:0}
+.HeaderHomepage{
+    background-image: url('/image/feat-May2019.jpg');
+    background-position: center 0px;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.HeaderBarHomepage{
+    width: 1500px;
+    padding: 10px 20px;
+    height: 62px;
+    display: inline-block;
+}
+.HeaderBarHomepage div.TotalNum{
+    float: left;
+    color: white;
+}
+.HeaderBarHomepage div.LogBar{
+    width: 300px;
+    float:right;
+}
+.HeaderMainHomepage{
+    width: 1500px;
+    display: inline-block;
+}
+.HeaderMainHomepage div.logo{
+    margin: 50px 0px;
+    font-size: 60px;
+    font-weight: 100;
+    color: white;
+}
+.HeaderTailHomepage{
+    width: 1500px;
+    position: relative;
+    height: 55px;
+    display: inline-block;
+}
+.HeaderTailHomepage div.web-disp{
+    color: white;
+    position: absolute;
+    left: 0px;
+    margin: 10px 20px;
+}
+.HeaderTailHomepage div.web-owner{
+    color: white;
+    position: absolute;
+    left: 0px;
+    top: 20px;
+    margin: 10px 20px;
+}
+
+
+.BodyHomePage{
+    width:1500px;
+    margin: 0 auto;
+}
+.BodyTopHomepage div.centerPanel{
+    margin:20px auto;
+    text-align: center;
+}
+.BodyTopHomepage div.centerPanel::after{
+    content: "";
+    clear: both;
+    display: block;
+}
+.BodyTopHomepage div.CataIcon{
+    display: inline-block;
+    margin: 0px 10px 0px 10px;
+    transition: 0.5s;
+}
+.BodyTopHomepage div.CataIcon:hover{
+    cursor: pointer;
+    filter: brightness(250%);
+    margin: 0px 50px 0px 50px;
+}
+.BodyTopHomepage div.CataIcon img{
+    width: 100px;
+    height: 80px;
+}
+.PreViewBar{
+    padding: 20px 50px 20px 50px;
+    transition: 0.4s;
+    overflow: hidden;
+}
+.PreViewBar:hover{
+    background-color: rgba(204, 204, 204, 0.61);
+}
+.PreViewBar:hover > .CataPreView{
+    opacity: 0;
+}
+.PreViewBar:hover > .ModelPreview{
+    margin-left: -170px;
+    width: 1300px;
+}
+.PreViewBar::after{
+    content: "";
+    clear: both;
+    display: block;
+}
+.CataPreView{
+    float: left;
+    width: 200px;
+    height: 215px;
+    margin: 0px 20px 0px 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.493);
+    box-shadow: 0 3px 3px 3px rgba(168, 168, 168, 0.349);
+    transition: 0.4s;
+}
+.ModelPreview{
+    float: left;
+    background: transparent;
+    transition: 1s;
+    width:1000px;
+    margin-left: 50px;
+}
+.ModelPreview::after{
+    content: "";
+    clear: both;
+    display: block;
+}
+.Package{
+    float: left;
+    position: relative;
+    border-radius: 10px;
+    width: 225px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.349);
+    box-shadow: 0 3px 3px 3px rgba(168, 168, 168, 0.349);
+    margin: 0px 25px 30px 0px;
+}
+.Package div.Package-up{
+    height: 135px;
+}
+.Package div.Package-up:hover{
+    filter: brightness(50%);
+}
+.Package div.Package-up:hover > div.zoom-icon{
+    display: block;
+}
+.Package div.Package-up div.icon-mask{
+    position: absolute;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 100%;
+    height: 135px;
+}
+.Package div.Package-up div.zoom-icon{
+    position: absolute;
+    top: 40%;
+    left: 45%;
+}
+.Package div.Package-up img{
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width:225px;
+    height:135px;
+}
+.Package div.Package-down{
+    padding: 2px 8px;
+    text-align: left;
+}
+.Package div.Package-down div.modelName{
+    font-weight: 800;
+}
+.Package div.Package-down div.modelName::before{
+    content: 'Name';
+}
+.Package div.Package-down div.modelFormat{
+    color: grey;
+}
+.Package div.Package-down div.modelFormat::before{
+    content: 'Format';
+}
+.Package div.Package-down div.modelAuthor{
+    font-weight: 600;
+    color: rgb(98, 173, 0);
+}
+.Package div.Package-down div.modelAuthor::before{
+    content: 'Author';
+}
+

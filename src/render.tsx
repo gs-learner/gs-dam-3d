@@ -7,6 +7,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Object3D, Box3, Group, MeshStandardMaterial, Mesh } from 'three'
 interface P {
     url?: string
+    openCtrl?:boolean
 }
 
 const Render : React.FC<P> = (props)=>{
@@ -15,6 +16,9 @@ const Render : React.FC<P> = (props)=>{
     useEffect(()=>{
         setHandle(RunAll())
     }, [])
+    useEffect(()=>{
+        // ...
+    }, [props.url])
 
     return (
         <div>
