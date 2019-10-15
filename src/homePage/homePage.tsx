@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
 import { Icon, Grid } from '@material-ui/core';
@@ -7,6 +7,7 @@ import SignUp from '../bits/buttonSignUp'
 import '../fonts/proxima-nova.css'
 
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import { profile } from '../bits/store';
 
 interface TotalNum{
     number: number;
@@ -171,6 +172,7 @@ export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     )
 }
 const BodyMainHomepage: React.FC=()=>{
+    const pro = useContext(profile)
     const cata:iconInfo = {name:'cata', url:'/image/cin.jpg', disp:'disp catalog'};
     const pkgs:preViewPackages = {preViewPackages:[
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
@@ -183,6 +185,9 @@ const BodyMainHomepage: React.FC=()=>{
 
     return(
         <div className="BodyMainHomepage">
+            <button onClick={()=>{
+                pro.toProfile()
+            }}>UUU</button>
             <PreViewBar cata={cata} preViewPackages={pkgs}/>
             <PreViewBar cata={cata} preViewPackages={pkgs}/>
             <PreViewBar cata={cata} preViewPackages={pkgs}/>

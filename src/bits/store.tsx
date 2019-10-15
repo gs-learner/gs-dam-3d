@@ -2,7 +2,8 @@ import React from 'react'
 
 
 const default_profile = {
-    username: ''
+    username: '',
+    toProfile: ()=>{}
 }
 
 export type Profile = typeof default_profile;
