@@ -27,15 +27,13 @@ export class CanvasManager {
         if(renderer) {
             renderer.setSize(this.w, this.h)
         }
-
-        frame.onresize = (ev)=>{
-            console.log('resize')
+        window.addEventListener('resize', ()=>{
             this.w = frame.clientWidth
             this.h = frame.clientHeight
             if(renderer) {
                 renderer.setSize(this.w, this.h)
             }
-        }
+        }, false)
     }
     
     set onmousemove(fn : any) {

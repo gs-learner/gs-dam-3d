@@ -24,6 +24,7 @@ const useStyles =  makeStyles((theme: Theme)=>
 )
 interface P {
     url?: string
+    openCtrl?:boolean
 }
 
 const Render : React.FC<P> = (props)=>{
@@ -32,6 +33,9 @@ const Render : React.FC<P> = (props)=>{
     useEffect(()=>{
         setHandle(RunAll())
     }, [])
+    useEffect(()=>{
+        // ...
+    }, [props.url])
 
     return (
         <div style={{

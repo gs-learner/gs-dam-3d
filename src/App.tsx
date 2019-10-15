@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import './App.css';
 import Render from './render';
-import CustomizedRatings from "./bits/rate"
-import { createMuiTheme, makeStyles, Theme } from '@material-ui/core/styles';
+import CustomizedRatings from "./bits/rate";
+import HomePage from './homePage/homePage';
+
+import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Edit from './bits/edit'
+import DetailPanel from './detail-panel'
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState(createMuiTheme({
@@ -16,7 +19,7 @@ const App: React.FC = () => {
     },
   }));
   const [dark, setDark] = useState(false);
-
+  const [openDetail, setOpenDetail] = useState(false)
 
 
   return (
@@ -24,7 +27,7 @@ const App: React.FC = () => {
       <CssBaseline>
         
     <div className="App">
-      <div id='canvas-frame'>
+      {/* <div id='canvas-frame'>
         <Render />
       </div>
       <CustomizedRatings />
@@ -42,9 +45,10 @@ const App: React.FC = () => {
         }))
         setDark(!dark)
       }}
-    >Click me</button>
-    
-      <Edit />
+    >Click me</button> */}
+    <button onClick={()=>setOpenDetail(true)}>Show Detail</button>
+    <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
+    <HomePage/>
 
     </div>
     
