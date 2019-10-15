@@ -5,7 +5,8 @@ import { Icon, Grid } from '@material-ui/core';
 import SignIn from '../bits/buttonSignIn'
 import SignUp from '../bits/buttonSignUp'
 import '../fonts/proxima-nova.css'
-
+import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 
 interface TotalNum{
@@ -27,6 +28,7 @@ interface preViewPackage{
     format:string;
     author:string;
     imgUrl:string;
+    avatar?: string;
 }
 interface preViewPackages{
     preViewPackages:preViewPackage[];
@@ -104,8 +106,20 @@ const CataPreView: React.FC<iconInfo> = (props)=>{
         </div>
     )
 }
+const useStyles = makeStyles({
+    avatar: {
+      margin: 5,
+      width: 20,
+      height: 20,
+      fontSize: 15,
+      lineHeight: 20,
+      verticalAlign: 'middle'
+    },
+  });
+
 const Package: React.FC<preViewPackage>=(props)=>{
     // const [action, setAction] = useState(false)
+    const classes = useStyles();
 
     return(
         <div className="Package">
@@ -121,11 +135,20 @@ const Package: React.FC<preViewPackage>=(props)=>{
             </div>
             <div className="Package-down">
                 <div>
-                <div className="modelName" style={{display: 'inline-block', width:'50%'}}>    {props.name}</div>
-                <div className="modelFormat" style={{display: 'inline-block', textAlign:'right', width:'50%'}}>{props.format}</div>
+                <div style={{display: 'inline-block'}}>
+                    {
+                        props.avatar !== undefined ? 
+                        <Avatar alt={props.author} src={props.avatar} className={classes.avatar}/> 
+                        :
+                        <Avatar className={classes.avatar}>
+                            {props.author[0]}
+                        </Avatar>
+                    }
+                    
                 </div>
-                
-                <div className="modelAuthor">  {props.author}</div>
+                <div className="modelName" style={{display: 'inline-block', width:'50%'}}>    {props.name}</div>
+                <div className="modelFormat" style={{display: 'inline-block', textAlign:'right', width:'20%'}}>{props.format}</div>
+                </div>
             </div>
         </div>
     )
@@ -137,7 +160,7 @@ const ModelPreview: React.FC<preViewPackages>=(props)=>{
             {
                 pkgs.map((v,idx)=>{
                     return(
-                        <Package imgUrl={v.imgUrl} name={v.name} format={v.format} author={v.author}/>
+                        <Package {...v}/>
                     )
                 })
             }
@@ -173,11 +196,11 @@ const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
 const BodyMainHomepage: React.FC=()=>{
     const cata:iconInfo = {name:'cata', url:'/image/cin.jpg', disp:'disp catalog'};
     const pkgs:preViewPackages = {preViewPackages:[
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/logo192.png'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/image/feat-May2019.jpg'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
     ]}
 
