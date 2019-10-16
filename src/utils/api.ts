@@ -80,6 +80,7 @@ interface D3DModel {
     tags: string[]
     animated: boolean // 是否包含动画
     render_config: string // url to json
+    owner: string
 }
 
 type ThreeDModelFormat = 'obj' | 'gltf'
