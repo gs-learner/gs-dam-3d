@@ -26,5 +26,6 @@ export function MockModel(): D3DModel {
         num_vertices: 123,
         tags: [],
         animated: false,
+        owner: ''
     }
 }
