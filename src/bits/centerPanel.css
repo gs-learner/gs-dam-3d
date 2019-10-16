@@ -1,0 +1,23 @@
+div.CenterPanel{
+    /* margin:20px auto; */
+    text-align: center;
+}
+div.centerPanel::after{
+    content: "";
+    clear: both;
+    display: block;
+}
+div.CataIcon{
+    display: inline-block;
+    margin: 0px 10px 0px 10px;
+    transition: 0.5s;
+}
+div.CataIcon:hover{
+    cursor: pointer;
+    filter: brightness(250%);
+    margin: 0px 50px 0px 50px;
+}
+div.CataIcon img{
+    width: 100px;
+    height: 80px;
+}

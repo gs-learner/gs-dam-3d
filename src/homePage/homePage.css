@@ -56,28 +56,8 @@
     width:1500px;
     margin: 0 auto;
 }
-.BodyTopHomepage div.centerPanel{
+.BodyTopHomepage .CenterPanel{
     margin:20px auto;
-    text-align: center;
-}
-.BodyTopHomepage div.centerPanel::after{
-    content: "";
-    clear: both;
-    display: block;
-}
-.BodyTopHomepage div.CataIcon{
-    display: inline-block;
-    margin: 0px 10px 0px 10px;
-    transition: 0.5s;
-}
-.BodyTopHomepage div.CataIcon:hover{
-    cursor: pointer;
-    filter: brightness(250%);
-    margin: 0px 50px 0px 50px;
-}
-.BodyTopHomepage div.CataIcon img{
-    width: 100px;
-    height: 80px;
 }
 .PreViewBar{
     padding: 20px 50px 20px 50px;
