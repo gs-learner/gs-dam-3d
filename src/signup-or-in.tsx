@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import { Paper } from '@material-ui/core';
 import { APISignup, APISignin } from './utils/api'
 import { profile } from './bits/store';
-
+import Grid from '@material-ui/core/Grid'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -98,9 +98,18 @@ const SignupOrIn : React.FC<Props> = (props)=>{
           {
             isSignup ? 
             <Paper>
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="center"
+            >
+            <Grid item xs>
             <Typography gutterBottom variant='h4'>
                 Signup
             </Typography>
+            </Grid>
+            <Grid item xs>
             <TextField
                 required
                 id="outlined-required"
@@ -111,6 +120,8 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                 onChange={(v)=>setUsername(v.target.value)}
                 value={username}
             />
+            </Grid>
+            <Grid item xs>
             <TextField
                 required
                 id="outlined-required"
@@ -121,6 +132,8 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                 value={email}
                 onChange={(v)=>setEmail(v.target.value)}
             />
+            </Grid>
+            <Grid item xs>
             <TextField
                 required
                 id="outlined-required"
@@ -131,17 +144,32 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                 margin="normal"
                 variant="outlined"
             />
+            </Grid>
+            <Grid item xs>
             <ColorButton> Sign Up</ColorButton>
+            </Grid>
             <Typography gutterBottom variant='subtitle1' onClick={()=>Signup()}>
                 or
             </Typography>
+            <Grid item xs>
             <ColorButton onClick={()=>setIsSignup(!isSignup)}> Sign In</ColorButton>
+            </Grid>
+            </Grid>
             </Paper>
             :
             <Paper>
+              <Grid
+                container
+                direction="column"
+                justify="flex-start"
+                alignItems="center"
+              >
+              <Grid item xs>
               <Typography gutterBottom variant='h4'>
                 Signup
               </Typography>
+              </Grid>
+              <Grid item xs>
               <TextField
                   required
                   id="outlined-required"
@@ -152,6 +180,8 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                   onChange={(v)=>setUsername(v.target.value)}
                   value={username}
               />
+              </Grid>
+              <Grid item xs>
               <TextField
                   required
                   id="outlined-required"
@@ -162,11 +192,17 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                   value={email}
                   onChange={(v)=>setEmail(v.target.value)}
               />
+              </Grid>
+              <Grid item xs>
               <ColorButton onClick={()=>Singin()}> Sign In </ColorButton>
+              </Grid>
               <Typography gutterBottom variant='subtitle1'>
                 or
               </Typography>
+              <Grid item xs>
               <ColorButton onClick={()=>setIsSignup(!isSignup)}>Sign Up</ColorButton>
+              </Grid>
+              </Grid>
             </Paper>
           }
         </Dialog>

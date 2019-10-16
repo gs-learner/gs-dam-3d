@@ -6,9 +6,9 @@ import Dropzone from 'react-dropzone'
 
 const UploadModel : React.FC = (props)=>{
     const pro = useContext(profile)
-    if(!pro.user.username) {
-        return null
-    }
+    // if(!pro.user.username) {
+    //     return null
+    // }
     return (
         <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)}>
             <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
