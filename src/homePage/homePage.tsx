@@ -3,13 +3,17 @@ import CustomizedInputBase from '../bits/search';
 import './homePage.css'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import SignIn from '../bits/buttonSignIn'
-import SignUp from '../bits/buttonSignUp'
+// import SignIn from '../bits/buttonSignIn'
+// import SignUp from '../bits/buttonSignUp'
 import '../fonts/proxima-nova.css'
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
+
+import SignIn from '../bits/buttonSignIn'
+import SignUp from '../bits/buttonSignUp'
+import {CenterPanel} from '../bits/centerPanel'
 
 
 interface TotalNum{
@@ -33,7 +37,7 @@ interface preViewPackage{
     imgUrl:string;
     avatar?: string;
 }
-interface preViewPackages{
+export interface preViewPackages{
     preViewPackages:preViewPackage[];
 }
 interface preViewBar{
@@ -47,7 +51,7 @@ const TotalNum: React.FC<TotalNum> = (props) =>{
         </div>
     )
 }
-export const LogBar: React.FC = () =>{
+export const LogBar: React.FC = (props) =>{
     return(
         <div className="LogBar">
             <SignIn/>
@@ -89,7 +93,7 @@ const HeaderHomepage: React.FC = () =>{
         </div>
     )
 }
-const CataIcon: React.FC<iconInfo> = (props) =>{
+export const CataIcon: React.FC<iconInfo> = (props) =>{
     return(
         <div className ="CataIcon">
             <img src = {props.url} alt={props.name}></img>
@@ -199,15 +203,7 @@ export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     const iconInfos: iconInfos = props;
     return(
         <div className="BodyTopHomepage">
-            <div className="centerPanel">
-            {
-                props.cata.map((v, idx)=>{
-                    return(
-                        <CataIcon name={v.name} url={v.url} key={idx}/>
-                    )
-                })
-            }
-            </div>
+            <CenterPanel cata={props.cata}/>
         </div>
     )
 }
@@ -238,9 +234,9 @@ const BodyHomePage: React.FC = () =>{
     return(
         <div className="BodyHomePage">
             <BodyTopHomepage cata={[
-                {url:'/image/cin.jpg',name:'建筑'},
-                {url:'/image/cin.jpg',name:'武器'},
-                {url:'/image/cin.jpg',name:'车辆'},
+                {url:'/image/cin.png',name:'建筑'},
+                {url:'/image/cin.png',name:'武器'},
+                {url:'/image/cin.png',name:'车辆'},
                 ]}/>
             <BodyMainHomepage/>
         </div>

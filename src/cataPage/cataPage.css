@@ -1,0 +1,31 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.LogBar{
+    float: right;
+}
+.HeaderNavCataPage{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: rgb(56, 56, 56);
+}
+.HeaderNavCataPage .CenterPanel .CataIcon{
+    filter: invert(80%);
+    transition: 0.4s;
+}
+.HeaderNavCataPage .CenterPanel .CataIcon:hover{
+    filter: invert(120%);
+}
+.BodyMainCataPage .bodyContCataPage{
+    padding: 20px 50px 20px 50px;
+}
+.BodyMainCataPage .bodyContCataPage::after{
+    content: "";
+    clear: both;
+    display: block;
+}
+.BodyTopCataPage{
+    padding: 100px 20px 0px 50px;
+    margin-bottom: -20px;
+}

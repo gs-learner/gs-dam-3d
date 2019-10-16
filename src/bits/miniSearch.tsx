@@ -7,7 +7,9 @@ import InputBase from '@material-ui/core/InputBase';
 import { createStyles, fade, Theme, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-
+import {LogBar} from '../homePage/homePage'
+import { Avatar } from '@material-ui/core';
+import Container from '@material-ui/core/Container'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
     },
     title: {
-      flexGrow: 1,
+      // flexGrow: 1,
       display: 'none',
       [theme.breakpoints.up('sm')]: {
         display: 'block',
@@ -60,6 +62,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    Container:{
+      background:'transparent',
+      // flexGrow: 1,
+      float:'right',
+    },
+    Toolbar:{
+      backgroundColor:'rgb(36,36,36)',
+    }
   }),
 );
 
@@ -69,17 +79,9 @@ export default function SearchAppBar() {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+        <Toolbar className={classes.Toolbar}>
+          <Typography className={classes.title} variant="h5" noWrap>
+            3D Models
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -94,6 +96,7 @@ export default function SearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
+          <Container className = {classes.Container}><LogBar/></Container>
         </Toolbar>
       </AppBar>
     </div>

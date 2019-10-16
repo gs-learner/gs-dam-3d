@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import './App.css';
 import {HomePage} from './homePage/homePage';
+import {CataPage} from './cataPage/cataPage';
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -82,7 +83,10 @@ const App: React.FC = () => {
     </div>
     </Route>
     <Route exact path='/profile'>
-      This is a profile
+      <CataPage/>
+    </Route>
+    <Route exact path='/user'>
+      
     </Route>
     <Route exact path='/profile/edit'>
       <EditProfile />
