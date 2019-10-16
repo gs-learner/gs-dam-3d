@@ -1,3 +1,5 @@
+import { async } from "q";
+
 export const errorCode = {
     0: 'Success',
     1: 'User not authorized'
@@ -60,26 +62,44 @@ interface URegisterUser {
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
-type ModelCatalog = 
+export type ModelCatalog = 
     'Animals' | 'Architecture' | 'Cars' | 
     'Characters' | 'History' | 'Furniture' |
     'Weapon' | 'Sci-fi' | 'People' | 'Place' |
     'Food';
 
+
+export interface DModelCatalogInfo {
+    name: ModelCatalog
+    img: string
+}
+
 interface RenderConfig {
     
 }
-interface D3DModel {
+interface Comment {
+    username: string
+    content: string
+    rating: number
+}
+
+// 文件目录结构
+// url/
+//   - scene.gltf
+//   - render.json
+//   - preview.png
+
+export interface D3DModel {
     url: string
     name: string
     publish: string // 发布时间
-    comments: string[]
+    comments: Comment[]
     catalog: ModelCatalog
     num_triangles: number
     num_vertices: number
     tags: string[]
     animated: boolean // 是否包含动画
-    render_config: string // url to json
+    // render_config: string // url to json
 }
 
 type ThreeDModelFormat = 'obj' | 'gltf'
@@ -139,6 +159,10 @@ export async function APIUpdateUserProfile(info: Omit<URegisterUser, 'username'|
 export async function APIUpdateUserPassword(info: {oldpassword:string,password:string}) {
     let res = await SendJSON('/api/user/update', info) as StandardResponse<undefined>
     return RefineResponse(res)
+}
+
+export async function APIUploadModel(info: U3DModel) {
+    // let res = await
 }
 
 // export async function APICheckUserExists(info:{username:string}){

@@ -9,6 +9,17 @@ const UploadModel : React.FC = (props)=>{
     if(!pro.user.username) {
          return null
     }
+    const toBase64 = (file : File) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    async function onDrop<T extends File>(acceptedFiles: T[], rejectedFiles: T[]) {
+        
+    }
+
     return (
         <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)}>
             <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>

@@ -14,6 +14,7 @@ import { profile } from '../bits/store';
 import SignIn from '../bits/buttonSignIn'
 import SignUp from '../bits/buttonSignUp'
 import {CenterPanel} from '../bits/centerPanel'
+import { ModelCatalog, D3DModel, DModelCatalogInfo } from '../utils/api';
 
 
 interface TotalNum{
@@ -230,6 +231,7 @@ const BodyMainHomepage: React.FC=()=>{
         </div>
     )
 }
+
 const BodyHomePage: React.FC = () =>{
     return(
         <div className="BodyHomePage">
@@ -242,6 +244,10 @@ const BodyHomePage: React.FC = () =>{
         </div>
     )
 }
+interface Props {
+    selection: {cat: DModelCatalogInfo, models: D3DModel[]}[]
+}
+
 export const HomePage: React.FC = () => {
 
     return(

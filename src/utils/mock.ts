@@ -1,4 +1,4 @@
-import {DUser} from './api'
+import {DUser, D3DModel} from './api'
 
 export function MockUser() : DUser {
     return {
@@ -11,5 +11,20 @@ export function MockUser() : DUser {
         collections: [],
         email: 'zzptql@zzpdl.com',
         avatar: '/static/test/avatar.jpg'
+    }
+}
+
+
+export function MockModel(): D3DModel {
+    return {
+        url: '/static/test',
+        name: 'Beetle Car',
+        publish: '2017-9-20',
+        comments: [],
+        catalog: 'Cars',
+        num_triangles: 999,
+        num_vertices: 123,
+        tags: [],
+        animated: false,
     }
 }

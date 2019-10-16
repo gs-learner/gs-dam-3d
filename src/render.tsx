@@ -11,6 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import {D3DModel} from './utils/api'
 
 const useStyles =  makeStyles((theme: Theme)=>
     createStyles({
@@ -23,8 +24,7 @@ const useStyles =  makeStyles((theme: Theme)=>
       })
 )
 interface P {
-    url?: string
-    openCtrl?:boolean
+    model?: D3DModel
 }
 
 const Render : React.FC<P> = (props)=>{
@@ -33,9 +33,9 @@ const Render : React.FC<P> = (props)=>{
     useEffect(()=>{
         setHandle(RunAll())
     }, [])
-    useEffect(()=>{
+   // useEffect(()=>{
         // ...
-    }, [props.url])
+    //}, [props.url])
 
     return (
         <div style={{
