@@ -1,17 +1,10 @@
 .canvas-frame-wrapper {
     width: 100%;
-    padding-top: 56.25%;
+    padding-top: 60%;
     /* whatever width you want */
     display: inline-block;
     position: relative;
 }
-/*
-.canvas-frame-wrapper:after {
-    padding-top: 56.25%;
-    
-    display: block;
-    content: '';
-}*/
 
 .canvas-frame {
     position: absolute;

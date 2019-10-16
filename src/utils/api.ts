@@ -1,6 +1,3 @@
-import { func, string } from "prop-types"
-import { async } from "q"
-
 export const errorCode = {
     0: 'Success',
     1: 'User not authorized'
@@ -24,16 +21,16 @@ interface DCollection {
 }
 
 // D 打头代表Download/Data, 从服务器获取的数据
-interface DUser {
+export interface DUser {
     username: string
     nickname: string
     biography: string
     owned_models: string[]
-    location?: string // 住址
+    location: string // 住址
     introduction: string // 个人简介
     collections?: DCollection[]
     email: string
-    avatar?:string
+    avatar:string
 }
 export function MakeEmptyUser() : DUser {
     return {
@@ -43,6 +40,8 @@ export function MakeEmptyUser() : DUser {
         email:'',
         nickname: '',
         biography: '',
+        location: '',
+        avatar: ''
     }
 }
 
@@ -58,12 +57,18 @@ interface URegisterUser {
     avatar: string // base64
 }
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+
 type ModelCatalog = 
     'Animals' | 'Architecture' | 'Cars' | 
     'Characters' | 'History' | 'Furniture' |
     'Weapon' | 'Sci-fi' | 'People' | 'Place' |
-    'Food'
+    'Food';
 
+interface RenderConfig {
+    
+}
 interface D3DModel {
     url: string
     name: string
@@ -74,6 +79,7 @@ interface D3DModel {
     num_vertices: number
     tags: string[]
     animated: boolean // 是否包含动画
+    render_config: string // url to json
 }
 
 type ThreeDModelFormat = 'obj' | 'gltf'
@@ -82,6 +88,7 @@ interface U3DModel {
     name: string
     catalog: ModelCatalog
     tags: string[]
+    render_config: RenderConfig // save to json
 }
 
 interface RefinedResponse<T> extends StandardResponse<T> {
@@ -122,11 +129,17 @@ export async function APISignin(info: {username:string, password:string}) {
     return RefineResponse(res)
 }
 
-export async function APIUpdateUserProfile(info: URegisterUser) {
+// 这里 Omit 是指 URegisterUser 里去掉 username & password 属性
+// username 的记录应该用服务器的 session 来记录, 否则知道用户名就能改别人的 profile
+export async function APIUpdateUserProfile(info: Omit<URegisterUser, 'username'|'password'>) {
     let res = await SendJSON('/api/user/update', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
 
+export async function APIUpdateUserPassword(info: {oldpassword:string,password:string}) {
+    let res = await SendJSON('/api/user/update', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
 
 // export async function APICheckUserExists(info:{username:string}){
 //     return await SendJSON('/api/check_user_exist', info) as StandardResponse<boolean>
