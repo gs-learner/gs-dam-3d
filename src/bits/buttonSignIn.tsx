@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { profile } from './store';
 
 // The `withStyles()` higher-order component is injecting a `classes`
 // prop that is used by the `Button` component.
@@ -22,5 +23,7 @@ const StyledButton = withStyles({
 
 
 export default function SignIn() {
-  return <StyledButton>SIGN IN</StyledButton>;
+  const pro = useContext(profile)
+
+  return <StyledButton onClick={()=>pro.triggerSigning('siginin')}>SIGN IN</StyledButton>;
 }

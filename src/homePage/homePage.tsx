@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
-import { Icon, Grid } from '@material-ui/core';
+import { Icon, Grid, Typography } from '@material-ui/core';
 import SignIn from '../bits/buttonSignIn'
 import SignUp from '../bits/buttonSignUp'
 import '../fonts/proxima-nova.css'
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import { profile } from '../bits/store';
+import { lineHeight } from '@material-ui/system';
+
 
 interface TotalNum{
     number: number;
@@ -20,7 +23,7 @@ interface iconInfo{
     url?: string;
     disp?: string;
 }
-interface iconInfos{
+export interface iconInfos{
     cata:iconInfo[];
 }
 interface preViewPackage{
@@ -44,7 +47,7 @@ const TotalNum: React.FC<TotalNum> = (props) =>{
         </div>
     )
 }
-const LogBar: React.FC = () =>{
+export const LogBar: React.FC = () =>{
     return(
         <div className="LogBar">
             <SignIn/>
@@ -113,11 +116,18 @@ const useStyles = makeStyles({
       height: 20,
       fontSize: 15,
       lineHeight: 20,
-      verticalAlign: 'middle'
+      verticalAlign: 'middle',
+      // float: 'right'
     },
+    name: {
+        height: 30,
+        verticalAlign: 'middle',
+        float: 'right',
+        lineHeight: '30px'
+    }
   });
 
-const Package: React.FC<preViewPackage>=(props)=>{
+export const Package: React.FC<preViewPackage>=(props)=>{
     // const [action, setAction] = useState(false)
     const classes = useStyles();
 
@@ -135,19 +145,27 @@ const Package: React.FC<preViewPackage>=(props)=>{
             </div>
             <div className="Package-down">
                 <div>
-                <div style={{display: 'inline-block'}}>
-                    {
-                        props.avatar !== undefined ? 
-                        <Avatar alt={props.author} src={props.avatar} className={classes.avatar}/> 
-                        :
-                        <Avatar className={classes.avatar}>
-                            {props.author[0]}
-                        </Avatar>
-                    }
-                    
-                </div>
-                <div className="modelName" style={{display: 'inline-block', width:'50%'}}>    {props.name}</div>
-                <div className="modelFormat" style={{display: 'inline-block', textAlign:'right', width:'20%'}}>{props.format}</div>
+                <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+                >
+
+                <Grid item xs={2}>
+                {
+                    props.avatar !== undefined && props.avatar.length ? 
+                    <Avatar alt={props.author} src={props.avatar} className={classes.avatar}/> 
+                    :
+                    <Avatar className={classes.avatar}>
+                        {props.author[0]}
+                    </Avatar>
+                }
+                </Grid>
+                <Grid item xs>
+                    <Typography> {props.name} </Typography>
+                </Grid>
+                </Grid>
                 </div>
             </div>
         </div>
@@ -177,7 +195,7 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
         </div>
     )
 }
-const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
+export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     const iconInfos: iconInfos = props;
     return(
         <div className="BodyTopHomepage">
@@ -194,6 +212,7 @@ const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     )
 }
 const BodyMainHomepage: React.FC=()=>{
+    const pro = useContext(profile)
     const cata:iconInfo = {name:'cata', url:'/image/cin.jpg', disp:'disp catalog'};
     const pkgs:preViewPackages = {preViewPackages:[
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/logo192.png'},
@@ -206,6 +225,9 @@ const BodyMainHomepage: React.FC=()=>{
 
     return(
         <div className="BodyMainHomepage">
+            <button onClick={()=>{
+                pro.to.profile()
+            }}>UUU</button>
             <PreViewBar cata={cata} preViewPackages={pkgs}/>
             <PreViewBar cata={cata} preViewPackages={pkgs}/>
             <PreViewBar cata={cata} preViewPackages={pkgs}/>
@@ -224,7 +246,7 @@ const BodyHomePage: React.FC = () =>{
         </div>
     )
 }
-const HomePage: React.FC = () => {
+export const HomePage: React.FC = () => {
 
     return(
         <div>
@@ -233,5 +255,3 @@ const HomePage: React.FC = () => {
         </div>
     )
 }
-
-export default HomePage;
