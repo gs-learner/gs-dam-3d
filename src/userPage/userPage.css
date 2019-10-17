@@ -1,0 +1,11 @@
+.BodyTopUserPage::after{
+    content: '';
+    clear: both;
+    display: block;
+}
+.BodyLeftUserPage{
+    padding: 50px;
+}
+.BodyRightUserPage{
+    padding: 50px 90px 30px 30px;
+}

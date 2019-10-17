@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import './App.css';
 import {HomePage} from './homePage/homePage';
 import {CataPage} from './cataPage/cataPage';
+import {UserPage} from './userPage/userPage';
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -56,35 +57,35 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
-      <profile.Provider value={pro}>
-        <BrowserRouter>
-       <Route exact path='/'>
-    <div className="App">
-    <a ref={toPorfile} href='/profile'></a>
-    <button onClick={()=>setOpenDetail(true)}>Show Detail</button>
-    <button onClick={()=>{
-      if(toPorfile.current) {
-        toPorfile.current.click()
-      }
-    }}>To Profile</button>
-    <button onClick={()=>{
-      setOpenUploadModel(true)
-    }}>Open Upload Model</button>
-    <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
-    <HomePage/>
-    
-    </div>
-    </Route>
-    <Route exact path='/profile'>
-      <CataPage/>
-    </Route>
-    <Route exact path='/user'>
-      
-    </Route>
-    </BrowserRouter>
-    <SignupOrIn open={openSignupOrSigin} onClose={()=>{setOpenSignipOrSignin(false)}} isSignUp={signupOrSignin}/>
-    <UploadModel></UploadModel>
-    </profile.Provider>
+        <profile.Provider value={pro}>
+          <BrowserRouter>
+            <Route exact path='/'>
+              <div className="App">
+                <a ref={toPorfile} href='/user'></a>
+                <button onClick={() => setOpenDetail(true)}>Show Detail</button>
+                <button onClick={() => {
+                  if (toPorfile.current) {
+                    toPorfile.current.click()
+                  }
+                }}>To Profile</button>
+                <button onClick={() => {
+                  setOpenUploadModel(true)
+                }}>Open Upload Model</button>
+                <DetailPanel open={openDetail} onClose={() => setOpenDetail(false)} />
+                <HomePage />
+
+              </div>
+            </Route>
+            <Route exact path='/profile'>
+              <CataPage />
+            </Route>
+            <Route exact path='/user'>
+              <UserPage />
+            </Route>
+          </BrowserRouter>
+          <SignupOrIn open={openSignupOrSigin} onClose={() => { setOpenSignipOrSignin(false) }} isSignUp={signupOrSignin} />
+          <UploadModel></UploadModel>
+        </profile.Provider>
       </CssBaseline>
     </ThemeProvider>
   );
