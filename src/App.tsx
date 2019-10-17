@@ -12,7 +12,6 @@ import DetailPanel from './detail-panel'
 import { profile, Profile } from './bits/store'
 import {BrowserRouter, Route} from 'react-router-dom'
 import SignupOrIn from './signup-or-in';
-import { MakeEmptyUser } from './utils/api';
 import UploadModel from './upload-model';
 import EditProfile from './edit-profile'
 

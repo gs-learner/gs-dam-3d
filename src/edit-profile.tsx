@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -9,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import { profile } from './bits/store';
 import Button from '@material-ui/core/Button';
-import { APIUpdateUserProfile } from './utils/api';
+import { APIUpdateUserProfile, APIUpdateUserPassword } from './utils/api';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -70,6 +69,7 @@ const EditProfile : React.FC = (props)=>{
         email: '',
         avatar: ''
     });
+    //TODO: 新密码需要输入两次一样的
     const [oldpassword, setOldpassword] = useState('');
     const [passwd1, setPasswd1] = useState('');
 
@@ -89,8 +89,31 @@ const EditProfile : React.FC = (props)=>{
                 ...p
             });
         }
+        else {
+            //TODO: Tell user update failed
+        }
     }
 
+    const clearPassword = ()=>{
+        setOldpassword('');
+        setPasswd1('')
+    }
+
+    useEffect(()=>{
+        clearPassword();
+    }, [tab, props, pro.user])
+
+    const updatePasswd = async ()=>{
+        let response = await APIUpdateUserPassword({oldpassword: oldpassword, password:passwd1});
+        clearPassword();
+        if(response.ok) {
+            //TODO: Tell user update passwd success
+        }
+        else {
+            //TODO: 
+        }
+    }
+        
     return(
         <Grid
         container
@@ -176,7 +199,7 @@ const EditProfile : React.FC = (props)=>{
                 variant="outlined"
                 fullWidth
             />
-            <Button variant="contained" color="primary" className={classes.button}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={updateProfile}>
                 Update
             </Button>
         </TabPanel>
@@ -204,7 +227,7 @@ const EditProfile : React.FC = (props)=>{
                 variant="outlined"
                 fullWidth
             />
-            <Button variant="contained" color="primary" className={classes.button}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={updatePasswd}>
                 Update
             </Button>
         </TabPanel>
