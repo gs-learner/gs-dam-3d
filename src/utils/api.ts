@@ -1,5 +1,4 @@
-import { func, string } from "prop-types"
-import { async } from "q"
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export const errorCode = {
     0: 'Success',
@@ -24,26 +23,16 @@ interface DCollection {
 }
 
 // D 打头代表Download/Data, 从服务器获取的数据
-interface DUser {
+export interface DUser {
     username: string
     nickname: string
     biography: string
     owned_models: string[]
-    location?: string // 住址
+    location: string // 住址
     introduction: string // 个人简介
     collections?: DCollection[]
     email: string
-    avatar?:string
-}
-export function MakeEmptyUser() : DUser {
-    return {
-        username: '',
-        owned_models: new Array<string>(),
-        introduction: '',
-        email:'',
-        nickname: '',
-        biography: '',
-    }
+    avatar:string
 }
 
 // U 打头代表Upload, 发给服务器
@@ -58,22 +47,112 @@ interface URegisterUser {
     avatar: string // base64
 }
 
-type ModelCatalog = 
-    'Animals' | 'Architecture' | 'Cars' | 
-    'Characters' | 'History' | 'Furniture' |
-    'Weapon' | 'Sci-fi' | 'People' | 'Place' |
-    'Food'
+export function MakeEmptyUser() : DUser {
+    return {
+        username: '',
+        owned_models: new Array<string>(),
+        introduction: '',
+        email:'',
+        nickname: '',
+        biography: '',
+        location: '',
+        avatar: ''
+    }
+}
 
-interface D3DModel {
+
+
+export const AllModelCatalogs = [
+    'Animals' , 'Architecture' , 'Cars' , 
+    'Characters' , 'History' , 'Furniture' ,
+    'Weapon' , 'Sci-fi' , 'People' , 'Place' ,
+    'Food',
+] as const;
+export type ModelCatalog = typeof AllModelCatalogs[number]
+
+export interface DModelCatalogInfo {
+    name: ModelCatalog
+    img: string
+}
+
+
+type LightTypes = 
+    'ambient'|
+    'point' |
+    'spot' 
+
+// if nothing is specified, all light types has the attribute
+// if <point> is specified, only point light & spot light has the attribute
+// if <spot>  is specified, only spot light has the attribute
+interface RenderLight {
+    type: LightTypes
+    position: number[]
+    color: number // hex, e.g. 0x404040
+    intensity: number
+    distance: number // <point> Maximum range of the light. Default is 0 (no limit).
+    decay: number // <point> The amount the light dims along the distance of the light. 
+    angle: number // <spot> Maximum angle of light dispersion from its direction
+    penumbra: number // <spot> Percent of the spotlight cone that is attenuated due to penumbra. Takes values between zero and 1. Default is zero.
+}
+
+type RenderSky = 
+    'col' | // background color
+    'sky'  // skybox
+
+export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
+    'default': [
+        {type: 'ambient', position:[0, 0, 0], color: 0x404040, intensity: 1, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[18, 18, 18], color: 0xffffff, intensity: 1, distance: 100, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-30, 18, 18], color: 0xffffff, intensity: 1, distance: 200, decay: 1, angle: Math.PI/2, penumbra: 0},
+    ]
+}
+
+interface RenderConfig {
+    renderSky: RenderSky
+    backgroundColor: string
+    backgroundGradient: boolean
+    skybox: string // skybox name
+    envMap: string
+    scale: number
+    lights: string[]
+}
+
+export function MakeDefaultRenderConfig() : RenderConfig {
+    return {
+        renderSky: 'col',
+        backgroundColor: '#222222',
+        backgroundGradient: true,
+        skybox: '',
+        envMap: '',
+        scale: 0.05,
+        lights: ['default']
+    }
+}
+
+interface Comment {
+    username: string
+    content: string
+    rating: number
+}
+
+// 文件目录结构
+// url/
+//   - scene.gltf
+//   - render.json
+//   - preview.png
+
+export interface D3DModel {
     url: string
     name: string
     publish: string // 发布时间
-    comments: string[]
+    comments: Comment[]
     catalog: ModelCatalog
     num_triangles: number
     num_vertices: number
     tags: string[]
     animated: boolean // 是否包含动画
+    // render_config: string // url to json
+    owner: string
 }
 
 type ThreeDModelFormat = 'obj' | 'gltf'
@@ -82,6 +161,7 @@ interface U3DModel {
     name: string
     catalog: ModelCatalog
     tags: string[]
+    render_config: RenderConfig // save to json
 }
 
 interface RefinedResponse<T> extends StandardResponse<T> {
@@ -112,6 +192,30 @@ async function SendJSON<U, T>(input: RequestInfo, data:T) {
     return await res.json() as StandardResponse<U>
 }
 
+function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to_1: number)=>any) {
+    return new Promise((resolve : (v:U)=>void, reject)=>{
+        const xhr = new XMLHttpRequest()
+        xhr.onerror = (e)=>reject(e)
+        xhr.upload.onprogress = (ev)=>{
+            const done = ev.loaded
+            const total = ev.total
+            onprogress(done / total)
+        }
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status===200){
+                resolve(JSON.parse(xhr.responseText) as U)
+            }
+            else {
+                reject('xhr failed w./ status' + xhr.status)
+            }
+        }
+        
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify(data))
+    })
+}
+
 export async function APISignup(info: URegisterUser){
     let res = await SendJSON('/api/user/register', info) as StandardResponse<DUser>
     return RefineResponse(res)
@@ -122,11 +226,22 @@ export async function APISignin(info: {username:string, password:string}) {
     return RefineResponse(res)
 }
 
-export async function APIUpdateUserProfile(info: URegisterUser) {
+// 这里 Omit 是指 URegisterUser 里去掉 username & password 属性
+// username 的记录应该用服务器的 session 来记录, 否则知道用户名就能改别人的 profile
+export async function APIUpdateUserProfile(info: Omit<URegisterUser, 'username'|'password'>) {
     let res = await SendJSON('/api/user/update', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
 
+export async function APIUpdateUserPassword(info: {oldpassword:string,password:string}) {
+    let res = await SendJSON('/api/user/update', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
+export async function APIUploadModel(info: U3DModel, onprogress: (progress_0_to_1: number)=>any) {
+    let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
 
 // export async function APICheckUserExists(info:{username:string}){
 //     return await SendJSON('/api/check_user_exist', info) as StandardResponse<boolean>

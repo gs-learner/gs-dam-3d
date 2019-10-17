@@ -1,17 +1,20 @@
 import React, {useState, useContext} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
-import { Icon, Grid, Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+// import SignIn from '../bits/buttonSignIn'
+// import SignUp from '../bits/buttonSignUp'
 import '../fonts/proxima-nova.css'
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
-import { lineHeight } from '@material-ui/system';
 
 import SignIn from '../bits/buttonSignIn'
 import SignUp from '../bits/buttonSignUp'
 import {CenterPanel} from '../bits/centerPanel'
+import { ModelCatalog, D3DModel, DModelCatalogInfo } from '../utils/api';
 
 
 interface TotalNum{
@@ -94,7 +97,7 @@ const HeaderHomepage: React.FC = () =>{
 export const CataIcon: React.FC<iconInfo> = (props) =>{
     return(
         <div className ="CataIcon">
-            <img src = {props.url}></img>
+            <img src = {props.url} alt={props.name}></img>
             <div>{props.name}</div>
         </div>
     )
@@ -139,11 +142,11 @@ export const Package: React.FC<preViewPackage>=(props)=>{
                 <div className="icon-mask"  >
                     <div className="zoom-icon"><ZoomInIcon htmlColor='white' fontSize='large'/></div>
                     <div className="bigger-img">
-                        <img src={props.imgUrl}></img>
+                        <img src={props.imgUrl} alt={props.name}></img>
                         <h2>{props.name}</h2>
                     </div>
                 </div>
-                <img className="small-img" src={props.imgUrl}></img>
+                <img className="small-img" src={props.imgUrl} alt={props.name}></img>
             </div>
             <div className="Package-down">
                 <div>
@@ -180,7 +183,7 @@ const ModelPreview: React.FC<preViewPackages>=(props)=>{
             {
                 pkgs.map((v,idx)=>{
                     return(
-                        <Package {...v}/>
+                        <Package key={idx} {...v}/>
                     )
                 })
             }
@@ -228,6 +231,7 @@ const BodyMainHomepage: React.FC=()=>{
         </div>
     )
 }
+
 const BodyHomePage: React.FC = () =>{
     return(
         <div className="BodyHomePage">
@@ -240,6 +244,10 @@ const BodyHomePage: React.FC = () =>{
         </div>
     )
 }
+interface Props {
+    selection: {cat: DModelCatalogInfo, models: D3DModel[]}[]
+}
+
 export const HomePage: React.FC = () => {
 
     return(

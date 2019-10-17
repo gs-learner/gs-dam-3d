@@ -9,7 +9,8 @@ const default_profile = {
         user: (u: User)=>{}
     },
     to: {
-        profile: ()=>{}
+        profile: ()=>{},
+        edit_profile: ()=>{},
     },
     open: {
         uploadModel: false,

@@ -4,13 +4,14 @@ import * as THREE from 'three'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Object3D, Box3, Group, MeshStandardMaterial, Mesh, Vector3 } from 'three'
+import { MeshStandardMaterial, Mesh } from 'three'
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import {D3DModel} from './utils/api'
 
 const useStyles =  makeStyles((theme: Theme)=>
     createStyles({
@@ -23,8 +24,7 @@ const useStyles =  makeStyles((theme: Theme)=>
       })
 )
 interface P {
-    url?: string
-    openCtrl?:boolean
+    model?: D3DModel
 }
 
 const Render : React.FC<P> = (props)=>{
@@ -33,9 +33,9 @@ const Render : React.FC<P> = (props)=>{
     useEffect(()=>{
         setHandle(RunAll())
     }, [])
-    useEffect(()=>{
+   // useEffect(()=>{
         // ...
-    }, [props.url])
+    //}, [props.url])
 
     return (
         <div style={{
@@ -88,14 +88,12 @@ const camera = new THREE.PerspectiveCamera(75, canvas.Aspect(), 0.1, 1000);
 const flatScene = new THREE.Scene()
 const flatCamera = new THREE.PerspectiveCamera(75, canvas.Aspect(), 0.1, 1000);
 
-// renderer.setSize(canvas.w, canvas.h);
 renderer.setClearColor(0x222222, 1.0);
 
 camera.position.z = 5;
 flatCamera.position.z = 5
 
-const control = new TrackballControls(camera, frame)
-const objectGeometry = new THREE.SphereGeometry( 10, 100, 100 );  
+const control = new TrackballControls(camera, frame) 
 const textureSky = new THREE.CubeTextureLoader().setPath( '/static/skybox/' ).load( [
     'hills2_rt_px.png',
     'hills2_lf_nx.png',
@@ -115,11 +113,11 @@ control.keys = []
 control.noRoll = true
 const ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
 scene.add( ambientLight );
-var light = new THREE.PointLight( 0xffffff, 1, 100 );
+const light = new THREE.PointLight( 0xffffff, 1, 100 );
 light.position.set( 20, 20, 20 );
 scene.add( light );
 
-var plight = new THREE.PointLight( 0xffffff, 1, 200 );
+const plight = new THREE.PointLight( 0xffffff, 1, 200 );
 plight.position.set( -40, 20, 20 );
 scene.add( plight );
 
@@ -133,18 +131,6 @@ function render(tm : number) {
 }
 render(0);
 
-
-const axisCaster = new THREE.Raycaster()
-let lastAxis : Object3D | null = null
-axisCaster.linePrecision = 0.05;
-
-frame.onmouseup = (ev)=>{
-    control.enabled = true
-    if(lastAxis !== null) {
-        (lastAxis as any).material.color.setHex(lastAxis.userData.color)
-        lastAxis = null
-    }
-}
 let objectScene : THREE.Scene | null = null
 
 
@@ -155,7 +141,6 @@ loader.load('/static/test/scene.gltf', (m)=>{
         if(obj instanceof Mesh) {
             (obj.material as MeshStandardMaterial).envMap  = textureSky;
             (obj.material as MeshStandardMaterial).needsUpdate  = true;
-            // (obj.material as MeshStandardMaterial).wireframe = true
         }
     })
     console.log(m.scene)
