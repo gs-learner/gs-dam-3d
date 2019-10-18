@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import './App.css';
 import {HomePage} from './homePage/homePage';
 import {CataPage} from './cataPage/cataPage';
+import {UserPage} from './userPage/userPage';
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
