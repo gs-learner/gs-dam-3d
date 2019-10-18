@@ -1,7 +1,7 @@
 ### Road Map
 
 1. 界面优化 @gs-learner
-- [ ] sigup-or-signin.tsx
+- [X] sigup-or-signin.tsx
 - [ ] upload-model.tsx
 - [ ] 根据登录状态现实登录按钮/用户头像+Upload按钮
 

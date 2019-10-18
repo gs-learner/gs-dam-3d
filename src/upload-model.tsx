@@ -15,6 +15,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Button } from '@material-ui/core'
+import { textAlign } from '@material-ui/system'
 
 interface WaitingItemProps {
     file: File
@@ -34,7 +35,10 @@ const useWaitingStyle = makeStyles((theme: Theme) => ({
         marginRight: theme.spacing(1),
     },
     formControl: {
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(2),
+        marginLeft:theme.spacing(1),
+        marginRight:theme.spacing(1),
+        marginBottom:theme.spacing(1),
         minWidth: 120,
       },
   }));
@@ -81,11 +85,12 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
     }
 
     useEffect(()=>{
+        setCompleted(0)
         if(props.index === props.active) {
-            setCompleted(0)
+            
             Upload()
         }
-    }, [props.index, props.active])
+    }, [props.index, props.active, props.file])
 
     useEffect(()=>{
         setName(props.file.name)
@@ -168,9 +173,18 @@ const UploadModel : React.FC = (props)=>{
             <Dropzone onDrop={onDrop} >
                 {({getRootProps, getInputProps}) => (
                     <section>
-                    <div {...getRootProps()} style={{height: 200}}>
+                    <div {...getRootProps()} style={{height: 200, textAlign:"center"}}>
                             <input {...getInputProps()} />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
+                            <div style={{
+                                position:'relative',
+                                top:'35%',
+                                borderStyle:"dashed",
+                                borderWidth:"1px",
+                                paddingTop:'20px',
+                                paddingBottom:'20px',
+                                }}>
+                                Drag 'n' drop some files here, or click to select files
+                            </div>
                     </div>
                     </section>
                 )}

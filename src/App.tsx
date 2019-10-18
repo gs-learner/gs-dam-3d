@@ -74,9 +74,9 @@ const App: React.FC = () => {
         toPorfile.current.click()
       }
     }}>To Profile</button>
-    <button onClick={()=>{
+    {/* <button onClick={()=>{
       setOpenUploadModel(true)
-    }}>Open Upload Model</button>
+    }}>Open Upload Model</button> */}
     <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
     <HomePage/>
     
@@ -86,7 +86,7 @@ const App: React.FC = () => {
       <CataPage/>
     </Route>
     <Route exact path='/user'>
-      
+      <UserPage/>
     </Route>
     <Route exact path='/profile/edit'>
       <EditProfile />

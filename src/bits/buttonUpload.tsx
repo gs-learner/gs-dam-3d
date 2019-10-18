@@ -25,5 +25,5 @@ const StyledButton = withStyles({
 export default function UploadButton() {
   const pro = useContext(profile)
 
-  return <StyledButton>UPLOAD</StyledButton>;
+  return <StyledButton onClick={()=>{pro.trigger.uploadModel(true)}}>UPLOAD</StyledButton>;
 }
