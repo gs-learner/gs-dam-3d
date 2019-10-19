@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { CanvasManager } from './canvas'
 import * as THREE from 'three'
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+// import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
+import { TrackballControls } from './bits/TrackballControls'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { MeshStandardMaterial, Mesh } from 'three'
 import Paper from '@material-ui/core/Paper';
@@ -11,7 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {D3DModel} from './utils/api'
+import {D3DModel, StaticGetJsonFile, RenderConfig} from './utils/api'
 
 const useStyles =  makeStyles((theme: Theme)=>
     createStyles({
@@ -24,18 +25,29 @@ const useStyles =  makeStyles((theme: Theme)=>
       })
 )
 interface P {
-    model?: D3DModel
+    model: D3DModel | null
+    onBgColor: (color:string)=>any
 }
 
 const Render : React.FC<P> = (props)=>{
     const [handle, setHandle] = useState<ReturnType<typeof RunAll>>()
     const [wireFrame, setWireFrame] = useState(true)
+    const [background, setBackground] = useState('radial-gradient(circle, rgba(35,162,244,1) 0%, rgba(26,26,186,1) 96%, rgba(25,18,144,1) 100%)');
+
     useEffect(()=>{
         setHandle(RunAll())
+        console.log('boostrapped')
+        props.onBgColor(background)
     }, [])
-   // useEffect(()=>{
-        // ...
-    //}, [props.url])
+
+    useEffect(()=>{
+        console.log('hi')
+        console.log(handle, props.model)
+        if(handle !== undefined && props.model !== null) { 
+            handle.rerender(props.model, ()=>{}, setBackground)
+            console.log('rerender')
+        }
+    }, [props.model, handle])
 
     return (
         <div style={{
@@ -82,71 +94,176 @@ export default Render;
 function RunAll () {
 const frame = document.getElementById('canvas-frame'); if(frame === null) return;
 const scene = new THREE.Scene();
-const renderer = new THREE.WebGLRenderer({antialias : true, powerPreference:'high-performance'});
+const renderer = new THREE.WebGLRenderer({antialias : true, powerPreference:'high-performance', alpha:true});
 const canvas = new CanvasManager(frame, renderer.domElement, renderer);
 const camera = new THREE.PerspectiveCamera(75, canvas.Aspect(), 0.1, 1000);
 const flatScene = new THREE.Scene()
 const flatCamera = new THREE.PerspectiveCamera(75, canvas.Aspect(), 0.1, 1000);
+let objectScene : THREE.Scene | null = null
 
-renderer.setClearColor(0x222222, 1.0);
+renderer.setClearColor(0x222222, 0.0);
 
 camera.position.z = 5;
 flatCamera.position.z = 5
-
 const control = new TrackballControls(camera, frame) 
-const textureSky = new THREE.CubeTextureLoader().setPath( '/static/skybox/' ).load( [
-    'hills2_rt_px.png',
-    'hills2_lf_nx.png',
-    'hills2_up_py.png',
-    'hills2_dn_ny.png',
-    'hills2_ft_pz.png',
-    'hills2_bk_nz.png'
-] );
+let autoRotate = false
+let autoRotateCount = 0
+let maxRotateCount = 0
 
-console.log(textureSky)
+const TriggerStart = ()=>{
+    autoRotate = true
+    autoRotateCount = 0
+    maxRotateCount = 60
+    control.zoomDelta(-2)
+}
 
-control.target.set(0, 0, 0)
-control.rotateSpeed = 10.0;
-control.noPan = false
-control.maxDistance = 20
-control.keys = []
-control.noRoll = true
-const ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
-scene.add( ambientLight );
-const light = new THREE.PointLight( 0xffffff, 1, 100 );
-light.position.set( 20, 20, 20 );
-scene.add( light );
+const AutoRotate = ()=>{
+    if(autoRotate === false) return;
+    if(autoRotateCount === maxRotateCount) {
+        autoRotate = false
+        return;
+    }
+    ++autoRotateCount;
+    
+    control.zoomDelta(0.26 / maxRotateCount)
+    control.mockRotateX(0.0101)
+}
+//TODO(leon): Add render info cache
+const fileLoader = new  THREE.FileLoader();
 
-const plight = new THREE.PointLight( 0xffffff, 1, 200 );
-plight.position.set( -40, 20, 20 );
-scene.add( plight );
+const GetJsonFile = (url:string, onprogress: (progress_0_to_1: number)=>any)=>new Promise((resolve, reject)=>{
+    fileLoader.load(url, (res)=>{
+        resolve(JSON.parse(res as string))
+    }, (pro)=>{
+        onprogress(pro.loaded / pro.total)
+    }, reject)
+})
 
+const ReRender = async (
+    minfo : D3DModel, 
+    onprogress: (progress_0_to_1: number)=>any, 
+    setbackground: (color:string, gradient:boolean)=>any
+    )=>{
+    
+    const renderConfig = await GetJsonFile(minfo.url + '/' + 'render.json', (n)=>onprogress(n*0.05)) as RenderConfig;
+    console.log(renderConfig)
+    if(renderConfig.renderSky === 'col') {
+        setbackground(renderConfig.backgroundColor, renderConfig.backgroundGradient);
+        renderer.setClearColor(0x222222, 0.0);
+    }
+    else{
+        renderer.setClearColor(0x222222, 1.0);
+        //TODO(leon): not supported yet
+    }
+
+    const textureSky = new THREE.CubeTextureLoader().setPath( '/static/skybox/hills2/' ).load( [
+        'px.png',
+        'nx.png',
+        'py.png',
+        'ny.png',
+        'pz.png',
+        'nz.png'
+    ] );
+
+    control.reset()
+    scene.children = []
+
+    control.target.set(0, 0, 0)
+    control.rotateSpeed = 10.0;
+    control.noPan = false
+    control.maxDistance = 20
+    control.keys = []
+    control.noRoll = true
+
+    const ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
+    scene.add( ambientLight );
+    const light = new THREE.PointLight( 0xffffff, 1, 100 );
+    light.position.set( 20, 20, 20 );
+    scene.add( light );
+
+    const plight = new THREE.PointLight( 0xffffff, 1, 200 );
+    plight.position.set( -40, 20, 20 );
+    scene.add( plight );
+
+    const loader = new GLTFLoader()
+    loader.load('/static/test/scene.gltf', (m)=>{
+        m.scene.scale.set(0.005, 0.005, 0.005)
+        m.scene.traverse(obj =>{
+            if(obj instanceof Mesh) {
+                (obj.material as MeshStandardMaterial).envMap  = textureSky;
+                (obj.material as MeshStandardMaterial).needsUpdate  = true;
+            }
+        })
+        TriggerStart()
+
+        scene.add(m.scene)
+        objectScene = m.scene
+        console.log('load done')
+    })
+}
+
+
+// const textureSky = new THREE.CubeTextureLoader().setPath( '/static/skybox/hills2/' ).load( [
+//     'px.png',
+//     'nx.png',
+//     'py.png',
+//     'ny.png',
+//     'pz.png',
+//     'nz.png'
+// ] );
+
+// console.log(textureSky)
+// 
+// control.target.set(0, 0, 0)
+// control.rotateSpeed = 10.0;
+// control.noPan = false
+// control.maxDistance = 20
+// control.keys = []
+// control.noRoll = true
+// 
+// const ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
+// scene.add( ambientLight );
+// const light = new THREE.PointLight( 0xffffff, 1, 100 );
+// light.position.set( 20, 20, 20 );
+// scene.add( light );
+// 
+// const plight = new THREE.PointLight( 0xffffff, 1, 200 );
+// plight.position.set( -40, 20, 20 );
+// scene.add( plight );
+// 
+// 
+// 
 function render(tm : number) {
+    console.log('render')
     requestAnimationFrame(render);
+    control.update()
+    AutoRotate()
+    
     renderer.autoClear = true;
     renderer.render(scene, camera);
     renderer.autoClear = false;
-    renderer.render(flatScene, flatCamera)
-    control.update()
+    renderer.render(flatScene, flatCamera);
 }
 render(0);
 
-let objectScene : THREE.Scene | null = null
-
-
-const loader = new GLTFLoader()
-loader.load('/static/test/scene.gltf', (m)=>{
-    m.scene.scale.set(0.005, 0.005, 0.005)
-    m.scene.traverse(obj =>{
-        if(obj instanceof Mesh) {
-            (obj.material as MeshStandardMaterial).envMap  = textureSky;
-            (obj.material as MeshStandardMaterial).needsUpdate  = true;
-        }
-    })
-    console.log(m.scene)
-    scene.add(m.scene)
-    objectScene = scene
-})
+// 
+// let objectScene : THREE.Scene | null = null
+// 
+// 
+// const loader = new GLTFLoader()
+// loader.load('/static/test/scene.gltf', (m)=>{
+//     m.scene.scale.set(0.005, 0.005, 0.005)
+//     m.scene.traverse(obj =>{
+//         if(obj instanceof Mesh) {
+//             (obj.material as MeshStandardMaterial).envMap  = textureSky;
+//             (obj.material as MeshStandardMaterial).needsUpdate  = true;
+//         }
+//     })
+//     TriggerStart()
+// 
+//     scene.add(m.scene)
+//     objectScene = scene
+// })
 
 return {
     setWireframe: (bool : boolean) =>{
@@ -161,7 +278,8 @@ return {
     },
     resetCamara: ()=>{
         control.reset()
-    }
+    },
+    rerender: ReRender
 }
 
 

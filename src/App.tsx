@@ -86,7 +86,7 @@ const App: React.FC = () => {
       <CataPage/>
     </Route>
     <Route exact path='/user'>
-      
+      <UserPage />
     </Route>
     <Route exact path='/profile/edit'>
       <EditProfile />

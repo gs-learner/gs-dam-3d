@@ -107,7 +107,7 @@ export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
     ]
 }
 
-interface RenderConfig {
+export interface RenderConfig {
     renderSky: RenderSky
     backgroundColor: string
     backgroundGradient: boolean
@@ -120,10 +120,10 @@ interface RenderConfig {
 export function MakeDefaultRenderConfig() : RenderConfig {
     return {
         renderSky: 'col',
-        backgroundColor: '#222222',
+        backgroundColor: 'radial-gradient(circle, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 87%, rgba(2,0,36,1) 100%)',
         backgroundGradient: true,
         skybox: '',
-        envMap: '',
+        envMap: '/static/skybox/hills2/',
         scale: 0.05,
         lights: ['default']
     }
@@ -247,6 +247,29 @@ export async function APIUpdateUserAvatar(info:{avatar:string /* base64 */}){
 export async function APIUploadModel(info: U3DModel, onprogress: (progress_0_to_1: number)=>any) {
     let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<{avatarUrl:string}>
     return RefineResponse(res)
+}
+
+export function StaticGetJsonFile<U>(url: string, onprogress: (progress_0_to_1: number)=>any) {
+    return new Promise((resolve : (v:U)=>void, reject)=>{
+        const xhr = new XMLHttpRequest()
+        xhr.onerror = (e)=>reject(e)
+        xhr.upload.onprogress = (ev)=>{
+            const done = ev.loaded
+            const total = ev.total
+            onprogress(done / total)
+        }
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status===200){
+                resolve(JSON.parse(xhr.responseText) as U)
+            }
+            else {
+                reject('xhr failed w/ status ' + xhr.status)
+            }
+        }
+        
+        xhr.open('GET', url, true);
+        xhr.send();
+    })
 }
 
 // export async function APICheckUserExists(info:{username:string}){
