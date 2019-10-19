@@ -248,37 +248,6 @@ const ReRender = async (
     })
 }
 
-
-// const textureSky = new THREE.CubeTextureLoader().setPath( '/static/skybox/hills2/' ).load( [
-//     'px.png',
-//     'nx.png',
-//     'py.png',
-//     'ny.png',
-//     'pz.png',
-//     'nz.png'
-// ] );
-
-// console.log(textureSky)
-// 
-// control.target.set(0, 0, 0)
-// control.rotateSpeed = 10.0;
-// control.noPan = false
-// control.maxDistance = 20
-// control.keys = []
-// control.noRoll = true
-// 
-// const ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
-// scene.add( ambientLight );
-// const light = new THREE.PointLight( 0xffffff, 1, 100 );
-// light.position.set( 20, 20, 20 );
-// scene.add( light );
-// 
-// const plight = new THREE.PointLight( 0xffffff, 1, 200 );
-// plight.position.set( -40, 20, 20 );
-// scene.add( plight );
-// 
-// 
-// 
 function render(tm : number) {
     console.log('render')
     requestAnimationFrame(render);
@@ -296,25 +265,6 @@ function render(tm : number) {
     // renderer.render(flatScene, flatCamera);
 }
 render(0);
-
-// 
-// let objectScene : THREE.Scene | null = null
-// 
-// 
-// const loader = new GLTFLoader()
-// loader.load('/static/test/scene.gltf', (m)=>{
-//     m.scene.scale.set(0.005, 0.005, 0.005)
-//     m.scene.traverse(obj =>{
-//         if(obj instanceof Mesh) {
-//             (obj.material as MeshStandardMaterial).envMap  = textureSky;
-//             (obj.material as MeshStandardMaterial).needsUpdate  = true;
-//         }
-//     })
-//     TriggerStart()
-// 
-//     scene.add(m.scene)
-//     objectScene = scene
-// })
 
 return {
     setWireframe: (bool : boolean) =>{
