@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import { profile } from './bits/store';
 import Button from '@material-ui/core/Button';
 import { APIUpdateUserProfile, APIUpdateUserPassword } from './utils/api';
+import AvatarEditor from 'react-avatar-editor'
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -150,6 +151,15 @@ const EditProfile : React.FC = (props)=>{
             <Typography variant='h6'>
                 {pro.user.username}
             </Typography>
+            <AvatarEditor
+                image={pro.user.avatar}
+                width={250}
+                height={250}
+                border={50}
+                color={[255, 255, 255, 0.6]} // RGBA
+                scale={1.2}
+                rotate={0}
+            />
             <TextField
                 id="outlined-name"
                 label="Display Name"

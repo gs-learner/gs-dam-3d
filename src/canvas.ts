@@ -4,6 +4,10 @@ import { WebGLRenderer } from "three"
 
 // import { MapColorToDiscrete, BeginingPrime, Integration, ComputeTransformMatrix } from './utils'
 
+interface Resizable {
+    setSize: (w:number,h:number)=>any
+}
+
 export class CanvasManager {
     w = 0
     h = 0
@@ -14,6 +18,7 @@ export class CanvasManager {
     canvas: HTMLCanvasElement
     frame : HTMLElement
     renderer ?: WebGLRenderer
+    resizables = new Array<Resizable>()
 
     constructor(frame : HTMLElement, canvas : HTMLCanvasElement, renderer?: WebGLRenderer) {
         this.clearPickPosition()
@@ -33,7 +38,14 @@ export class CanvasManager {
             if(renderer) {
                 renderer.setSize(this.w, this.h)
             }
+            for(let item of this.resizables) {
+                item.setSize(this.w, this.h)
+            }
         }, false)
+    }
+
+    listenResize(target : Resizable) {
+        this.resizables.push(target)
     }
     
     set onmousemove(fn : any) {

@@ -107,7 +107,7 @@ export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
     ]
 }
 
-interface RenderConfig {
+export interface RenderConfig {
     renderSky: RenderSky
     backgroundColor: string
     backgroundGradient: boolean
@@ -120,10 +120,10 @@ interface RenderConfig {
 export function MakeDefaultRenderConfig() : RenderConfig {
     return {
         renderSky: 'col',
-        backgroundColor: '#222222',
+        backgroundColor: 'radial-gradient(circle, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 87%, rgba(2,0,36,1) 100%)',
         backgroundGradient: true,
         skybox: '',
-        envMap: '',
+        envMap: '/static/skybox/hills2/',
         scale: 0.05,
         lights: ['default']
     }
@@ -136,7 +136,8 @@ interface Comment {
 }
 
 // 文件目录结构
-// url/
+// /home/models/ <-- root
+// username/id/ <-- url
 //   - scene.gltf
 //   - render.json
 //   - preview.png
@@ -184,7 +185,7 @@ export interface RModels extends StandardResponse<D3DModel[]> {}
 async function SendJSON<U, T>(input: RequestInfo, data:T) {
     let res = await fetch(input, {
         headers: { 
-            "Content-Type": "application/json"
+            "Content-Type": "application/json;charset=UTF-8"
         },
         method: 'POST',
         body: JSON.stringify(data)
@@ -206,7 +207,7 @@ function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to
                 resolve(JSON.parse(xhr.responseText) as U)
             }
             else {
-                reject('xhr failed w./ status' + xhr.status)
+                reject('xhr failed w/ status ' + xhr.status)
             }
         }
         
@@ -229,18 +230,46 @@ export async function APISignin(info: {username:string, password:string}) {
 // 这里 Omit 是指 URegisterUser 里去掉 username & password 属性
 // username 的记录应该用服务器的 session 来记录, 否则知道用户名就能改别人的 profile
 export async function APIUpdateUserProfile(info: Omit<URegisterUser, 'username'|'password'>) {
-    let res = await SendJSON('/api/user/update', info) as StandardResponse<undefined>
+    let res = await SendJSON('/api/user/update/basic', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
 
 export async function APIUpdateUserPassword(info: {oldpassword:string,password:string}) {
-    let res = await SendJSON('/api/user/update', info) as StandardResponse<undefined>
+    let res = await SendJSON('/api/user/update/passwd', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
+export async function APIUpdateUserAvatar(info:{avatar:string /* base64 */}){
+    let res = await SendJSON('/api/user/update/avatar', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
 
 export async function APIUploadModel(info: U3DModel, onprogress: (progress_0_to_1: number)=>any) {
-    let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<undefined>
+    let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<{avatarUrl:string}>
     return RefineResponse(res)
+}
+
+export function StaticGetJsonFile<U>(url: string, onprogress: (progress_0_to_1: number)=>any) {
+    return new Promise((resolve : (v:U)=>void, reject)=>{
+        const xhr = new XMLHttpRequest()
+        xhr.onerror = (e)=>reject(e)
+        xhr.upload.onprogress = (ev)=>{
+            const done = ev.loaded
+            const total = ev.total
+            onprogress(done / total)
+        }
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status===200){
+                resolve(JSON.parse(xhr.responseText) as U)
+            }
+            else {
+                reject('xhr failed w/ status ' + xhr.status)
+            }
+        }
+        
+        xhr.open('GET', url, true);
+        xhr.send();
+    })
 }
 
 // export async function APICheckUserExists(info:{username:string}){
