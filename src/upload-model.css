@@ -1,0 +1,6 @@
+#plusIcon{
+    transition:0.4s;
+}
+#plusIcon:hover{
+    filter: brightness(150%);
+}

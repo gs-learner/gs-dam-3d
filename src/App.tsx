@@ -17,11 +17,13 @@ import UploadModel from './upload-model';
 import EditProfile from './edit-profile'
 
 import { MockUser } from './utils/mock'
+import { green, red } from '@material-ui/core/colors';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState(createMuiTheme({
     palette: {
       primary: blue,
+      secondary: red,
     },
   }));
   const toPorfile = useRef<HTMLAnchorElement>(null)
