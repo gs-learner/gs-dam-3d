@@ -4,7 +4,7 @@ import Dialog from '@material-ui/core/Dialog'
 import Dropzone from 'react-dropzone'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, Theme, withStyles, ThemeProvider, lighten } from '@material-ui/core/styles';
 import { DisplayFileSize, toBase64 } from './utils/utils'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { MakeDefaultRenderConfig, APIUploadModel, ModelCatalog, AllModelCatalogs } from './utils/api'
@@ -14,7 +14,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core'
+import { textAlign, palette } from '@material-ui/system'
+import Link from '@material-ui/core/Link'
+
+import './upload-model.css'
+import { orange, deepOrange } from '@material-ui/core/colors'
+import { relative } from 'path'
 
 interface WaitingItemProps {
     file: File
@@ -27,23 +34,52 @@ const useWaitingStyle = makeStyles((theme: Theme) => ({
     paper: {
         whiteSpace: 'normal',
         overflow: 'hidden',
-        marginBottom: theme.spacing(1)
+        // marginBottom: theme.spacing(1),
+        // padding:'10px',
     },
     textField: {
+        marginTop: theme.spacing(2),
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+        marginBottom:theme.spacing(1),
     },
     formControl: {
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(2),
+        marginLeft:theme.spacing(1),
+        marginRight:theme.spacing(1),
+        marginBottom:theme.spacing(1),
         minWidth: 120,
       },
+    progressBar: {
+        height: 25,
+        //backgroundColor: theme.palette.secondary.dark
+    }
   }));
+
+  
+
+  const ColorLinearProgress = withStyles((theme:Theme)=>({
+    colorSecondary:{
+      backgroundColor: deepOrange[100],
+    },
+    barColorSecondary:{
+        backgroundColor:deepOrange[300],
+    },
+    colorPrimary: {
+      backgroundColor: lighten(theme.palette.primary.light,0.3),
+    },
+    barColorPrimary: {
+      backgroundColor: lighten(theme.palette.primary.main, 0.3),
+    },
+  }))(LinearProgress);
 
 const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
     const [completed, setCompleted] = useState(0)
     const classes = useWaitingStyle()
     const [name, setName] = useState('')
     const [catagory, setCatagory] = useState(0)
+    const [isloaded,setIsloaded] = useState(true)
+    const [overState, setOverState] = useState(false)
     
     const Upload =  async ()=>{
         let base = await toBase64(props.file, (f)=>{
@@ -65,27 +101,34 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                 setCompleted(10 + f * 90)
             });
             if(res.ok) {
-                //TODO: Tell User
+                console.log('succeed');
+                setIsloaded(true);
             }
             else {
-                //TODO: 进度条标红?
-                //TODO: Tell User
+                console.log('failed');
+                setIsloaded(false);
             }
+            
+            setOverState(true);
+            setCompleted(100);
             props.onDone(props.index)
         }
         catch(e){
             console.log(e)
+            console.log('changed')
+            
+            setIsloaded(false);
+            setOverState(true);
+            setCompleted(100);
             props.onDone(props.index);
-            //TODO: Log eror
         }
     }
 
     useEffect(()=>{
         if(props.index === props.active) {
-            setCompleted(0)
             Upload()
         }
-    }, [props.index, props.active])
+    }, [props.index, props.active, props.file])
 
     useEffect(()=>{
         setName(props.file.name)
@@ -104,12 +147,13 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                 label="Name of the Model"
                 defaultValue="foo"
                 className={classes.textField}
-                margin="normal"
+                // margin="normal"
                 variant="outlined"
                 value={name}
                 onChange={e=>setName(e.target.value)}
+                margin="dense"
             />
-            <FormControl variant="outlined" className={classes.formControl}>
+            <FormControl variant="outlined" margin="dense" className={classes.formControl}>
                 <InputLabel ref={inputLabel} htmlFor="outlined-catagory-simple">
                     Catagory
                 </InputLabel>
@@ -129,18 +173,87 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                 }
                 </Select>
             </FormControl>
-            <Typography variant='subtitle2'>
-                {DisplayFileSize(props.file.size)}
-            </Typography>
-            <LinearProgress variant="determinate" value={completed}/>
+            <Grid container spacing={3}>
+                <Grid item xs>
+                    <div style={{position:'relative',height:'10px', zIndex:100000,color:'white',fontWeight:'bold'}}>
+                        <div style={{position:'absolute',top:'12px'}}>
+                            <Typography variant='subtitle2'>
+                            {DisplayFileSize(props.file.size)}
+                            </Typography>
+                        </div>
+                    </div>
+                </Grid>
+                <Grid item xs>
+                    <div style={{position:'relative',height:'10px', zIndex:100000,color:'white',fontWeight:'bold'}}>
+                        <div style={{position:'absolute',top:'12px',width:'100%'}}>
+                            <div style={{float:'right'}}>
+                            <Typography variant='subtitle2'>
+                                {overState?(isloaded?
+                                    (<img src='/image/right.png' width='20px' height='20px'></img>)
+                                    :(<img src='/image/wrong.png' width='20px' height='20px'></img>))
+                                    :''}
+                            </Typography>
+                            </div>
+                        </div>
+                    </div>
+                </Grid>
+            </Grid>
+            <ColorLinearProgress className={classes.progressBar} variant="determinate" value={completed} color={isloaded?'primary':'secondary'}/>
         </Paper>
     )
 }
+
+const HEADER_LINE = 100 as const
+
+const useStyle = makeStyles((theme: Theme) => ({
+    header: {
+        backgroundColor: theme.palette.primary.main,
+        height: HEADER_LINE,
+        width: '100%',
+        verticalAlign: 'middle',
+        textAlign: 'center',
+        fontSize: 20,
+    },
+    header_accent: {
+        fontWeight: 700,
+        color: 'white',
+        fontSize: 22,
+        lineHeight: 2,
+        fontFamily: 'Proxima Nova'
+    },
+    header_light: {
+        fontWeight: 100,
+        color: 'white',
+        lineHeight: 2,
+        fontSize: 20,
+        fontFamily: 'Proxima Nova'
+    },
+    hint: {
+        color: '#000000bb',
+        fontFamily: 'Proxima Nova'
+    },
+    hintLink: {
+        color: theme.palette.primary.light,
+        fontFamily: 'Proxima Nova'
+    },
+    submitButton:{
+        width:'100%',
+        backgroundColor:'#2196f3',
+        color:'white',
+        '&:hover':{
+            color:'black',
+        },
+    }
+  }));
 
 const UploadModel : React.FC = (props)=>{
     const pro = useContext(profile)
     const [files, setFiles] = useState(new Array<File>())
     const [uploading, setUploading] = useState(-1)
+    const classes = useStyle()
+    const [height, setHeight] = useState(80)
+    const [open, setopen] = useState(false)
+
     
     if(!pro.user.username) {
          return null
@@ -149,6 +262,8 @@ const UploadModel : React.FC = (props)=>{
     function onDrop<T extends File>(acceptedFiles: T[], rejectedFiles: T[]) {
         // setUploading(0)
         setFiles(acceptedFiles)
+        setHeight(100)
+        setopen(true)
     }
 
     const onUploadDone = (idx : number) => {
@@ -164,18 +279,20 @@ const UploadModel : React.FC = (props)=>{
     
 
     return (
-        <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)}>
-            <Dropzone onDrop={onDrop} >
-                {({getRootProps, getInputProps}) => (
-                    <section>
-                    <div {...getRootProps()} style={{height: 200}}>
-                            <input {...getInputProps()} />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
-                    </div>
-                    </section>
-                )}
-            </Dropzone>
-            <Paper>
+        <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)} scroll='body'>
+            <Grid container alignItems='center' className={classes.header} style={{height: height / 2}}>
+                <Grid item xs>
+                    <Typography display='inline' className={classes.header_accent}>
+                        Upload
+                    </Typography>
+                    <Typography display='inline' className={classes.header_light}>
+                        Models
+                    </Typography>
+                </Grid>
+                
+            </Grid>
+
+            <Paper style={{maxHeight: '500px', overflow: 'auto'}}>
             {
                 files.map((v, idx)=>
                     <WaitingItem
@@ -188,7 +305,50 @@ const UploadModel : React.FC = (props)=>{
                 )
             }
             </Paper>
-            {(uploading < 0 && files.length)? <Button onClick={()=>setUploading(0)}>Submit</Button>:null}
+            {(uploading < 0 && files.length)? <Button onClick={()=>setUploading(0)} className={classes.submitButton}>Submit</Button>:null}
+
+            <Dropzone onDrop={onDrop}>
+                {({getRootProps, getInputProps}) => (
+                    
+                    <div {...getRootProps()} style={{textAlign:"center", backgroundColor: '#f1f5ff'}}>
+                            <input {...getInputProps()} />
+                            <div style={{padding:'20px'}}>
+                                <div id="plusIcon" style={{
+                                    borderStyle:"dashed",
+                                    borderWidth:4,
+                                    borderColor: '#00000020',
+                                    borderRadius: 4,
+                                    padding: 20,
+                                    width: 'auto',
+                                    boxSizing: 'border-box',
+                                    backgroundImage:(open?'url(/image/plus.png)':'none'),
+                                    backgroundRepeat:'no-repeat',
+                                    backgroundSize:'100% 100%',
+                                    }}>
+                                        
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justify="center"
+                                        alignItems="center"
+                                    >
+                                        <Grid item xs>
+                                
+                                        <Typography className={classes.hint} display='inline'>
+                                        {open?'':'Drag File here or'} <span> </span>
+                                        </Typography>
+                                        <Typography className={classes.hintLink} display='inline' style={{cursor:'pointer'}}>{open?'':'Browse'}</Typography>
+                                        
+                                        </Grid>
+                                        
+                                    </Grid>
+                                    
+                                </div>
+                            </div>
+                            
+                    </div>
+                )}
+            </Dropzone>
         </Dialog>
     )
 }

@@ -17,9 +17,11 @@
     float: left;
     color: white;
 }
+.LogBar{
+    float:right;
+}
 .HeaderBarHomepage div.LogBar{
     width: 300px;
-    float:right;
 }
 .HeaderMainHomepage{
     width: 1500px;

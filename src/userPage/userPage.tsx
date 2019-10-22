@@ -62,7 +62,7 @@ const BodyLeftUserPage: React.FC<preViewPackages> = (props) => {
                 {
                     pkgs.map((v, idx) => {
                         return (
-                            <Grid item xs={12} md={5} lg={3} xl={2}>
+                            <Grid key={idx} item xs={12} md={5} lg={3} xl={2}>
                                 <Package {...v} />
                             </Grid>
                         )
@@ -115,7 +115,7 @@ const BodyUserPage: React.FC = () => {
 }
 const HeadUserPage: React.FC = () => {
     return (
-        <SearchAppBar />
+        <SearchAppBar/>
     )
 }
 

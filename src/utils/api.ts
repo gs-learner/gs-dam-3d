@@ -203,6 +203,7 @@ function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to
             onprogress(done / total)
         }
         xhr.onreadystatechange = ()=>{
+            xhr.upload.onprogress = null
             if(xhr.readyState === XMLHttpRequest.DONE && xhr.status===200){
                 resolve(JSON.parse(xhr.responseText) as U)
             }

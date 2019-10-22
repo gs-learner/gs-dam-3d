@@ -7,7 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { createStyles, fade, Theme, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import {LogBar} from '../homePage/homePage'
+import {LogBar} from './logBar'
 import { Avatar } from '@material-ui/core';
 import Container from '@material-ui/core/Container'
 const useStyles = makeStyles((theme: Theme) =>
@@ -85,7 +85,7 @@ export default function SearchAppBar() {
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon />
+              <SearchIcon/>
             </div>
             <InputBase
               placeholder="Search…"

@@ -2,9 +2,6 @@
     margin: 0px;
     padding: 0px;
 }
-.LogBar{
-    float: right;
-}
 .HeaderNavCataPage{
     padding-top: 20px;
     padding-bottom: 20px;
@@ -28,4 +25,7 @@
 .BodyTopCataPage{
     padding: 100px 20px 0px 50px;
     margin-bottom: -20px;
+}
+.bodyContCataPage .Package{
+    margin: 0px 30px 30px 0;
 }

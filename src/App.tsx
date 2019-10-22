@@ -17,11 +17,13 @@ import UploadModel from './upload-model';
 import EditProfile from './edit-profile'
 
 import { MockUser } from './utils/mock'
+import { green, red } from '@material-ui/core/colors';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState(createMuiTheme({
     palette: {
       primary: blue,
+      secondary: red,
     },
   }));
   const toPorfile = useRef<HTMLAnchorElement>(null)
@@ -31,6 +33,7 @@ const App: React.FC = () => {
   const [openSignupOrSigin, setOpenSignipOrSignin] = useState(false)
   const [user, setUser] = useState(MockUser())
   const [openUploadModel, setOpenUploadModel] = useState(false)
+  const [logState, setLogState] = useState(false)
   
   const pro:Profile  = {
     user: user,
@@ -51,8 +54,12 @@ const App: React.FC = () => {
     open: {
       uploadModel: openUploadModel
     },
+    State:{
+      logState: logState
+    },
     trigger: {
-      uploadModel: setOpenUploadModel
+      uploadModel: setOpenUploadModel,
+      logState: setLogState,
     },
     triggerSigning: (v)=>{
       setSignupOrSigin(v === 'signup');
@@ -74,9 +81,9 @@ const App: React.FC = () => {
         toPorfile.current.click()
       }
     }}>To Profile</button>
-    <button onClick={()=>{
+    {/* <button onClick={()=>{
       setOpenUploadModel(true)
-    }}>Open Upload Model</button>
+    }}>Open Upload Model</button> */}
     <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
     <HomePage/>
     

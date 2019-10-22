@@ -11,8 +11,9 @@ const StyledButton = withStyles({
     borderRadius: 3,
     border: 0,
     color: 'white',
-    height: 30,
-    width: 100,
+    fontSize:20,
+    height: 50,
+    width: 180,
     padding: '0 10px',
     margin:'0 5px',
   },
@@ -25,5 +26,5 @@ const StyledButton = withStyles({
 export default function UploadButton() {
   const pro = useContext(profile)
 
-  return <StyledButton>UPLOAD</StyledButton>;
+  return <StyledButton onClick={()=>{pro.trigger.uploadModel(true)}}>UPLOAD</StyledButton>;
 }
