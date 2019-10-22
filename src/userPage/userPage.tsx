@@ -115,7 +115,7 @@ const BodyUserPage: React.FC = () => {
 }
 const HeadUserPage: React.FC = () => {
     return (
-        <SearchAppBar />
+        <SearchAppBar/>
     )
 }
 

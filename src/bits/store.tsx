@@ -12,11 +12,15 @@ const default_profile = {
         profile: ()=>{},
         edit_profile: ()=>{},
     },
+    State:{
+        logState: false,
+    },
     open: {
         uploadModel: false,
     },
     trigger: {
-        uploadModel: (v:boolean)=>{}
+        uploadModel: (v:boolean)=>{},
+        logState:(v:boolean)=>{},
     },
     triggerSigning: (v:'siginin' | 'signup')=>{}
 }

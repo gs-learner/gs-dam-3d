@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const [openSignupOrSigin, setOpenSignipOrSignin] = useState(false)
   const [user, setUser] = useState(MockUser())
   const [openUploadModel, setOpenUploadModel] = useState(false)
+  const [logState, setLogState] = useState(false)
   
   const pro:Profile  = {
     user: user,
@@ -53,8 +54,12 @@ const App: React.FC = () => {
     open: {
       uploadModel: openUploadModel
     },
+    State:{
+      logState: logState
+    },
     trigger: {
-      uploadModel: setOpenUploadModel
+      uploadModel: setOpenUploadModel,
+      logState: setLogState,
     },
     triggerSigning: (v)=>{
       setSignupOrSigin(v === 'signup');

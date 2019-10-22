@@ -24,6 +24,5 @@ const StyledButton = withStyles({
 
 export default function SignIn() {
   const pro = useContext(profile)
-
   return <StyledButton onClick={()=>pro.triggerSigning('siginin')}>SIGN IN</StyledButton>;
 }

@@ -3,8 +3,7 @@ import CustomizedInputBase from '../bits/search';
 import './homePage.css'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-// import SignIn from '../bits/buttonSignIn'
-// import SignUp from '../bits/buttonSignUp'
+import {LogBar} from '../bits/logBar';
 import '../fonts/proxima-nova.css'
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -52,19 +51,12 @@ const TotalNum: React.FC<TotalNum> = (props) =>{
         </div>
     )
 }
-export const LogBar: React.FC = (props) =>{
-    return(
-        <div className="LogBar">
-            <SignIn/>
-            <SignUp/>
-        </div>
-    )
-}
+
 const HeaderBarHomepage: React.FC = () =>{
     return(
         <div className="HeaderBarHomepage">
             <TotalNum number={9999}/>
-            <LogBar />
+            <LogBar/>
         </div>
     )
 }

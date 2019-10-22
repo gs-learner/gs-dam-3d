@@ -101,15 +101,12 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                 setCompleted(10 + f * 90)
             });
             if(res.ok) {
-                //TODO: Tell User
                 console.log('succeed');
                 setIsloaded(true);
             }
             else {
                 console.log('failed');
                 setIsloaded(false);
-                //TODO: 进度条标红?
-                //TODO: Tell User
             }
             
             setOverState(true);
@@ -124,7 +121,6 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
             setOverState(true);
             setCompleted(100);
             props.onDone(props.index);
-            //TODO: Log eror
         }
     }
 
