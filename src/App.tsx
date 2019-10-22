@@ -82,10 +82,10 @@ const App: React.FC = () => {
     
     </div>
     </Route>
-    <Route exact path='/profile'>
+    <Route exact path='/catalog'>
       <CataPage/>
     </Route>
-    <Route exact path='/user'>
+    <Route exact path='/profile'>
       <UserPage />
     </Route>
     <Route exact path='/profile/edit'>
