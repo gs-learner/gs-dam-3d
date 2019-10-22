@@ -85,7 +85,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
         let base = await toBase64(props.file, (f)=>{
             setCompleted(f * 10)
         });
-        
+        console.log(base)
         if(base === null) {
             props.onDone(props.index)
             return
@@ -94,6 +94,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
             let res = await APIUploadModel({
                 model: base,
                 name: name,
+                filename: props.file.name,
                 catalog: AllModelCatalogs[catagory],
                 tags: new Array<string>(),
                 render_config: MakeDefaultRenderConfig()

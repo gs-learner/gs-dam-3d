@@ -1,5 +1,5 @@
 import React from 'react'
-import { MakeEmptyUser } from '../utils/api'
+import { MakeEmptyUser, D3DModel } from '../utils/api'
 
 type User = ReturnType<typeof MakeEmptyUser>
 
@@ -11,6 +11,7 @@ const default_profile = {
     to: {
         profile: ()=>{},
         edit_profile: ()=>{},
+        edit_render: (model: D3DModel)=>{}
     },
     State:{
         logState: false,

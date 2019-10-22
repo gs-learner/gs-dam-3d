@@ -159,6 +159,7 @@ export interface D3DModel {
 type ThreeDModelFormat = 'obj' | 'gltf'
 interface U3DModel {
     model: string // base64 encoded
+    filename: string
     name: string
     catalog: ModelCatalog
     tags: string[]

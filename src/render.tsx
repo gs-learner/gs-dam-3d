@@ -31,6 +31,7 @@ const useStyles =  makeStyles((theme: Theme)=>
 interface P {
     model: D3DModel | null
     onBgColor: (color:string)=>any
+    frameid: string
 }
 
 const Render : React.FC<P> = (props)=>{
@@ -39,14 +40,12 @@ const Render : React.FC<P> = (props)=>{
     const [background, setBackground] = useState('radial-gradient(circle, rgba(35,162,244,1) 0%, rgba(26,26,186,1) 96%, rgba(25,18,144,1) 100%)');
 
     useEffect(()=>{
-        setHandle(RunAll())
-        console.log('boostrapped')
+        setHandle(RunAll(props.frameid))
+        console.log('boostrapped on ', props.frameid)
         props.onBgColor(background)
     }, [])
 
     useEffect(()=>{
-        console.log('hi')
-        console.log(handle, props.model)
         if(handle !== undefined && props.model !== null) { 
             handle.rerender(props.model, ()=>{}, setBackground)
             console.log('rerender')
@@ -55,7 +54,7 @@ const Render : React.FC<P> = (props)=>{
 
     return (
         <div style={{
-            position: 'absolute'
+            position: 'absolute',
         }}>
             <Paper>
             <Grid
@@ -95,8 +94,8 @@ const Render : React.FC<P> = (props)=>{
 export default Render;
 
 
-function RunAll () {
-const frame = document.getElementById('canvas-frame'); if(frame === null) return;
+function RunAll (frameid: string) {
+const frame = document.getElementById(frameid); if(frame === null) return;
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({antialias : true, powerPreference:'high-performance', alpha:true, premultipliedAlpha: false});
 const canvas = new CanvasManager(frame, renderer.domElement, renderer);
