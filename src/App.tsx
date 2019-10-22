@@ -11,13 +11,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import DetailPanel from './detail-panel'
 import { profile, Profile } from './bits/store'
-import {BrowserRouter, Route} from 'react-router-dom'
+import {BrowserRouter, Route, useHistory} from 'react-router-dom'
 import SignupOrIn from './signup-or-in';
 import UploadModel from './upload-model';
 import EditProfile from './edit-profile'
 
 import { MockUser, MockModel } from './utils/mock'
-import { green, red } from '@material-ui/core/colors';
+import { red } from '@material-ui/core/colors';
 import RenderEditor from './render-editor';
 import { D3DModel } from './utils/api';
 
@@ -38,20 +38,24 @@ const App: React.FC = () => {
   const [openUploadModel, setOpenUploadModel] = useState(false)
   const [logState, setLogState] = useState(false)
   const [editingModel, setEditingodel] = useState<D3DModel>();
+  // const history = useHistory();
 
   const pro:Profile  = {
     user: user,
     set: {
-      user: setUser
+      user: setUser,
+      logState: setLogState,
     },
     to: {
       profile: ()=>{
-        if(toPorfile.current) {
-          toPorfile.current.click()
-        }
+        // history.push('/profile');
+        // if(toPorfile.current) {
+        //   toPorfile.current.click()
+        // }
       },
       edit_profile: ()=>{
-        if(toEditPorfile.current) toEditPorfile.current.click()
+        // history.push('/profile/edit');
+        // if(toEditPorfile.current) toEditPorfile.current.click()
       },
       edit_render: (model: D3DModel)=>{
         setEditingodel(model)
@@ -66,7 +70,6 @@ const App: React.FC = () => {
     },
     trigger: {
       uploadModel: setOpenUploadModel,
-      logState: setLogState,
     },
     triggerSigning: (v)=>{
       setSignupOrSigin(v === 'signup');
@@ -74,34 +77,29 @@ const App: React.FC = () => {
     }
   }
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline>
-      <profile.Provider value={pro}>
-        <BrowserRouter>
+<ThemeProvider theme={theme}>
+  <CssBaseline>
+    <profile.Provider value={pro}>
+      <BrowserRouter>
        <Route exact path='/'>
-    <div className="App">
-    <div style={{position: 'fixed', left: -100, top: -200}}>
-      <a ref={toPorfile} href='/profile'>x</a>
-      <a ref={toEditPorfile} href='/profile/edit'>x</a>
-      <a ref={toEditRender} href='/model/edit'>x</a>
-    </div>
+        <div className="App">
+        <div style={{position: 'fixed', left: -100, top: -200}}>
+          <a ref={toPorfile} href='/profile'>x</a>
+          <a ref={toEditPorfile} href='/profile/edit'>x</a>
+          <a ref={toEditRender} href='/model/edit'>x</a>
+        </div>
     
-    <button onClick={()=>setOpenDetail(true)}>Show Detail</button>
-    <button onClick={()=>{
-      if(toPorfile.current) {
-        toPorfile.current.click()
-      }
-    }}>To Profile</button>
-    <button onClick={()=>{
-      pro.to.edit_render(MockModel())
-    }}>Edit Model</button>
-    {/* <button onClick={()=>{
-      setOpenUploadModel(true)
-    }}>Open Upload Model</button> */}
-    <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
-    <HomePage/>
+        <button onClick={()=>{ console.log('click detail'); setOpenDetail(true)}}>Show Detail</button>
+        <button onClick={()=>{
+          pro.to.profile();
+        }}>To Profile</button>
+        <button onClick={()=>{
+          pro.to.edit_render(MockModel())
+        }}>Edit Model</button>
+        
+        <HomePage/>
     
-    </div>
+      </div>
     </Route>
     <Route exact path='/catalog'>
       <CataPage/>
@@ -117,10 +115,11 @@ const App: React.FC = () => {
     </Route>
     </BrowserRouter>
     <SignupOrIn open={openSignupOrSigin} onClose={()=>{setOpenSignipOrSignin(false)}} isSignUp={signupOrSignin}/>
+    <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
     <UploadModel></UploadModel>
     </profile.Provider>
-      </CssBaseline>
-    </ThemeProvider>
+  </CssBaseline>
+</ThemeProvider>
   );
 }
 

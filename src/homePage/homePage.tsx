@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
 import Typography from '@material-ui/core/Typography'
@@ -10,10 +10,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
 
-import SignIn from '../bits/buttonSignIn'
-import SignUp from '../bits/buttonSignUp'
 import {CenterPanel} from '../bits/centerPanel'
-import { ModelCatalog, D3DModel, DModelCatalogInfo } from '../utils/api';
+import { D3DModel, DModelCatalogInfo } from '../utils/api';
 
 
 interface TotalNum{
@@ -55,8 +53,14 @@ const TotalNum: React.FC<TotalNum> = (props) =>{
 const HeaderBarHomepage: React.FC = () =>{
     return(
         <div className="HeaderBarHomepage">
-            <TotalNum number={9999}/>
-            <LogBar/>
+            <Grid container spacing={3}>
+                <Grid item xs={6}>
+                    <TotalNum number={9999}/>
+                </Grid>
+                <Grid item xs={6}>
+                    <LogBar/>
+                </Grid>
+            </Grid>
         </div>
     )
 }
@@ -72,17 +76,31 @@ const HeaderMainHomepage:React.FC = () =>{
 const HeaderTailHomepage: React.FC<owner> = (props)=>{
     return(
         <div className="HeaderTailHomepage">
-            <div className="web-disp">DAM-2019-3D Model</div>
-            <div className="web-owner">created by {props.owner}</div>
+            <Grid container spacing={3}>
+                <Grid item xs={6}>
+                    <div className="web-disp">DAM-2019-3D Model</div>
+                </Grid>
+                <Grid item xs={6}>
+                    <div className="web-owner">created by {props.owner}</div>
+                </Grid>
+            </Grid>
         </div>
     )
 }
 const HeaderHomepage: React.FC = () =>{
     return(
         <div className="HeaderHomepage">
-            <HeaderBarHomepage/>
-            <HeaderMainHomepage/>
-            <HeaderTailHomepage owner={['a','b','c']}/>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <HeaderBarHomepage/>
+                </Grid>
+                <Grid item xs={12}>
+                    <HeaderMainHomepage/>
+                </Grid>
+                <Grid item xs={12}>
+                    <HeaderTailHomepage owner={['a','b','c']}/>
+                </Grid>
+            </Grid>
         </div>
     )
 }

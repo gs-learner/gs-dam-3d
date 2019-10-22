@@ -1,14 +1,11 @@
 import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
 
 import SearchAppBar from '../bits/miniSearch';
 import './cataPage.css'
 import {Package, iconInfos, preViewPackages} from '../homePage/homePage';
 import {CenterPanel} from '../bits/centerPanel'
 import { Divider } from '@material-ui/core';
-import { classes } from 'istanbul-lib-coverage';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,14 +66,13 @@ const BodyTopCataPage:React.FC =()=>{
 }
 const BodyMainCataPage:React.FC<preViewPackages>=(props)=>{
     const pkgs=props.preViewPackages;
-    const classes = useStyles();
     return(
         <div className="BodyMainCataPage">
             <div className="bodyContCataPage">
             {
                 pkgs.map((v,idx)=>{
                     return(
-                        <Package {...v}/>
+                        <Package key={idx} {...v}/>
                     )
                 })
             }

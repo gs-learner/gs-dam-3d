@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { purple } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
-import { Paper } from '@material-ui/core';
 import { APISignup, APISignin } from './utils/api';
 import { profile } from './bits/store';
 import Grid from '@material-ui/core/Grid';
@@ -14,7 +13,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import { MockUser } from './utils/mock';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -150,7 +148,7 @@ const SignupOrIn : React.FC<Props> = (props)=>{
         })
         if(result.ok) {
           pro.set.user(result.data)
-          pro.trigger.logState(true);
+          pro.set.logState(true);
           props.onClose();
           setError(false);
         }
@@ -161,8 +159,8 @@ const SignupOrIn : React.FC<Props> = (props)=>{
       }catch(e){
         setError(true)
         seterrorMessage("error connect server")
-        //TODO
-        pro.trigger.logState(true);
+        //TODO(over)
+        pro.set.logState(true);
       }
       
     }

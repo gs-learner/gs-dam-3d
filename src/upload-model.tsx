@@ -4,24 +4,20 @@ import Dialog from '@material-ui/core/Dialog'
 import Dropzone from 'react-dropzone'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme, withStyles, ThemeProvider, lighten } from '@material-ui/core/styles';
+import { makeStyles, Theme, withStyles, lighten } from '@material-ui/core/styles';
 import { DisplayFileSize, toBase64 } from './utils/utils'
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { MakeDefaultRenderConfig, APIUploadModel, ModelCatalog, AllModelCatalogs } from './utils/api'
+import { MakeDefaultRenderConfig, APIUploadModel, AllModelCatalogs } from './utils/api'
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core'
-import { textAlign, palette } from '@material-ui/system'
-import Link from '@material-ui/core/Link'
 
 import './upload-model.css'
-import { orange, deepOrange } from '@material-ui/core/colors'
-import { relative } from 'path'
+import {  deepOrange } from '@material-ui/core/colors'
 
 interface WaitingItemProps {
     file: File
@@ -81,7 +77,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
     const [isloaded,setIsloaded] = useState(true)
     const [overState, setOverState] = useState(false)
     
-    const Upload =  async ()=>{
+    const Upload = async ()=>{
         let base = await toBase64(props.file, (f)=>{
             setCompleted(f * 10)
         });
@@ -129,6 +125,8 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
         if(props.index === props.active) {
             Upload()
         }
+        // We dont care anout how upload is chaned
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.index, props.active, props.file])
 
     useEffect(()=>{
@@ -190,8 +188,8 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                             <div style={{float:'right'}}>
                             <Typography variant='subtitle2'>
                                 {overState?(isloaded?
-                                    (<img src='/image/right.png' width='20px' height='20px'></img>)
-                                    :(<img src='/image/wrong.png' width='20px' height='20px'></img>))
+                                    (<img src='/image/right.png' alt='avatar' width='20px' height='20px'></img>)
+                                    :(<img src='/image/wrong.png' alt='avatar' width='20px' height='20px'></img>))
                                     :''}
                             </Typography>
                             </div>
@@ -269,7 +267,7 @@ const UploadModel : React.FC = (props)=>{
 
     const onUploadDone = (idx : number) => {
         if(idx === files.length - 1) { // all files upload done
-            //TODO: 告诉用户上传完成
+            //TODO: (redundancy)告诉用户上传完成
             setUploading(-1)
         }
         else {

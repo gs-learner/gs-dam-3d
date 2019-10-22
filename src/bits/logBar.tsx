@@ -1,4 +1,4 @@
-import React, {useContext}from 'react'
+import React, {useContext, useEffect}from 'react'
 
 import SignIn from './buttonSignIn'
 import SignUp from './buttonSignUp'
@@ -15,6 +15,9 @@ const useStyles = makeStyles({
 export const LogBar: React.FC = (props) =>{
     const pro = useContext(profile)
     const classes = useStyles();
+    useEffect(() => {
+        console.log(pro)
+    }, [pro]);
     return(
         <div className="LogBar" style={{float:'right'}}>
         {
