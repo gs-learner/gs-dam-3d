@@ -150,7 +150,7 @@ const SignupOrIn : React.FC<Props> = (props)=>{
         })
         if(result.ok) {
           pro.set.user(result.data)
-          pro.trigger.logState(true);
+          pro.set.logState(true);
           props.onClose();
           setError(false);
         }
@@ -161,8 +161,8 @@ const SignupOrIn : React.FC<Props> = (props)=>{
       }catch(e){
         setError(true)
         seterrorMessage("error connect server")
-        //TODO
-        pro.trigger.logState(true);
+        //TODO(over)
+        pro.set.logState(true);
       }
       
     }

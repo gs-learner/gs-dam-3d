@@ -268,7 +268,7 @@ const UploadModel : React.FC = (props)=>{
 
     const onUploadDone = (idx : number) => {
         if(idx === files.length - 1) { // all files upload done
-            //TODO: 告诉用户上传完成
+            //TODO: (redundancy)告诉用户上传完成
             setUploading(-1)
         }
         else {

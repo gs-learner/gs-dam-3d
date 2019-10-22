@@ -7,25 +7,15 @@
     text-align: center;
 }
 
-.HeaderBarHomepage{
-    width: 1500px;
-    padding: 10px 20px;
-    height: 62px;
-    display: inline-block;
-}
 .HeaderBarHomepage div.TotalNum{
     float: left;
     color: white;
 }
-.LogBar{
-    float:right;
-}
-.HeaderBarHomepage div.LogBar{
-    width: 300px;
+.HeaderBarHomepage{
+    padding: 20px;
 }
 .HeaderMainHomepage{
-    width: 1500px;
-    display: inline-block;
+    padding: 30px;
 }
 .HeaderMainHomepage div.logo{
     margin: 50px 0px;
@@ -34,24 +24,31 @@
     color: white;
 }
 .HeaderTailHomepage{
+    padding: 20px;
+}
+.HeaderTailHomepage div.web-disp{
+    float: left;
+    color: white;
+}
+.HeaderTailHomepage div.web-owner{
+    color: white;
+    float:right;
+}
+/* 
+.HeaderBarHomepage div.LogBar{
+    width: 300px;
+}
+.HeaderMainHomepage{
+    width: 1500px;
+    display: inline-block;
+}
+.HeaderTailHomepage{
     width: 1500px;
     position: relative;
     height: 55px;
     display: inline-block;
 }
-.HeaderTailHomepage div.web-disp{
-    color: white;
-    position: absolute;
-    left: 0px;
-    margin: 10px 20px;
-}
-.HeaderTailHomepage div.web-owner{
-    color: white;
-    position: absolute;
-    left: 0px;
-    top: 20px;
-    margin: 10px 20px;
-}
+} */
 
 
 .BodyHomePage{

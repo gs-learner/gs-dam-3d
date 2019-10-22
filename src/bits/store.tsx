@@ -6,7 +6,8 @@ type User = ReturnType<typeof MakeEmptyUser>
 const default_profile = {
     user: MakeEmptyUser(),
     set: {
-        user: (u: User)=>{}
+        user: (u: User)=>{},
+        logState:(v:boolean)=>{},
     },
     to: {
         profile: ()=>{},
@@ -20,7 +21,6 @@ const default_profile = {
     },
     trigger: {
         uploadModel: (v:boolean)=>{},
-        logState:(v:boolean)=>{},
     },
     triggerSigning: (v:'siginin' | 'signup')=>{}
 }

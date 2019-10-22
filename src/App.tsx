@@ -38,7 +38,8 @@ const App: React.FC = () => {
   const pro:Profile  = {
     user: user,
     set: {
-      user: setUser
+      user: setUser,
+      logState: setLogState,
     },
     to: {
       profile: ()=>{
@@ -59,7 +60,6 @@ const App: React.FC = () => {
     },
     trigger: {
       uploadModel: setOpenUploadModel,
-      logState: setLogState,
     },
     triggerSigning: (v)=>{
       setSignupOrSigin(v === 'signup');
@@ -75,12 +75,12 @@ const App: React.FC = () => {
     <div className="App">
     <a ref={toPorfile} href='/profile'></a>
     <a ref={toEditPorfile} href='/profile/edit'></a>
-    <button onClick={()=>setOpenDetail(true)}>Show Detail</button>
+    {/* <button onClick={()=>setOpenDetail(true)}>Show Detail</button>
     <button onClick={()=>{
       if(toPorfile.current) {
         toPorfile.current.click()
       }
-    }}>To Profile</button>
+    }}>To Profile</button> */}
     {/* <button onClick={()=>{
       setOpenUploadModel(true)
     }}>Open Upload Model</button> */}
