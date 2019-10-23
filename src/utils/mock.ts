@@ -17,7 +17,7 @@ export function MockUser() : DUser {
 
 export function MockModel(): D3DModel {
     return {
-        url: '/static/test',
+        url: '/static/test/fortnite-animated',
         name: 'Beetle Car',
         publish: '2017-9-20',
         comments: [],

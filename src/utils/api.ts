@@ -146,7 +146,7 @@ export interface RenderConfig {
 export function MakeDefaultRenderConfig() : RenderConfig {
     return {
         renderSky: 'col',
-        backgroundColor: 'radial-gradient(circle, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 87%, rgba(2,0,36,1) 100%)',
+        backgroundColor: 'radial-gradient(circle, rgba(35,162,244,1) 0%, rgba(26,26,186,1) 96%, rgba(25,18,144,1) 100%);',
         backgroundGradient: true,
         skybox: '',
         envMap: '/static/skybox/hills2/',
@@ -185,6 +185,7 @@ export interface D3DModel {
 type ThreeDModelFormat = 'obj' | 'gltf'
 interface U3DModel {
     model: string // base64 encoded
+    filename: string
     name: string
     catalog: ModelCatalog
     tags: string[]
@@ -273,6 +274,11 @@ export async function APIUpdateUserAvatar(info:{avatar:string /* base64 */}){
 
 export async function APIUploadModel(info: U3DModel, onprogress: (progress_0_to_1: number)=>any) {
     let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<{avatarUrl:string}>
+    return RefineResponse(res)
+}
+
+export async function APISearch(info:string) {
+    let res = await SendJSON('/api/search', {key:info}) as StandardResponse<{results:D3DModel[]}>
     return RefineResponse(res)
 }
 

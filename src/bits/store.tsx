@@ -1,5 +1,6 @@
 import React from 'react'
-import { MakeEmptyUser } from '../utils/api'
+import { MakeEmptyUser, D3DModel } from '../utils/api'
+import { Theme } from '@material-ui/core/styles';
 
 type User = ReturnType<typeof MakeEmptyUser>
 
@@ -8,10 +9,15 @@ const default_profile = {
     set: {
         user: (u: User)=>{},
         logState:(v:boolean)=>{},
+        theme: (v:Theme)=>{}
+    },
+    save: {
+        login: (username:string, password:string)=>{} 
     },
     to: {
         profile: ()=>{},
         edit_profile: ()=>{},
+        edit_render: (model: D3DModel)=>{}
     },
     State:{
         logState: false,

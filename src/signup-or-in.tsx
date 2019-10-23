@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { purple } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
-import { Paper } from '@material-ui/core';
 import { APISignup, APISignin } from './utils/api';
 import { profile } from './bits/store';
 import Grid from '@material-ui/core/Grid';
@@ -153,6 +152,7 @@ const SignupOrIn : React.FC<Props> = (props)=>{
           pro.set.logState(true);
           props.onClose();
           setError(false);
+          pro.save.login(username, password)
         }
         else {
           setError(true)
@@ -163,6 +163,8 @@ const SignupOrIn : React.FC<Props> = (props)=>{
         seterrorMessage("error connect server")
         //TODO(over)
         pro.set.logState(true);
+        pro.set.user(MockUser()) //TODO: delete
+        pro.save.login('aaa', 'bbb') //TODO: delete
       }
       
     }

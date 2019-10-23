@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
 import Typography from '@material-ui/core/Typography'
@@ -10,12 +10,10 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
 
-import SignIn from '../bits/buttonSignIn'
-import SignUp from '../bits/buttonSignUp'
 import {CenterPanel} from '../bits/centerPanel'
 import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound } from '../utils/api';
 import { useTheme } from '@material-ui/styles';
-import { orange, deepOrange, lightBlue, lightGreen } from '@material-ui/core/colors'
+import { lightGreen } from '@material-ui/core/colors'
 
 
 interface TotalNum{

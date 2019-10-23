@@ -7,46 +7,54 @@ import { TrackballControls } from './bits/TrackballControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { MeshStandardMaterial, Mesh, AnimationMixer } from 'three'
 import Paper from '@material-ui/core/Paper';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {D3DModel, StaticGetJsonFile, RenderConfig} from './utils/api'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import {D3DModel, RenderConfig} from './utils/api';
+import Grow from '@material-ui/core/Grow';
+// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+// import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+// import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 
 
-const useStyles =  makeStyles((theme: Theme)=>
-    createStyles({
-        root: {
-          padding: theme.spacing(3, 2),
-          position: 'absolute',
-          left: 0,
-          top: 0
-        },
-      })
-)
+const useStyles =  makeStyles((theme: Theme)=>({
+    root: {
+        
+        position: 'absolute',
+        left: 0,
+        top: 0,
+    },
+    paper: {
+        padding: theme.spacing(2, 2),
+    }
+}))
 interface P {
     model: D3DModel | null
     onBgColor: (color:string)=>any
+    frameid: string
+    openCtrl: boolean
 }
 
 const Render : React.FC<P> = (props)=>{
     const [handle, setHandle] = useState<ReturnType<typeof RunAll>>()
     const [wireFrame, setWireFrame] = useState(true)
     const [background, setBackground] = useState('radial-gradient(circle, rgba(35,162,244,1) 0%, rgba(26,26,186,1) 96%, rgba(25,18,144,1) 100%)');
-
+    const classes = useStyles()
     useEffect(()=>{
-        setHandle(RunAll())
-        console.log('boostrapped')
+        setHandle(RunAll(props.frameid))
+        console.log('boostrapped on ', props.frameid)
         props.onBgColor(background)
-    }, [])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.frameid])
 
     useEffect(()=>{
-        console.log('hi')
-        console.log(handle, props.model)
+        props.onBgColor(background)
+    }, [background, props])
+
+    
+    useEffect(()=>{
         if(handle !== undefined && props.model !== null) { 
             handle.rerender(props.model, ()=>{}, setBackground)
             console.log('rerender')
@@ -54,10 +62,9 @@ const Render : React.FC<P> = (props)=>{
     }, [props.model, handle])
 
     return (
-        <div style={{
-            position: 'absolute'
-        }}>
-            <Paper>
+        <Grow in={props.openCtrl}>
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
             <Grid
             container
             direction="column"
@@ -89,20 +96,21 @@ const Render : React.FC<P> = (props)=>{
             </Grid>
             </Paper>
         </div>
+        </Grow>
     )
 }
 
 export default Render;
 
 
-function RunAll () {
-const frame = document.getElementById('canvas-frame'); if(frame === null) return;
+function RunAll (frameid: string) {
+const frame = document.getElementById(frameid); if(frame === null) return;
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({antialias : true, powerPreference:'high-performance', alpha:true, premultipliedAlpha: false});
 const canvas = new CanvasManager(frame, renderer.domElement, renderer);
 const camera = new THREE.PerspectiveCamera(75, canvas.Aspect(), 0.1, 1000);
-const flatScene = new THREE.Scene()
-const flatCamera = new THREE.PerspectiveCamera(75, canvas.Aspect(), 0.1, 1000);
+// const flatScene = new THREE.Scene()
+// const flatCamera = new THREE.PerspectiveCamera(75, canvas.Aspect(), 0.1, 1000);
 let objectScene : THREE.Scene | null = null
 
 // const renderScene = new RenderPass(scene, camera);
@@ -116,7 +124,7 @@ let objectScene : THREE.Scene | null = null
 renderer.setClearColor(0x222222, 0.0);
 
 camera.position.z = 5;
-flatCamera.position.z = 5
+// flatCamera.position.z = 5
 const control = new TrackballControls(camera, frame) 
 let autoRotate = false
 let autoRotateCount = 0
@@ -161,7 +169,7 @@ const ReRender = async (
     setbackground: (color:string, gradient:boolean)=>any
     )=>{
     
-    const renderConfig = await GetJsonFile(minfo.url + '/' + 'render.json', (n)=>onprogress(n*0.05)) as RenderConfig;
+    const renderConfig = await GetJsonFile(minfo.url + '/render.json', (n)=>onprogress(n*0.05)) as RenderConfig;
     if(renderConfig.renderSky === 'col') {
         setbackground(renderConfig.backgroundColor, renderConfig.backgroundGradient);
         renderer.setClearColor(0x222222, 0.0);
@@ -220,16 +228,23 @@ const ReRender = async (
         const scale = 0.00020
         m.scene.scale.set(scale, scale, scale)
         m.scene.traverse(obj =>{
-            console.log('a', obj);
+            // console.log('a', obj);
             if(obj instanceof Mesh) {
-                console.log('b', obj);
+                // console.log('b', obj);
                 obj.frustumCulled = false;
                 // (obj.material as MeshStandardMaterial).envMapIntensity = 2;
 
                 (obj.material as MeshStandardMaterial).envMap  = textureSky;
                 (obj.material as MeshStandardMaterial).needsUpdate  = true;
+                const vnh = new THREE.VertexNormalsHelper(obj, 1, 0xff0000 );
+        vnh.update()
+        vnh.scale.set(scale, scale, scale)
+        console.log(vnh)
+        scene.add( vnh );
             }
         })
+        
+        
         TriggerStart()
         clock.start();
         if(m.animations.length) {

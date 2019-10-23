@@ -4,30 +4,32 @@ import Dialog from '@material-ui/core/Dialog'
 import Dropzone from 'react-dropzone'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme, withStyles, ThemeProvider, lighten } from '@material-ui/core/styles';
+import { makeStyles, Theme, withStyles, lighten } from '@material-ui/core/styles';
 import { DisplayFileSize, toBase64 } from './utils/utils'
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { MakeDefaultRenderConfig, APIUploadModel, ModelCatalog, AllModelCatalogs } from './utils/api'
+import { MakeDefaultRenderConfig, APIUploadModel, AllModelCatalogs } from './utils/api'
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
-import { Button } from '@material-ui/core'
-import { textAlign, palette } from '@material-ui/system'
-import Link from '@material-ui/core/Link'
+import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
+import CloseIcon from '@material-ui/icons/Close';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 
 import './upload-model.css'
-import { orange, deepOrange } from '@material-ui/core/colors'
-import { relative } from 'path'
+import {  deepOrange } from '@material-ui/core/colors'
 
 interface WaitingItemProps {
     file: File
     index: number
     active: number
     onDone: (idx:number)=>any
+    globalTags: string[]
 }
 
 const useWaitingStyle = makeStyles((theme: Theme) => ({
@@ -81,11 +83,11 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
     const [isloaded,setIsloaded] = useState(true)
     const [overState, setOverState] = useState(false)
     
-    const Upload =  async ()=>{
+    const Upload = async ()=>{
         let base = await toBase64(props.file, (f)=>{
             setCompleted(f * 10)
         });
-        
+        console.log(base)
         if(base === null) {
             props.onDone(props.index)
             return
@@ -94,8 +96,9 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
             let res = await APIUploadModel({
                 model: base,
                 name: name,
+                filename: props.file.name,
                 catalog: AllModelCatalogs[catagory],
-                tags: new Array<string>(),
+                tags: props.globalTags,
                 render_config: MakeDefaultRenderConfig()
             }, (f)=>{
                 setCompleted(10 + f * 90)
@@ -128,6 +131,8 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
         if(props.index === props.active) {
             Upload()
         }
+        // We dont care anout how upload is chaned
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.index, props.active, props.file])
 
     useEffect(()=>{
@@ -189,8 +194,8 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                             <div style={{float:'right'}}>
                             <Typography variant='subtitle2'>
                                 {overState?(isloaded?
-                                    (<img src='/image/right.png' width='20px' height='20px'></img>)
-                                    :(<img src='/image/wrong.png' width='20px' height='20px'></img>))
+                                    (<img src='/image/right.png' alt='avatar' width='20px' height='20px'></img>)
+                                    :(<img src='/image/wrong.png' alt='avatar' width='20px' height='20px'></img>))
                                     :''}
                             </Typography>
                             </div>
@@ -253,7 +258,8 @@ const UploadModel : React.FC = (props)=>{
     const classes = useStyle()
     const [height, setHeight] = useState(80)
     const [open, setopen] = useState(false)
-
+    const [tags, setTags] = useState(new Array<string>())
+    const [curTagIpt, setCurTagIpt] = useState('')
     
     if(!pro.user.username) {
          return null
@@ -276,7 +282,16 @@ const UploadModel : React.FC = (props)=>{
         }
     }
 
-    
+    const handleDelete = (idx:number)=>{
+        const filtered = [...tags]
+        filtered.splice(idx, 1);
+        setTags(filtered)
+    }
+
+    const handleAddTags = ()=>{
+        setTags([...tags, curTagIpt]);
+        setCurTagIpt('')
+    }
 
     return (
         <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)} scroll='body'>
@@ -285,13 +300,49 @@ const UploadModel : React.FC = (props)=>{
                     <Typography display='inline' className={classes.header_accent}>
                         Upload
                     </Typography>
+                    
                     <Typography display='inline' className={classes.header_light}>
                         Models
                     </Typography>
                 </Grid>
                 
             </Grid>
-
+            <Typography variant='h6'>
+                Tags applied to all uploads
+            </Typography>
+            <TextField
+                id="add-to-tags"
+                variant="outlined"
+                label="Add Tags for All Uploads"
+                value={curTagIpt}
+                onChange={(e)=>setCurTagIpt(e.target.value)}
+                InputProps={{
+                endAdornment: (
+                    <InputAdornment position="end">
+                    <IconButton
+                        disabled={!Boolean(curTagIpt)}
+                        edge="end"
+                        aria-label="add tags"
+                        onClick={handleAddTags}
+                    >
+                        <AddIcon />
+                    </IconButton>
+                    </InputAdornment>
+                ),
+                }}
+            />
+            {
+                tags.map((v, idx)=>{return(
+                    <Chip
+                        key={idx}
+                        label={v}
+                        onDelete={()=>handleDelete(idx)}
+                        deleteIcon={<CloseIcon />}
+                    />
+                )})
+            }
+            
+            
             <Paper style={{maxHeight: '500px', overflow: 'auto'}}>
             {
                 files.map((v, idx)=>
@@ -301,6 +352,7 @@ const UploadModel : React.FC = (props)=>{
                         active={uploading}
                         onDone={onUploadDone}
                         key={idx}
+                        globalTags={tags}
                     />
                 )
             }

@@ -6,7 +6,7 @@ import './userPage.css'
 import SearchAppBar from '../bits/miniSearch';
 import UploadButton from '../bits/buttonUpload';
 import FolderList from '../bits/userInfoList';
-import { Package, iconInfos, preViewPackages } from '../homePage/homePage';
+import { Package, preViewPackages } from '../homePage/homePage';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
