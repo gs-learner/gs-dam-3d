@@ -64,7 +64,7 @@
     /* overflow: hidden; */
 }
 .PreViewBar:hover{
-    background-color: rgba(204, 204, 204, 0.61);
+    background-color: #f4fcff;;
 }
 .PreViewBar:hover > .CataPreView{
     opacity: 0;
@@ -117,7 +117,7 @@
     width: 225px;
     /* height: 200px; */
     background-color: rgba(255, 255, 255, 0.349);
-    box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.2), 0px 1px 6px -1px rgba(0,0,0,0.10), 0px 1px 8px 0px rgba(0,0,0,0.04);
+    box-shadow: 0 1px 1px rgba(97,108,121,.1), 0 7px 18px 0 rgba(97,108,121,.13);
     /* overflow: hidden; */
 }
 .Package div.Package-up{
