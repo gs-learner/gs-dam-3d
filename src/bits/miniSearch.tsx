@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -7,6 +7,7 @@ import { createStyles, fade, Theme, makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search';
 import {LogBar} from './logBar'
 import Container from '@material-ui/core/Container'
+import { profile } from './store';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       // flexGrow: 1,
       display: 'none',
+      cursor: 'pointer',
       [theme.breakpoints.up('sm')]: {
         display: 'block',
       },
@@ -72,12 +74,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function SearchAppBar() {
   const classes = useStyles();
-
+  const pro = useContext(profile);
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.Toolbar}>
-          <Typography className={classes.title} variant="h5" noWrap>
+          <Typography className={classes.title} variant="h5" noWrap onClick={()=>{
+            pro.to.index();
+          }}>
             3D Models
           </Typography>
           <div className={classes.search}>

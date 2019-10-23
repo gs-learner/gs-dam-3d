@@ -14,10 +14,15 @@ const default_profile = {
     save: {
         login: (username:string, password:string)=>{} 
     },
+    del:{
+        login:()=>{}
+    },
     to: {
+        index:()=>{},
         profile: ()=>{},
         edit_profile: ()=>{},
-        edit_render: (model: D3DModel)=>{}
+        edit_render: (model: D3DModel)=>{},
+        catalog:()=>{},
     },
     State:{
         logState: false,

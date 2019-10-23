@@ -1,5 +1,5 @@
 import React from 'react';
-import {CataIcon, iconInfo, iconInfos} from '../homePage/homePage';
+import {CataIcon, iconInfos} from '../homePage/homePage';
 import './centerPanel.css'
 import {CatalogBound} from '../utils/api';
 

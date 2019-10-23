@@ -6,13 +6,12 @@ import Grid from '@material-ui/core/Grid'
 import {LogBar} from '../bits/logBar';
 import '../fonts/proxima-nova.css'
 import Avatar from '@material-ui/core/Avatar';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
 
 import {CenterPanel} from '../bits/centerPanel'
 import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound } from '../utils/api';
-import { useTheme } from '@material-ui/styles';
 import { lightGreen } from '@material-ui/core/colors'
 
 
@@ -43,6 +42,7 @@ export interface preViewPackages{
 interface preViewBar{
     cata:iconInfo;
     preViewPackages:preViewPackages;
+    idx: number;
 }
 const TotalNum: React.FC<TotalNum> = (props) =>{
     return(
@@ -111,9 +111,12 @@ const HeaderHomepage: React.FC = () =>{
     )
 }
 export const CataIcon: React.FC<iconInfo> = (props) =>{
+    const pro = useContext(profile)
     return(
         <div className ="CataIcon">
-            <img src = {props.url} alt={props.name}></img>
+            <img src = {props.url} alt={props.name} onClick={()=>{
+                pro.to.catalog()
+            }}></img>
             <div style={{
                 // fontFamily:'Author',
                 // fontWeight:200,
@@ -127,7 +130,6 @@ export const CataIcon: React.FC<iconInfo> = (props) =>{
 
 
 const CataPreView: React.FC<iconInfo> = (props)=>{
-    const theme = useTheme();
     return(
         <div className="CataPreView">
             <CataIcon name={props.name} url={props.url}/>
@@ -223,9 +225,9 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
     const pkgs = props.preViewPackages;
     return(
         //TODO change background
-        <div className="PreViewBarPlus" style={{backgroundImage:`url(${CatalogBound[props.cata.name][0]})`}}>
+        <div className="PreViewBarPlus" style={{backgroundImage:`url(${CatalogBound[props.cata.name][0]})`, zIndex:40-props.idx}}>
             <div className="slidebkg">
-                <img src="/image/viewbarMask.png" style={{
+                <img src="/image/viewbarMask.png" alt="viewMaskMissing" style={{
                     height:'100%',
                 }}></img>
             </div>
@@ -237,7 +239,6 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
     )
 }
 export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
-    const iconInfos: iconInfos = props;
     return(
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -249,7 +250,6 @@ export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     )
 }
 const BodyMainHomepage: React.FC=()=>{
-    const pro = useContext(profile)
     const cata:iconInfo[] = [
         //TODO actually only name is useful
         {name:'Animals', url:'/image/cin.png', disp:'disp catalog'},
@@ -277,12 +277,9 @@ const BodyMainHomepage: React.FC=()=>{
 
     return(
         <div className="BodyMainHomepage">
-            <button onClick={()=>{
-                pro.to.profile()
-            }}>UUU</button>
             {
                 cata.map((v,idx)=>{
-                    return <PreViewBar cata={cata[idx]} preViewPackages={pkgs} key={idx}/>
+                    return <PreViewBar idx={idx} cata={cata[idx]} preViewPackages={pkgs} key={idx}/>
                 })
             }
             {/* <PreViewBar cata={cata} preViewPackages={pkgs}/>
