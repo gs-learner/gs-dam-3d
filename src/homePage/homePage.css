@@ -54,6 +54,8 @@
 .BodyMainHomepage{
     width:1800px;
     margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
 }
 .BodyTopHomepage .CenterPanel{
     margin:20px auto;
@@ -194,12 +196,12 @@
 .icon-mask div.bigger-img::after{
     border-width: 10px;
     border-top-color: rgb(49, 49, 49);
-    right: 20px;
+    right: 182px;
 }
 .icon-mask div.bigger-img::before{
     border-width: 12px;
     border-top-color: rgb(49, 49, 49);
-    right: 18px;
+    right: 180px;
 }
 .icon-mask div.bigger-img img{
     border-top-right-radius: 10px;
