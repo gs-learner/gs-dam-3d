@@ -81,9 +81,6 @@ const App: React.FC = () => {
         toPorfile.current.click()
       }
     }}>To Profile</button> */}
-    {/* <button onClick={()=>{
-      setOpenUploadModel(true)
-    }}>Open Upload Model</button> */}
     <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
     <HomePage/>
     

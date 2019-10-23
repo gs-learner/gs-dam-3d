@@ -6,14 +6,16 @@ import Grid from '@material-ui/core/Grid'
 import {LogBar} from '../bits/logBar';
 import '../fonts/proxima-nova.css'
 import Avatar from '@material-ui/core/Avatar';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
 
 import SignIn from '../bits/buttonSignIn'
 import SignUp from '../bits/buttonSignUp'
 import {CenterPanel} from '../bits/centerPanel'
-import { ModelCatalog, D3DModel, DModelCatalogInfo } from '../utils/api';
+import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound } from '../utils/api';
+import { useTheme } from '@material-ui/styles';
+import { orange, deepOrange, lightBlue, lightGreen } from '@material-ui/core/colors'
 
 
 interface TotalNum{
@@ -22,9 +24,9 @@ interface TotalNum{
 interface owner{
     owner: string[];
 }
-interface iconInfo{
-    name?: string;
-    url?: string;
+export interface iconInfo{
+    name: ModelCatalog;
+    url: string;
     disp?: string;
 }
 export interface iconInfos{
@@ -69,7 +71,11 @@ const HeaderBarHomepage: React.FC = () =>{
 const HeaderMainHomepage:React.FC = () =>{
     return(
         <div className="HeaderMainHomepage">
-            <div className="logo">3D Models</div>
+            <div className="logo" style={{
+                fontFamily:'Author',
+                fontWeight:1000,
+                fontSize:90,
+            }}><span style={{fontSize:120}}>3</span>D Models</div>
             <CustomizedInputBase/>
         </div>
     )
@@ -110,17 +116,29 @@ export const CataIcon: React.FC<iconInfo> = (props) =>{
     return(
         <div className ="CataIcon">
             <img src = {props.url} alt={props.name}></img>
-            <div>{props.name}</div>
+            <div style={{
+                // fontFamily:'Author',
+                // fontWeight:200,
+                // fontSize:20,
+            }}>
+                {props.name}
+            </div>
         </div>
     )
 }
 
 
 const CataPreView: React.FC<iconInfo> = (props)=>{
+    const theme = useTheme();
     return(
         <div className="CataPreView">
             <CataIcon name={props.name} url={props.url}/>
-            <div>
+            <div className="Catadisp" style={{
+                padding: '20px 30px 30px 30px',
+                fontFamily: 'Proxima Nova',
+                fontWeight:700,
+                color: lightGreen[700],
+            }}>
                 {props.disp}
             </div>
         </div>
@@ -206,29 +224,56 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
     const cata = props.cata;
     const pkgs = props.preViewPackages;
     return(
-        <div className="PreViewBar">
-            <CataPreView name={cata.name} url={cata.url} disp={cata.disp}/>
-            <ModelPreview preViewPackages={pkgs.preViewPackages}/>
+        //TODO change background
+        <div className="PreViewBarPlus" style={{backgroundImage:`url(${CatalogBound[props.cata.name][0]})`}}>
+            <div className="slidebkg">
+                <img src="/image/viewbarMask.png" style={{
+                    height:'100%',
+                }}></img>
+            </div>
+            <div className="PreViewBar">
+                <CataPreView name={cata.name} url={CatalogBound[props.cata.name][1]} disp={CatalogBound[props.cata.name][2]}/>
+                <ModelPreview preViewPackages={pkgs.preViewPackages}/>
+            </div>
         </div>
     )
 }
 export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     const iconInfos: iconInfos = props;
     return(
-        <div className="BodyTopHomepage">
-            <CenterPanel cata={props.cata}/>
-        </div>
+        <Grid container spacing={3}>
+            <Grid item xs={12}>
+                <div className="BodyTopHomepage">
+                    <CenterPanel cata={props.cata}/>
+                </div>
+            </Grid>
+        </Grid>
     )
 }
 const BodyMainHomepage: React.FC=()=>{
     const pro = useContext(profile)
-    const cata:iconInfo = {name:'cata', url:'/image/cin.jpg', disp:'disp catalog'};
+    const cata:iconInfo[] = [
+        //TODO actually only name is useful
+        {name:'Animals', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Architecture', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'History', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Place', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Food', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Furniture', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'People', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Sci-fi', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Weapon', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Characters', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Cars', url:'/image/cin.jpg', disp:'disp catalog'},
+    ];
     const pkgs:preViewPackages = {preViewPackages:[
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/logo192.png'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/image/feat-May2019.jpg'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
         {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
     ]}
 
@@ -237,9 +282,13 @@ const BodyMainHomepage: React.FC=()=>{
             <button onClick={()=>{
                 pro.to.profile()
             }}>UUU</button>
-            <PreViewBar cata={cata} preViewPackages={pkgs}/>
-            <PreViewBar cata={cata} preViewPackages={pkgs}/>
-            <PreViewBar cata={cata} preViewPackages={pkgs}/>
+            {
+                cata.map((v,idx)=>{
+                    return <PreViewBar cata={cata[idx]} preViewPackages={pkgs} key={idx}/>
+                })
+            }
+            {/* <PreViewBar cata={cata} preViewPackages={pkgs}/>
+            <PreViewBar cata={cata} preViewPackages={pkgs}/> */}
         </div>
     )
 }
@@ -248,9 +297,18 @@ const BodyHomePage: React.FC = () =>{
     return(
         <div className="BodyHomePage">
             <BodyTopHomepage cata={[
-                {url:'/image/cin.png',name:'建筑'},
-                {url:'/image/cin.png',name:'武器'},
-                {url:'/image/cin.png',name:'车辆'},
+                //TODO actually only name is useful
+                {name:'Animals', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Architecture', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'History', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Place', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Food', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Furniture', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'People', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Sci-fi', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Weapon', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Characters', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Cars', url:'/image/cin.jpg', disp:'disp catalog'},
                 ]}/>
             <BodyMainHomepage/>
         </div>

@@ -89,9 +89,9 @@ const HeaderCataPage: React.FC=()=>{
         <div className="HeaderCataPage">
             <HeaderBarCataPage/>
             <HeaderNavCataPage cata={[
-                {url:'/image/cin.png',name:'建筑'},
-                {url:'/image/cin.png',name:'武器'},
-                {url:'/image/cin.png',name:'车辆'},
+                {url:'/image/cin.png',name:'Architecture'},
+                {url:'/image/cin.png',name:'Weapon'},
+                {url:'/image/cin.png',name:'Cars'},
             ]}/>
         </div>
     )
