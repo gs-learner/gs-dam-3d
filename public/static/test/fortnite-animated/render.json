@@ -1,6 +1,6 @@
 {
     "renderSky": "col",
-    "backgroundColor": "radial-gradient(circle, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 87%, rgba(2,0,36,1) 100%)",
+    "backgroundColor": "radial-gradient(circle, rgba(224,243,255,1) 0%, rgba(52,50,80,1) 100%, rgba(26,26,186,1) 100%)",
     "backgroundGradient": true,
     "skybox": "",
     "envMap": "/static/skybox/hills2/",

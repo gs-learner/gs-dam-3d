@@ -12,26 +12,29 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {D3DModel, RenderConfig} from './utils/api'
+import {D3DModel, RenderConfig} from './utils/api';
+import Grow from '@material-ui/core/Grow';
 // import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 // import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 // import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 
 
 const useStyles =  makeStyles((theme: Theme)=>({
-    // createStyles({
-        root: {
-          padding: theme.spacing(3, 2),
-          position: 'absolute',
-          left: 0,
-          top: 0
-        },
-      //})
+    root: {
+        
+        position: 'absolute',
+        left: 0,
+        top: 0,
+    },
+    paper: {
+        padding: theme.spacing(2, 2),
+    }
 }))
 interface P {
     model: D3DModel | null
     onBgColor: (color:string)=>any
     frameid: string
+    openCtrl: boolean
 }
 
 const Render : React.FC<P> = (props)=>{
@@ -42,13 +45,15 @@ const Render : React.FC<P> = (props)=>{
     useEffect(()=>{
         setHandle(RunAll(props.frameid))
         console.log('boostrapped on ', props.frameid)
-        
+        props.onBgColor(background)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.frameid])
 
     useEffect(()=>{
         props.onBgColor(background)
     }, [background, props])
 
+    
     useEffect(()=>{
         if(handle !== undefined && props.model !== null) { 
             handle.rerender(props.model, ()=>{}, setBackground)
@@ -57,8 +62,9 @@ const Render : React.FC<P> = (props)=>{
     }, [props.model, handle])
 
     return (
+        <Grow in={props.openCtrl}>
         <div className={classes.root}>
-            <Paper>
+            <Paper className={classes.paper}>
             <Grid
             container
             direction="column"
@@ -90,6 +96,7 @@ const Render : React.FC<P> = (props)=>{
             </Grid>
             </Paper>
         </div>
+        </Grow>
     )
 }
 
@@ -221,16 +228,22 @@ const ReRender = async (
         const scale = 0.00020
         m.scene.scale.set(scale, scale, scale)
         m.scene.traverse(obj =>{
-            console.log('a', obj);
+            // console.log('a', obj);
             if(obj instanceof Mesh) {
-                console.log('b', obj);
+                // console.log('b', obj);
                 obj.frustumCulled = false;
                 // (obj.material as MeshStandardMaterial).envMapIntensity = 2;
 
                 (obj.material as MeshStandardMaterial).envMap  = textureSky;
                 (obj.material as MeshStandardMaterial).needsUpdate  = true;
+                const vnh = new THREE.VertexNormalsHelper(obj, 1, 0xff0000 );
+        vnh.update()
+        console.log(vnh)
+        scene.add( vnh );
             }
         })
+        
+        
         TriggerStart()
         clock.start();
         if(m.animations.length) {

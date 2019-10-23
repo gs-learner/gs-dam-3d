@@ -10,7 +10,7 @@ interface EditProps {
 
 const RenderEditor: React.FC<EditProps> = (props)=>{
     const NotImplFn = ()=>{}
-
+    
     return (
         <Grid container>
             <Grid item xs={12} md={8}>
@@ -20,6 +20,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                         onBgColor={NotImplFn} 
                         model={props.model ? props.model : null}
                         frameid='edit-frame'
+                        openCtrl={false}
                     />
                 </div>
                 </div>

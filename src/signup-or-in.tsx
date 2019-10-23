@@ -13,6 +13,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import { MockUser } from './utils/mock';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -151,6 +152,7 @@ const SignupOrIn : React.FC<Props> = (props)=>{
           pro.set.logState(true);
           props.onClose();
           setError(false);
+          pro.save.login(username, password)
         }
         else {
           setError(true)
@@ -161,6 +163,8 @@ const SignupOrIn : React.FC<Props> = (props)=>{
         seterrorMessage("error connect server")
         //TODO(over)
         pro.set.logState(true);
+        pro.set.user(MockUser()) //TODO: delete
+        pro.save.login('aaa', 'bbb') //TODO: delete
       }
       
     }

@@ -11,7 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import DetailPanel from './detail-panel'
 import { profile, Profile } from './bits/store'
-import {Router, Route, useHistory} from 'react-router-dom'
+import {Router, Route} from 'react-router-dom'
 import SignupOrIn from './signup-or-in';
 import UploadModel from './upload-model';
 import EditProfile from './edit-profile'
@@ -19,12 +19,24 @@ import EditProfile from './edit-profile'
 import { MockUser, MockModel } from './utils/mock'
 import { red } from '@material-ui/core/colors';
 import RenderEditor from './render-editor';
-import { D3DModel } from './utils/api';
+import { D3DModel, APISignin, MakeEmptyUser } from './utils/api';
 import { createBrowserHistory } from 'history'
-const history = createBrowserHistory();
+import Cookies from 'universal-cookie';
 
-interface RouteTo {
-  path: string
+const history = createBrowserHistory();
+const cookies = new Cookies()
+const persSave = (key:string, value:string)=>{
+  cookies.set(key, value, { path: '/' });
+}
+
+const persGet = (key:string)=>{
+  return cookies.get(key)
+}
+
+const persDel = (...keys:string[])=>{
+  for(let k of keys) {
+    cookies.remove(k)
+  }
 }
 
 const App: React.FC = () => {
@@ -40,16 +52,40 @@ const App: React.FC = () => {
   const [openDetail, setOpenDetail] = useState(false)
   const [signupOrSignin, setSignupOrSigin] = useState(true)
   const [openSignupOrSigin, setOpenSignipOrSignin] = useState(false)
-  const [user, setUser] = useState(MockUser())
+  const [user, setUser] = useState(MakeEmptyUser())
   const [openUploadModel, setOpenUploadModel] = useState(false)
   const [logState, setLogState] = useState(false)
   const [editingModel, setEditingodel] = useState<D3DModel>();
-
+  useEffect(()=>{
+    const username = persGet('username')
+    const password = persGet('password')
+    if(username && password) {
+      APISignin({username: username, password:password}).then((duser)=>{
+        if(duser.ok) {
+          setUser(duser.data)
+        }
+        else {
+          persDel('username', 'password');
+        }
+      }).catch(e=>{
+        console.log('failed to connect server')
+        // persDel('username', 'password');
+        setUser(MockUser()) //TODO: delete
+      })
+    }
+  }, [])
   const pro:Profile  = {
     user: user,
     set: {
       user: setUser,
       logState: setLogState,
+    },
+    save: {
+      login: (username, password)=>{
+        console.log('saving', password, username)
+        persSave('username', username);
+        persSave('password', password);
+      }
     },
     to: {
       profile: ()=>{
@@ -60,7 +96,8 @@ const App: React.FC = () => {
       },
       edit_render: (model: D3DModel)=>{
         setEditingodel(model)
-        if(toEditRender.current) toEditRender.current.click()
+        setEditingodel(MockModel())
+        history.push('/model/edit');
       }
     },
     open: {

@@ -15,13 +15,13 @@ const useStyles = makeStyles({
 export const LogBar: React.FC = (props) =>{
     const pro = useContext(profile)
     const classes = useStyles();
-    useEffect(() => {
-        console.log(pro)
-    }, [pro]);
+    // useEffect(() => {
+    //     console.log(pro)
+    // }, [pro]);
     return(
         <div className="LogBar" style={{float:'right'}}>
         {
-            pro.State.logState?
+            pro.user.username ?
             <Grid container spacing={3}>
                 <Grid item xs>
                     <div style={{lineHeight:'40px', color:'white',marginRight:'-10px'}}>

@@ -9,6 +9,9 @@ const default_profile = {
         user: (u: User)=>{},
         logState:(v:boolean)=>{},
     },
+    save: {
+        login: (username:string, password:string)=>{} 
+    },
     to: {
         profile: ()=>{},
         edit_profile: ()=>{},

@@ -36,6 +36,13 @@ const DetailPanel : React.FC<Props> = (props)=>{
         }
 
     }, [props.open])
+    const seBgW = (bg:string) => {
+        console.log(bg);
+        // if(!bg.startsWith('radial-gradient(circle, rgba(35')) {
+        //     debugger
+        // }
+        setCanvasBg(bg)
+    }
     return(
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-title" maxWidth='xl' fullWidth={true}>
             <Grid container>
@@ -43,12 +50,13 @@ const DetailPanel : React.FC<Props> = (props)=>{
                     <div className='canvas-frame-wrapper'>
                     <div id='canvas-frame'  className='canvas-frame' style={{background:canvasBg}}>
                         <Render 
-                            onBgColor={setCanvasBg} 
+                            onBgColor={seBgW} 
                             model={currentModel}
                             frameid='canvas-frame'
+                            openCtrl={openCtrl}
                         />
                         <div className={classes.ctrl}>
-                            <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small'>
+                            <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
                                 <SettingsIcon />
                             </IconButton>
                             
