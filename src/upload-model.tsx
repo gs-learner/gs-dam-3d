@@ -14,7 +14,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
-import { Button } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
+import CloseIcon from '@material-ui/icons/Close';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 
 import './upload-model.css'
 import {  deepOrange } from '@material-ui/core/colors'
@@ -24,6 +29,7 @@ interface WaitingItemProps {
     index: number
     active: number
     onDone: (idx:number)=>any
+    globalTags: string[]
 }
 
 const useWaitingStyle = makeStyles((theme: Theme) => ({
@@ -92,7 +98,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                 name: name,
                 filename: props.file.name,
                 catalog: AllModelCatalogs[catagory],
-                tags: new Array<string>(),
+                tags: props.globalTags,
                 render_config: MakeDefaultRenderConfig()
             }, (f)=>{
                 setCompleted(10 + f * 90)
@@ -252,7 +258,8 @@ const UploadModel : React.FC = (props)=>{
     const classes = useStyle()
     const [height, setHeight] = useState(80)
     const [open, setopen] = useState(false)
-
+    const [tags, setTags] = useState(new Array<string>())
+    const [curTagIpt, setCurTagIpt] = useState('')
     
     if(!pro.user.username) {
          return null
@@ -275,7 +282,16 @@ const UploadModel : React.FC = (props)=>{
         }
     }
 
-    
+    const handleDelete = (idx:number)=>{
+        const filtered = [...tags]
+        filtered.splice(idx, 1);
+        setTags(filtered)
+    }
+
+    const handleAddTags = ()=>{
+        setTags([...tags, curTagIpt]);
+        setCurTagIpt('')
+    }
 
     return (
         <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)} scroll='body'>
@@ -284,13 +300,49 @@ const UploadModel : React.FC = (props)=>{
                     <Typography display='inline' className={classes.header_accent}>
                         Upload
                     </Typography>
+                    
                     <Typography display='inline' className={classes.header_light}>
                         Models
                     </Typography>
                 </Grid>
                 
             </Grid>
-
+            <Typography variant='h6'>
+                Tags applied to all uploads
+            </Typography>
+            <TextField
+                id="add-to-tags"
+                variant="outlined"
+                label="Add Tags for All Uploads"
+                value={curTagIpt}
+                onChange={(e)=>setCurTagIpt(e.target.value)}
+                InputProps={{
+                endAdornment: (
+                    <InputAdornment position="end">
+                    <IconButton
+                        disabled={!Boolean(curTagIpt)}
+                        edge="end"
+                        aria-label="add tags"
+                        onClick={handleAddTags}
+                    >
+                        <AddIcon />
+                    </IconButton>
+                    </InputAdornment>
+                ),
+                }}
+            />
+            {
+                tags.map((v, idx)=>{return(
+                    <Chip
+                        key={idx}
+                        label={v}
+                        onDelete={()=>handleDelete(idx)}
+                        deleteIcon={<CloseIcon />}
+                    />
+                )})
+            }
+            
+            
             <Paper style={{maxHeight: '500px', overflow: 'auto'}}>
             {
                 files.map((v, idx)=>
@@ -300,6 +352,7 @@ const UploadModel : React.FC = (props)=>{
                         active={uploading}
                         onDone={onUploadDone}
                         key={idx}
+                        globalTags={tags}
                     />
                 )
             }

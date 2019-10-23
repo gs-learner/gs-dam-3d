@@ -79,10 +79,10 @@ const App: React.FC = () => {
     set: {
       user: setUser,
       logState: setLogState,
+      theme: setTheme
     },
     save: {
       login: (username, password)=>{
-        console.log('saving', password, username)
         persSave('username', username);
         persSave('password', password);
       }
@@ -129,7 +129,7 @@ const App: React.FC = () => {
           <a ref={toEditRender} href='/model/edit'>x</a>
         </div>
     
-        <button onClick={()=>{ console.log('click detail'); setOpenDetail(true)}}>Show Detail</button>
+        <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
         <button onClick={()=>{
           pro.to.profile();
         }}>To Profile</button>

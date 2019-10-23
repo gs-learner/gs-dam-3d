@@ -238,6 +238,7 @@ const ReRender = async (
                 (obj.material as MeshStandardMaterial).needsUpdate  = true;
                 const vnh = new THREE.VertexNormalsHelper(obj, 1, 0xff0000 );
         vnh.update()
+        vnh.scale.set(scale, scale, scale)
         console.log(vnh)
         scene.add( vnh );
             }
