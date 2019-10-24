@@ -29,3 +29,6 @@
 .bodyContCataPage .Package{
     margin: 0px 30px 30px 0;
 }
+.BodyCataPage{
+    min-height: 650px;
+}

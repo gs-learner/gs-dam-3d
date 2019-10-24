@@ -122,7 +122,7 @@ const BodyCataPage:React.FC=()=>{
 
 export const CataPage:React.FC=()=>{
     return(
-        <div className="CataPage">
+        <div className="CataPage" style={{minHeight: '100vh'}}>
             <HeaderCataPage/>
             <BodyCataPage/>
             <TailBar/>

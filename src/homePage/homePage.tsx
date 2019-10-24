@@ -317,7 +317,9 @@ interface Props {
 export const HomePage: React.FC = () => {
 
     return(
-        <div>
+        <div style={{
+            textAlign:'center',
+        }}>
             <HeaderHomepage/>
             <BodyHomePage/>
             <TailBar/>

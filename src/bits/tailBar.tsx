@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
         flexGrow:1,
         fontFamily:'Proxima Nova',
         fontWeight:400,
+        textAlign:'center',
     },
     content:{
         lineHeight:'100%',
