@@ -14,7 +14,7 @@ import { profile, Profile } from './bits/store'
 import {Router, Route} from 'react-router-dom'
 import SignupOrIn from './signup-or-in';
 import UploadModel from './upload-model';
-import EditProfile from './edit-profile'
+import EditProfile from './userPage/edit-profile'
 
 import { MockUser, MockModel } from './utils/mock'
 import { red } from '@material-ui/core/colors';
@@ -32,6 +32,7 @@ const persSave = (key:string, value:string)=>{
 const persGet = (key:string)=>{
   return cookies.get(key)
 }
+
 
 const persDel = (...keys:string[])=>{
   for(let k of keys) {
@@ -87,7 +88,15 @@ const App: React.FC = () => {
         persSave('password', password);
       }
     },
+    del: {
+      login: ()=>{
+        persDel('username', 'password')
+      }
+    },
     to: {
+      index:()=>{
+        history.push('/');
+      },
       profile: ()=>{
         history.push('/profile');
       },
@@ -98,6 +107,9 @@ const App: React.FC = () => {
         setEditingodel(model)
         setEditingodel(MockModel())
         history.push('/model/edit');
+      },
+      catalog:()=>{
+        history.push('/catalog');
       }
     },
     open: {
@@ -129,14 +141,14 @@ const App: React.FC = () => {
           <a ref={toEditRender} href='/model/edit'>x</a>
         </div>
     
-        {/* <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
+        <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
         <button onClick={()=>{
           pro.to.profile();
         }}>To Profile</button>
         <button onClick={()=>{
           pro.to.edit_render(MockModel())
-        }}>Edit Model</button> */}
-        
+        }}>Edit Model</button> 
+      
         <HomePage/>
     
       </div>

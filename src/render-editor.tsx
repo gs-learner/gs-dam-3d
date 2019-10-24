@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { D3DModel } from './utils/api'
+import { D3DModel, LightTypes } from './utils/api'
 import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
 import Grid from '@material-ui/core/Grid'
@@ -47,11 +47,20 @@ interface LightControlProps {
     lights: LightManager
 }
 
-const LightTypeName = [
+const LightTypeName= [
     ['Ambient Light', 'For global illumination, not working on PBR material'],
     ['Point Light', 'A light that acts like a bulb'],
     ['Spot Light', 'A light acts like a torch']
 ]
+
+const GetLightTypeId = (str:LightTypes)=>{
+    switch (str) {
+    case 'ambient': return 0;
+    case 'point': return 1;
+    case 'spot': return 2;
+    default: return -1;
+    }
+}
 
 const LightControl : React.FC<LightControlProps> = (props)=>{
     const [controlLevel, setControlLevel] = useState(0)
@@ -62,8 +71,6 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
     const [intensity, setIntensity] = useState(0)
     const [distance, setDistance] = useState(0)
     
-
-
     useEffect(()=>{
         props.lights.listenAmountChange = (l)=>{
             setLightsArr([...l.lights])
@@ -75,6 +82,10 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
             setDistance((props.lights.lights[1] as any).distance)
         }, 2000)
     }, [props.lights])
+
+    const SetEditingLight = (idx:number) => {
+        
+    }
 
     
     return (
@@ -182,7 +193,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     const classes = useStyles();
     const [handle, setHandle] = useState<HandleType>()
     const [lights, setLights] = useState<LightManager>()
-    const model = MockModel();
+    const [model, setModel] = useState(MockModel());
     const [openCtrl, setOpenCtrl] = useState(false)
 
     const updateHandle = (h: HandleType)=>{

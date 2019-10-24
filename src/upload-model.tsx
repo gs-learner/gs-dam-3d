@@ -20,9 +20,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
+import clsx from 'clsx';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import './upload-model.css'
-import {  deepOrange } from '@material-ui/core/colors'
+import {  deepOrange, lightBlue } from '@material-ui/core/colors'
+import { Stepper,StepConnector,Step,StepLabel } from '@material-ui/core'
 
 interface WaitingItemProps {
     file: File
@@ -41,14 +44,14 @@ const useWaitingStyle = makeStyles((theme: Theme) => ({
     },
     textField: {
         marginTop: theme.spacing(2),
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2),
         marginBottom:theme.spacing(1),
     },
     formControl: {
         marginTop: theme.spacing(2),
-        marginLeft:theme.spacing(1),
-        marginRight:theme.spacing(1),
+        marginLeft:theme.spacing(2),
+        marginRight:theme.spacing(2),
         marginBottom:theme.spacing(1),
         minWidth: 120,
       },
@@ -183,7 +186,9 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                     <div style={{position:'relative',height:'10px', zIndex:100000,color:'white',fontWeight:'bold'}}>
                         <div style={{position:'absolute',top:'12px'}}>
                             <Typography variant='subtitle2'>
-                            {DisplayFileSize(props.file.size)}
+                                <div style={{paddingLeft:'10px',paddingRight:'10px'}}>
+                                    {DisplayFileSize(props.file.size)}
+                                </div>
                             </Typography>
                         </div>
                     </div>
@@ -193,10 +198,12 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                         <div style={{position:'absolute',top:'12px',width:'100%'}}>
                             <div style={{float:'right'}}>
                             <Typography variant='subtitle2'>
-                                {overState?(isloaded?
-                                    (<img src='/image/right.png' alt='avatar' width='20px' height='20px'></img>)
-                                    :(<img src='/image/wrong.png' alt='avatar' width='20px' height='20px'></img>))
-                                    :''}
+                                <div style={{paddingLeft:'10px',paddingRight:'10px'}}>
+                                    {overState?(isloaded?
+                                        (<img src='/image/right.png' alt='avatar' width='20px' height='20px'></img>)
+                                        :(<img src='/image/wrong.png' alt='avatar' width='20px' height='20px'></img>))
+                                        :''}
+                                </div>
                             </Typography>
                             </div>
                         </div>
@@ -248,7 +255,13 @@ const useStyle = makeStyles((theme: Theme) => ({
         '&:hover':{
             color:'black',
         },
-    }
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+    textField: {
+        flexBasis: 200,
+    },
   }));
 
 const UploadModel : React.FC = (props)=>{
@@ -264,6 +277,29 @@ const UploadModel : React.FC = (props)=>{
     if(!pro.user.username) {
          return null
     }
+    const QontoConnector = withStyles({
+        alternativeLabel: {
+          top: 10,
+          left: 'calc(-50% + 16px)',
+          right: 'calc(50% + 16px)',
+        },
+        active: {
+          '& $line': {
+            borderColor: '#784af4',
+          },
+        },
+        completed: {
+          '& $line': {
+            borderColor: '#784af4',
+          },
+        },
+        line: {
+          borderColor: lightBlue[500],
+          borderTopWidth: 3,
+          borderRadius: 4,
+          borderWidth: 3,
+        },
+      })(StepConnector);
 
     function onDrop<T extends File>(acceptedFiles: T[], rejectedFiles: T[]) {
         // setUploading(0)
@@ -295,112 +331,146 @@ const UploadModel : React.FC = (props)=>{
 
     return (
         <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)} scroll='body'>
-            <Grid container alignItems='center' className={classes.header} style={{height: height / 2}}>
-                <Grid item xs>
-                    <Typography display='inline' className={classes.header_accent}>
-                        Upload
-                    </Typography>
-                    
-                    <Typography display='inline' className={classes.header_light}>
-                        Models
-                    </Typography>
+            <Grid container spacing={0}>
+                <Grid item xs={12}>
+                    <Grid container alignItems='center' className={classes.header} style={{height: height / 2}}>
+                        <Grid item xs>
+                            <Typography display='inline' className={classes.header_accent}>
+                                Upload
+                            </Typography>
+                            <Typography display='inline' className={classes.header_light}>
+                                Models
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                
-            </Grid>
-            <Typography variant='h6'>
-                Tags applied to all uploads
-            </Typography>
-            <TextField
-                id="add-to-tags"
-                variant="outlined"
-                label="Add Tags for All Uploads"
-                value={curTagIpt}
-                onChange={(e)=>setCurTagIpt(e.target.value)}
-                InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                    <IconButton
-                        disabled={!Boolean(curTagIpt)}
-                        edge="end"
-                        aria-label="add tags"
-                        onClick={handleAddTags}
-                    >
-                        <AddIcon />
-                    </IconButton>
-                    </InputAdornment>
-                ),
-                }}
-            />
-            {
-                tags.map((v, idx)=>{return(
-                    <Chip
-                        key={idx}
-                        label={v}
-                        onDelete={()=>handleDelete(idx)}
-                        deleteIcon={<CloseIcon />}
-                    />
-                )})
-            }
-            
-            
-            <Paper style={{maxHeight: '500px', overflow: 'auto'}}>
-            {
-                files.map((v, idx)=>
-                    <WaitingItem
-                        file={v}
-                        index={idx}
-                        active={uploading}
-                        onDone={onUploadDone}
-                        key={idx}
-                        globalTags={tags}
-                    />
-                )
-            }
-            </Paper>
-            {(uploading < 0 && files.length)? <Button onClick={()=>setUploading(0)} className={classes.submitButton}>Submit</Button>:null}
-
-            <Dropzone onDrop={onDrop}>
-                {({getRootProps, getInputProps}) => (
-                    
-                    <div {...getRootProps()} style={{textAlign:"center", backgroundColor: '#f1f5ff'}}>
-                            <input {...getInputProps()} />
-                            <div style={{padding:'20px'}}>
-                                <div id="plusIcon" style={{
-                                    borderStyle:"dashed",
-                                    borderWidth:4,
-                                    borderColor: '#00000020',
-                                    borderRadius: 4,
-                                    padding: 20,
-                                    width: 'auto',
-                                    boxSizing: 'border-box',
-                                    backgroundImage:(open?'url(/image/plus.png)':'none'),
-                                    backgroundRepeat:'no-repeat',
-                                    backgroundSize:'100% 100%',
-                                    }}>
-                                        
-                                    <Grid
-                                        container
-                                        direction="row"
-                                        justify="center"
-                                        alignItems="center"
+                <Grid item xs={12}>
+                    <Grid container spacing={0}>
+                        <Grid item xs={3}>
+                            {files.length?
+                            <TextField
+                                style={{
+                                    backgroundColor:'#f1f5ff',
+                                }}
+                                id="add-to-tags"
+                                variant="outlined"
+                                label="Add Tags for All"
+                                value={curTagIpt}
+                                onChange={(e)=>setCurTagIpt(e.target.value)}
+                                className={clsx(classes.margin, classes.textField)}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">
+                                        <LoyaltyIcon fontSize='small'></LoyaltyIcon>
+                                        </InputAdornment>,
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                        <IconButton
+                                            disabled={!Boolean(curTagIpt)}
+                                            edge="end"
+                                            aria-label="add tags"
+                                            onClick={handleAddTags}
+                                        >
+                                        <AddIcon/>
+                                        </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            : <div></div>}
+                            <div style={{marginLeft:'-20px'}}>
+                            {
+                                tags.length?
+                                    <Paper style={{maxHeight: '466px', overflow: 'auto'}}>
+                                    <Stepper
+                                    connector={<QontoConnector />}
+                                    orientation='vertical'
                                     >
-                                        <Grid item xs>
-                                
-                                        <Typography className={classes.hint} display='inline'>
-                                        {open?'':'Drag File here or'} <span> </span>
-                                        </Typography>
-                                        <Typography className={classes.hintLink} display='inline' style={{cursor:'pointer'}}>{open?'':'Browse'}</Typography>
-                                        
-                                        </Grid>
-                                        
-                                    </Grid>
-                                    
-                                </div>
+                                        {
+                                            tags.map((v,idx)=>(
+                                                <Step key={idx}>
+                                                    <StepLabel StepIconComponent={QontoConnector}>
+                                                        <Chip
+                                                            icon={<LoyaltyIcon fontSize='small'></LoyaltyIcon>}
+                                                            key={idx}
+                                                            label={v}
+                                                            onDelete={() => handleDelete(idx)}
+                                                            deleteIcon={<CloseIcon />}
+                                                            />
+                                                    </StepLabel>
+                                                </Step>
+                                            ))
+                                        }
+                                    </Stepper>
+                                    </Paper>
+                                :<div></div>
+                            }
                             </div>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Paper style={{maxHeight: '500px', overflow: 'auto'}}>
+                            {
+                                files.map((v, idx)=>
+                                    <WaitingItem
+                                        file={v}
+                                        index={idx}
+                                        active={uploading}
+                                        onDone={onUploadDone}
+                                        key={idx}
+                                        globalTags={tags}
+                                    />
+                                )
+                            }
+                            </Paper>
+                            {(uploading < 0 && files.length)? <Button onClick={()=>setUploading(0)} className={classes.submitButton}>Submit</Button>:null}
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <Dropzone onDrop={onDrop}>
+                        {({getRootProps, getInputProps}) => (
                             
-                    </div>
-                )}
-            </Dropzone>
+                            <div {...getRootProps()} style={{textAlign:"center", backgroundColor: '#f1f5ff'}}>
+                                    <input {...getInputProps()} />
+                                    <div style={{padding:'20px'}}>
+                                        <div id="plusIcon" style={{
+                                            borderStyle:"dashed",
+                                            borderWidth:4,
+                                            borderColor: '#00000020',
+                                            borderRadius: 4,
+                                            padding: 20,
+                                            width: 'auto',
+                                            boxSizing: 'border-box',
+                                            backgroundImage:(open?'url(/image/plus.png)':'none'),
+                                            backgroundRepeat:'no-repeat',
+                                            backgroundSize:'100% 100%',
+                                            }}>
+                                                
+                                            <Grid
+                                                container
+                                                direction="row"
+                                                justify="center"
+                                                alignItems="center"
+                                            >
+                                                <Grid item xs>
+                                                    <Typography className={classes.hint} display='inline'>
+                                                    {open?'':'Drag File here or'} <span> </span>
+                                                    </Typography>
+                                                    <Typography className={classes.hintLink} display='inline' style={{cursor:'pointer'}}>{open?'':'Browse'}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                            </div>
+                        )}
+                    </Dropzone>
+                </Grid>
+            </Grid>
+            
+            
+
         </Dialog>
     )
 }

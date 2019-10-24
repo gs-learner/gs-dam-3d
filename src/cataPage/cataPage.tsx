@@ -7,6 +7,7 @@ import {Package, iconInfos, preViewPackages} from '../homePage/homePage';
 import {CenterPanel} from '../bits/centerPanel'
 import { Divider } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import TailBar from '../bits/tailBar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -121,9 +122,10 @@ const BodyCataPage:React.FC=()=>{
 
 export const CataPage:React.FC=()=>{
     return(
-        <div className="CataPage">
+        <div className="CataPage" style={{minHeight: '100vh'}}>
             <HeaderCataPage/>
             <BodyCataPage/>
+            <TailBar/>
         </div>
     )
 }

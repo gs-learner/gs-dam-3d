@@ -1,6 +1,6 @@
 *{padding:0; margin:0}
 .HeaderHomepage{
-    background-image: url('/image/feat-May2019.jpg');
+    background-image: url('/image/homePageBKG3.jpg');
     background-position: center 0px;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -52,7 +52,7 @@
 
 
 .BodyMainHomepage{
-    width:1800px;
+    width:1730px;
     margin: 0 auto;
     background-color: #f4fcff;
     overflow: hidden;
@@ -75,7 +75,7 @@
 }
 .PreViewBarPlus:hover > div.PreViewBar .ModelPreview{
     margin-left: -120px;
-    width: 1400px;
+    /* width: 1400px; */
 }
 .PreViewBarPlus:hover > .slidebkg{
     margin-left:-130px;
@@ -143,8 +143,8 @@
     border-radius: 5px;
     width: 225px;
     /* height: 200px; */
-    background-color: rgba(255, 255, 255, 0.349);
-    box-shadow: 0 1px 1px rgba(97,108,121,.1), 0 7px 18px 0 rgba(97,108,121,.13);
+    background-color: rgba(255, 255, 255, 0.747);
+    box-shadow: 0 2px 2px rgba(97,108,121,.1), 0 7px 18px 0 rgba(97,108,121,.13);
     /* overflow: hidden; */
 }
 .Package div.Package-up{
@@ -179,31 +179,32 @@
 }
 .icon-mask div.bigger-img{
     position: absolute;
-    left: -70%;
-    top:-270%;
+    left: 106%;
     display: none;
     border-radius: 10px;
     background: rgb(49, 49, 49);
     color: white;
     text-align: center;
+    border: solid 2px;
+    box-shadow: 0px 0px 15px rgb(255, 255, 255);
 }
 .icon-mask div.bigger-img::before, .icon-mask div.bigger-img::after{
     border: solid transparent;
     content: ' ';
     height: 0;
-    top: 100%;
+    right: 100%;
     position: absolute;
     width: 0;
 }
 .icon-mask div.bigger-img::after{
     border-width: 10px;
-    border-top-color: rgb(49, 49, 49);
-    right: 182px;
+    border-right-color: white;
+    top: 20px;
 }
 .icon-mask div.bigger-img::before{
     border-width: 12px;
-    border-top-color: rgb(49, 49, 49);
-    right: 180px;
+    border-right-color: white;
+    top: 18px;
 }
 .icon-mask div.bigger-img img{
     border-top-right-radius: 10px;

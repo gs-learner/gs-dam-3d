@@ -7,6 +7,7 @@ import SearchAppBar from '../bits/miniSearch';
 import UploadButton from '../bits/buttonUpload';
 import FolderList from '../bits/userInfoList';
 import { Package, preViewPackages } from '../homePage/homePage';
+import TailBar from '../bits/tailBar';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -124,6 +125,7 @@ export const UserPage: React.FC = () => {
         <div className="UserPage">
             <HeadUserPage />
             <BodyUserPage />
+            <TailBar/>
         </div>
     )
 }

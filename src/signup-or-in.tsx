@@ -124,6 +124,7 @@ const SignupOrIn : React.FC<Props> = (props)=>{
   
   
         if(result.ok) {
+          console.log(result.data)
           pro.set.user(result.data);
           props.onClose();
           setError(false);
@@ -206,7 +207,6 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                         required
                         fullWidth
                         error={logError}
-                        id="outlined-required"
                         label={logError ? errorMessage : "Username"}
                         className={classes.textField}
                         margin="normal"
@@ -218,7 +218,6 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                     <Grid item xs>
                       <TextField
                         required
-                        id="outlined-required"
                         label="Email"
                         className={classes.textField}
                         margin="normal"
@@ -230,7 +229,6 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                     <Grid item xs>
                       <TextField
                         required
-                        id="outlined-required"
                         label="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -261,7 +259,6 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                       <TextField
                         required
                         error={logError}
-                        id="outlined-required"
                         label={logError ? errorMessage : "Username"}
                         className={classes.textField}
                         margin="normal"
@@ -273,13 +270,12 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                     <Grid item xs>
                       <TextField
                         required
-                        id="outlined-required"
                         label="Password"
                         className={classes.textField}
                         margin="normal"
                         variant="outlined"
-                        value={email}
-                        onChange={(v) => setEmail(v.target.value)}
+                        value={password}
+                        onChange={(v) => setPassword(v.target.value)}
                       />
                     </Grid>
                     <Grid item xs>

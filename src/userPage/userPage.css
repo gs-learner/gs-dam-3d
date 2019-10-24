@@ -1,3 +1,9 @@
+.BodyTopUserPage{
+    padding-top: 70px;
+    background-image: url(/image/homeBKG1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 .BodyTopUserPage::after{
     content: '';
     clear: both;
