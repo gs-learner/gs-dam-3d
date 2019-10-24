@@ -54,6 +54,7 @@
 .BodyHomePage{
     width:1500px;
     margin: 0 auto;
+    background-color: #f4fcff;
 }
 .BodyTopHomepage .CenterPanel{
     margin:20px auto;
@@ -64,7 +65,7 @@
     /* overflow: hidden; */
 }
 .PreViewBar:hover{
-    background-color: #f4fcff;;
+    background-color: #f4fcff;
 }
 .PreViewBar:hover > .CataPreView{
     opacity: 0;

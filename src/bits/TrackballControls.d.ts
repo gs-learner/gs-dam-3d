@@ -53,4 +53,6 @@ export class TrackballControls extends EventDispatcher {
 	zoomRange(beg:number, end:number):void
 
 	mockRotateX(delta:number):void
+
+	reregister():void
 }

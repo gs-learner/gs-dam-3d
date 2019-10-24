@@ -104,6 +104,24 @@ export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
         {type: 'ambient', position:[0, 0, 0], color: 0x404040, intensity: 1, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
         {type: 'point', position:[18, 18, 18], color: 0xffffff, intensity: 1, distance: 100, decay: 1, angle: Math.PI/2, penumbra: 0},
         {type: 'point', position:[-30, 18, 18], color: 0xffffff, intensity: 1, distance: 200, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[10, 10, 20],  color: 0xe0e0e0, intensity: 6, distance: 200, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-10, -10, 10],  color: 0xe0e0e0, intensity: 5, distance: 200, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-10, 10, 10],  color: 0xe0e0e0, intensity: 4, distance: 200, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-10, -10, -10],  color: 0xe0e0e0, intensity: 8, distance: 200, decay: 1, angle: Math.PI/2, penumbra: 0},
+    ],
+    'disco': [
+        {type: 'ambient', position:[0, 0, 0], color: 0x404040, intensity: 1, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[18, 18, 18], color: 0x1caedf, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-18, -18, 18], color: 0xea1831, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-18, 18, -18], color: 0xea1831, intensity: 5, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[18, 18, -18], color: 0x1caedf, intensity: 5, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+
+    ],
+    'bio hazard': [
+        {type: 'ambient', position:[0, 0, 0], color: 0x404040, intensity: 1, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[18, 18, 18], color: 0xfbf000, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-18, -18, 18], color: 0x04c21a, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-18, 18, -18], color: 0x004307, intensity: 5, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
     ]
 }
 
@@ -247,7 +265,7 @@ export async function APIUpdateUserAvatar(info:{avatar:string /* base64 */}){
 }
 
 export async function APIUploadModel(info: U3DModel, onprogress: (progress_0_to_1: number)=>any) {
-    let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<{avatarUrl:string}>
+    let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<{preview:string}>
     return RefineResponse(res)
 }
 
