@@ -1,6 +1,19 @@
 {
   "name": "3d-dams-web",
-  "version": "0.1.0",
+  "version": "0.1.2",
+  "description": "3D Models view & trade & share website.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gs-learner/gs-dam-3d"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "3d models",
+    "typescript",
+    "dam",
+    "digital assets management"
+  ],
   "proxy": "http://127.0.0.1:5000",
   "private": true,
   "dependencies": {

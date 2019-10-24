@@ -11,6 +11,18 @@
     font-weight: 700;
     src: url(/static/fonts/proxima_nova_bold.ttf) format('truetype');
 }
+@font-face {
+    font-family: 'bauerboddee';
+    font-style: normal;
+    font-weight: 900;
+    src: url(/static/fonts/bauerboddee_bold_italic.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Author';
+    font-style: normal;
+    font-weight: 900;
+    src: url(/static/fonts/Author-plain.ttf) format('truetype');
+}
 
 @font-face {
     font-family: 'Proxima Nova';
@@ -18,4 +30,15 @@
     font-weight: 200;
     src: url(/static/fonts/Proxima-Nova-Thin.otf) format('oft');
 }
-
+@font-face {
+    font-family: 'LouisaCP';
+    font-style: normal;
+    font-weight: 700;
+    src: url(/static/fonts/LouisaCP.otf) format('otf');
+}
+@font-face {
+    font-family: 'Vitrina';
+    font-style: normal;
+    font-weight: 700;
+    src: url(/static/fonts/Vitrina.otf) format('otf');
+}

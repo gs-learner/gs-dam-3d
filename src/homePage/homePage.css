@@ -18,7 +18,7 @@
     padding: 30px;
 }
 .HeaderMainHomepage div.logo{
-    margin: 50px 0px;
+    margin: 25px 0px;
     font-size: 60px;
     font-weight: 100;
     color: white;
@@ -51,10 +51,12 @@
 } */
 
 
-.BodyHomePage{
-    width:1500px;
+.BodyMainHomepage{
+    width:1800px;
     margin: 0 auto;
     background-color: #f4fcff;
+    overflow: hidden;
+    text-align: center;
 }
 .BodyTopHomepage .CenterPanel{
     margin:20px auto;
@@ -62,17 +64,25 @@
 .PreViewBar{
     padding: 20px 50px 20px 50px;
     transition: 0.4s;
+    background-color: rgb(250, 250, 250);
     /* overflow: hidden; */
 }
-.PreViewBar:hover{
-    background-color: #f4fcff;
+.PreViewBarPlus:hover > .PreViewBar{
+    background-color:unset;
 }
-.PreViewBar:hover > .CataPreView{
+.PreViewBarPlus:hover > div.PreViewBar .CataPreView{
     opacity: 0;
 }
-.PreViewBar:hover > .ModelPreview{
-    margin-left: -170px;
-    width: 1300px;
+.PreViewBarPlus:hover > div.PreViewBar .ModelPreview{
+    margin-left: -120px;
+    width: 1400px;
+}
+.PreViewBarPlus:hover > .slidebkg{
+    margin-left:-130px;
+}
+.PreViewBar{
+    z-index: 10;
+    background-color: #f4fcff;
 }
 .PreViewBar::after{
     content: "";
@@ -88,18 +98,34 @@
     background-color: rgba(255, 255, 255, 0.493);
     box-shadow: 0 3px 3px 3px rgba(168, 168, 168, 0.349);
     transition: 0.4s;
+    z-index: 100;
 }
 .ModelPreview{
     float: left;
     background: transparent;
     transition: 1s;
-    width:1000px;
+    width:1100px;
     margin-left: 50px;
 }
 .ModelPreview::after{
     content: "";
     clear: both;
     display: block;
+}
+.PreViewBarPlus{
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    overflow: visible;
+}
+.slidebkg{
+    height: 100%;
+    position: absolute;
+    z-index:-10;
+    margin-left:-2200px;
+    transition: 2.4s;
 }
 
 
@@ -153,7 +179,8 @@
 }
 .icon-mask div.bigger-img{
     position: absolute;
-    left: 106%;
+    left: -70%;
+    top:-270%;
     display: none;
     border-radius: 10px;
     background: rgb(49, 49, 49);
@@ -164,19 +191,19 @@
     border: solid transparent;
     content: ' ';
     height: 0;
-    right: 100%;
+    top: 100%;
     position: absolute;
     width: 0;
 }
 .icon-mask div.bigger-img::after{
     border-width: 10px;
-    border-right-color: rgb(49, 49, 49);
-    top: 20px;
+    border-top-color: rgb(49, 49, 49);
+    right: 182px;
 }
 .icon-mask div.bigger-img::before{
     border-width: 12px;
-    border-right-color: rgb(49, 49, 49);
-    top: 18px;
+    border-top-color: rgb(49, 49, 49);
+    right: 180px;
 }
 .icon-mask div.bigger-img img{
     border-top-right-radius: 10px;

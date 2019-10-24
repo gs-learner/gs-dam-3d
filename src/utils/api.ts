@@ -69,6 +69,32 @@ export const AllModelCatalogs = [
     'Food',
 ] as const;
 export type ModelCatalog = typeof AllModelCatalogs[number]
+export const CatalogBound : Record<ModelCatalog, string[]> = {
+    //TODO each icon needs a jump
+    Animals:['/image/common.png','/image/cin.png',
+    'This part contains many kinds of Animals models'],
+    Architecture:['/image/building.png','/image/cin.png',
+    'This part contains many kinds of Architecture models'],
+    Cars:['/image/common.png','/image/cin.png',
+    'This part contains many kinds of Cars models'],
+    Characters:['/image/people.png','/image/cin.png',
+    'This part contains many kinds of Characters models'],
+    History:['/image/history.png','/image/cin.png',
+    'This part contains many kinds of History models'],
+    Furniture:['/image/common.png','/image/cin.png',
+    'This part contains many kinds of Furniture models'],
+    Weapon:['/image/weapon.png','/image/cin.png',
+    'This part contains many kinds of Weapon models'],
+    "Sci-fi":['/image/scifi.png','/image/cin.png',
+    'This part contains many kinds of Sci-fi models'],
+    People:['/image/people.png','/image/cin.png',
+    'This part contains many kinds of People models'],
+    Place:['/image/common.png','/image/cin.png',
+    'This part contains many kinds of Place models'],
+    Food:['/image/common.png','/image/cin.png',
+    'This part contains many kinds of Food models'],
+}
+
 
 export interface DModelCatalogInfo {
     name: ModelCatalog
