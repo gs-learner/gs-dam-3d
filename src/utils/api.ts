@@ -66,11 +66,12 @@ export const AllModelCatalogs = [
     'Animals' , 'Architecture' , 'Cars' , 
     'Characters' , 'History' , 'Furniture' ,
     'Weapon' , 'Sci-fi' , 'People' , 'Place' ,
-    'Food',
+    'Food', 'Dinosaurs'
 ] as const;
 export type ModelCatalog = typeof AllModelCatalogs[number]
 export const CatalogBound : Record<ModelCatalog, string[]> = {
     //TODO each icon needs a jump
+    //TODO: add for dinosaurs
     Animals:['/image/common.png','/image/cin.png',
     'This part contains many kinds of Animals models'],
     Architecture:['/image/building.png','/image/cin.png',
@@ -93,6 +94,8 @@ export const CatalogBound : Record<ModelCatalog, string[]> = {
     'This part contains many kinds of Place models'],
     Food:['/image/common.png','/image/cin.png',
     'This part contains many kinds of Food models'],
+    Dinosaurs:['/image/common.png','/image/cin.png',
+    'Dinosaurs, dragons, roar!'],
 }
 
 
@@ -110,7 +113,7 @@ type LightTypes =
 // if nothing is specified, all light types has the attribute
 // if <point> is specified, only point light & spot light has the attribute
 // if <spot>  is specified, only spot light has the attribute
-interface RenderLight {
+export interface RenderLight {
     type: LightTypes
     position: number[]
     color: number // hex, e.g. 0x404040
@@ -137,7 +140,7 @@ export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
     ],
     'disco': [
         {type: 'ambient', position:[0, 0, 0], color: 0x404040, intensity: 1, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
-        {type: 'point', position:[18, 18, 18], color: 0x1caedf, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[8, 8, 8], color: 0x1caedf, intensity: 6, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
         {type: 'point', position:[-18, -18, 18], color: 0xea1831, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
         {type: 'point', position:[-18, 18, -18], color: 0xea1831, intensity: 5, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
         {type: 'point', position:[18, 18, -18], color: 0x1caedf, intensity: 5, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
@@ -145,9 +148,9 @@ export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
     ],
     'bio hazard': [
         {type: 'ambient', position:[0, 0, 0], color: 0x404040, intensity: 1, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
-        {type: 'point', position:[18, 18, 18], color: 0xfbf000, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
-        {type: 'point', position:[-18, -18, 18], color: 0x04c21a, intensity: 8, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
-        {type: 'point', position:[-18, 18, -18], color: 0x004307, intensity: 5, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[8, 8, 8], color: 0xfbf000, intensity: 4, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-8, -6, 8], color: 0x04c21a, intensity: 6, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
+        {type: 'point', position:[-7, 8, -8], color: 0x004307, intensity: 3, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
     ]
 }
 

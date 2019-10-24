@@ -13,7 +13,14 @@ import Tooltip from '@material-ui/core/Tooltip'
 import { ChromePicker } from 'react-color'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { MockModel } from './utils/mock'
-
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import PrettoSlider from './bits/pretto-slider';
+import SettingsIcon from '@material-ui/icons/Settings';
+import IconButton from '@material-ui/core/IconButton';
 
 const useLightStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,11 +58,24 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
     const [expanded, setExpanded] = useState(false)
     const [lightsarr, setLightsArr] = useState([...props.lights.lights])
     const classes = useLightStyles();
+    const [selected, setSelected] = useState(0)
+    const [intensity, setIntensity] = useState(0)
+    const [distance, setDistance] = useState(0)
+    
+
+
     useEffect(()=>{
         props.lights.listenAmountChange = (l)=>{
             setLightsArr([...l.lights])
         }
+        setTimeout(()=>{
+            props.lights.enableEdit(1);
+            setControlLevel(1)
+            setIntensity(props.lights.lights[1].intensity)
+            setDistance((props.lights.lights[1] as any).distance)
+        }, 2000)
     }, [props.lights])
+
     
     return (
         <ExpansionPanel expanded={expanded} onChange={()=>setExpanded(!expanded)}>
@@ -78,27 +98,66 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
             controlLevel>=0?
                 <Grid item xs>
                 <ChromePicker onChange={e=>{
-                    if(!props.lights.controlling) return;
-                    props.lights.controlling.color.setRGB(e.rgb.r / 255.0, e.rgb.g / 255.0, e.rgb.b / 255.0)
+                    props.lights.editColor(e.rgb.r / 255.0, e.rgb.g / 255.0, e.rgb.b / 255.0)
                 }}/>
                 </Grid> : <Typography>No Lights Selected, Click on add lights to add</Typography>
             }
+            <Grid item xs={4}>
             {
                 controlLevel>=0?
-                <Grid item xs>
+                
                 <Tooltip title={LightTypeName[controlLevel][1]} placement="bottom">
                 <Typography>
                     {LightTypeName[controlLevel][0]}
                 </Typography>
                 </Tooltip>
-                </Grid>
                 : null
             }
             {
-                lightsarr.map((v, idx)=>{return(
-                    <p>{idx}</p>
-                )})
+                controlLevel>=1?
+                <div>
+                <Typography gutterBottom>
+                Intensity
+                </Typography>
+                <PrettoSlider
+                min={0} max={30} step={0.2} valueLabelDisplay="auto"
+                value={intensity}
+                defaultValue={0} onChange={(e,v:any)=>{
+                    setIntensity(v)
+                    props.lights.editIntensity(v)
+                }}/>
+
+                <Typography gutterBottom>
+                Max Lumination Distance
+                </Typography>
+                <PrettoSlider 
+                value={distance}
+                min={0} max={30} step={0.2} valueLabelDisplay="auto"
+                defaultValue={0} onChange={(e,v:any)=>{
+                    setDistance(v)
+                    props.lights.editDistance(v)
+                }}/>
+                </div>
+                : null
             }
+
+            </Grid>
+            <FormControl component="fieldset">
+                <FormLabel component="legend">Pick Lights in the Scene</FormLabel>
+                <RadioGroup aria-label="pick-lights" 
+                    name="pick-lights" value={selected} 
+                    onChange={(e, v)=>{
+                        setSelected(Number(v))
+                    }}>
+                    {
+                        lightsarr.map((v, idx)=>{
+                            const info = props.lights.lightsTypeinfo[idx]
+                            return(
+                            <FormControlLabel value={idx} control={<Radio />} label={'#'+idx.toString() + ' ' + info.type} />
+                        )})
+                    }
+                </RadioGroup>
+            </FormControl>
             
             </Grid>
             </ExpansionPanelDetails>
@@ -110,13 +169,22 @@ interface EditProps {
     model?: D3DModel
 }
 
-
+const useStyles = makeStyles((theme:Theme)=>({
+    ctrl: {
+        position: 'absolute',
+        right: 0,
+        top: 0
+    }
+}));
 
 const RenderEditor: React.FC<EditProps> = (props)=>{
     const NotImplFn = ()=>{}
+    const classes = useStyles();
     const [handle, setHandle] = useState<HandleType>()
     const [lights, setLights] = useState<LightManager>()
     const model = MockModel();
+    const [openCtrl, setOpenCtrl] = useState(false)
+
     const updateHandle = (h: HandleType)=>{
         if(h) {
             setHandle(h)
@@ -133,9 +201,14 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                         onBgColor={NotImplFn} 
                         model={model}
                         frameid='edit-frame'
-                        openCtrl={false}
+                        openCtrl={openCtrl}
                         onhandle={updateHandle}
                     />
+                </div>
+                <div className={classes.ctrl}>
+                    <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
+                        <SettingsIcon />
+                    </IconButton>
                 </div>
                 </div>
             </Grid>
