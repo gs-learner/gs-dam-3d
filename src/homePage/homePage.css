@@ -54,6 +54,7 @@
 .BodyMainHomepage{
     /* width:1800px; */
     margin: 0 auto;
+    background-color: #f4fcff;
     overflow: hidden;
     text-align: center;
 }
@@ -81,6 +82,7 @@
 }
 .PreViewBar{
     z-index: 10;
+    background-color: #f4fcff;
 }
 .PreViewBar::after{
     content: "";

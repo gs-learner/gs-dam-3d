@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import {LogBar} from '../bits/logBar';
 import '../fonts/proxima-nova.css'
 import Avatar from '@material-ui/core/Avatar';
-import { makeStyles} from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
 import TailBar from '../bits/tailBar';
@@ -145,9 +145,9 @@ const CataPreView: React.FC<iconInfo> = (props)=>{
         </div>
     )
 }
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme:Theme)=>({
     avatar: {
-      margin: 5,
+      margin: theme.spacing(1),
       width: 20,
       height: 20,
       fontSize: 15,
@@ -161,7 +161,7 @@ const useStyles = makeStyles({
         float: 'right',
         lineHeight: '30px'
     }
-  });
+  }));
 
 export const Package: React.FC<preViewPackage>=(props)=>{
     // const [action, setAction] = useState(false)

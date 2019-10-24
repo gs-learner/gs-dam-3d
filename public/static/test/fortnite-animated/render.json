@@ -5,9 +5,9 @@
     "skybox": "",
     "envMap": "/static/skybox/hills2/",
     "scale": 0.05,
-    "lights": ["default"]
+    "lights": ["bio hazard", "disco", "default"]
 }
-        
+
         
         
         

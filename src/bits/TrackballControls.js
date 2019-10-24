@@ -5,6 +5,10 @@
  * @author Luca Antiga 	/ http://lantiga.github.io
  */
 
+ /* modifid by leon
+ * - Allow set rotate & position
+ */
+
 import {
 	EventDispatcher,
 	MOUSE,
@@ -711,6 +715,19 @@ var TrackballControls = function ( object, domElement ) {
 		window.removeEventListener( 'keyup', keyup, false );
 
 	};
+
+	this.reregister = function (){
+		_this.domElement.addEventListener( 'contextmenu', contextmenu, false );
+		_this.domElement.addEventListener( 'mousedown', mousedown, false );
+		_this.domElement.addEventListener( 'wheel', mousewheel, false );
+
+		_this.domElement.addEventListener( 'touchstart', touchstart, false );
+		_this.domElement.addEventListener( 'touchend', touchend, false );
+		_this.domElement.addEventListener( 'touchmove', touchmove, false );
+
+		window.addEventListener( 'keydown', keydown, false );
+		window.addEventListener( 'keyup', keyup, false );
+	}
 
 	this.domElement.addEventListener( 'contextmenu', contextmenu, false );
 	this.domElement.addEventListener( 'mousedown', mousedown, false );

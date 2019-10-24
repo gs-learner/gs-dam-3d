@@ -31,6 +31,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
     const [openCtrl, setOpenCtrl] = useState(false)
     useEffect(()=>{
         if(props.open) {
+            setOpenCtrl(false)
             console.log('triggering rerender')
             setCurrentModel(MockModel())
         }
