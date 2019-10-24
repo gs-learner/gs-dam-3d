@@ -71,13 +71,13 @@ export const AllModelCatalogs = [
 export type ModelCatalog = typeof AllModelCatalogs[number]
 export const CatalogBound : Record<ModelCatalog, string[]> = {
     //TODO each icon needs a jump
-    Animals:['/image/common.png','/image/cin.png',
+    Animals:['/image/animal.png','/image/cin.png',
     'This part contains many kinds of Animals models'],
     Architecture:['/image/building.png','/image/cin.png',
     'This part contains many kinds of Architecture models'],
-    Cars:['/image/common.png','/image/cin.png',
+    Cars:['/image/car.png','/image/cin.png',
     'This part contains many kinds of Cars models'],
-    Characters:['/image/people.png','/image/cin.png',
+    Characters:['/image/character.png','/image/cin.png',
     'This part contains many kinds of Characters models'],
     History:['/image/history.png','/image/cin.png',
     'This part contains many kinds of History models'],

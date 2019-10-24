@@ -1,6 +1,6 @@
 *{padding:0; margin:0}
 .HeaderHomepage{
-    background-image: url('/image/homePageBKG2.jpg');
+    background-image: url('/image/homePageBKG3.jpg');
     background-position: center 0px;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -52,7 +52,7 @@
 
 
 .BodyMainHomepage{
-    width:1800px;
+    /* width:1800px; */
     margin: 0 auto;
     overflow: hidden;
     text-align: center;

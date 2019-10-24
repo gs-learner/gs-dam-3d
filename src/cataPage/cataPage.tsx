@@ -7,6 +7,7 @@ import {Package, iconInfos, preViewPackages} from '../homePage/homePage';
 import {CenterPanel} from '../bits/centerPanel'
 import { Divider } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import TailBar from '../bits/tailBar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -124,6 +125,7 @@ export const CataPage:React.FC=()=>{
         <div className="CataPage">
             <HeaderCataPage/>
             <BodyCataPage/>
+            <TailBar/>
         </div>
     )
 }

@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { makeStyles} from '@material-ui/core/styles';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import { profile } from '../bits/store';
+import TailBar from '../bits/tailBar';
 
 import {CenterPanel} from '../bits/centerPanel'
 import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound } from '../utils/api';
@@ -96,7 +97,7 @@ const HeaderTailHomepage: React.FC<owner> = (props)=>{
 const HeaderHomepage: React.FC = () =>{
     return(
         <div className="HeaderHomepage">
-            <Grid container spacing={3}>
+            <Grid container spacing={0}>
                 <Grid item xs={12}>
                     <HeaderBarHomepage/>
                 </Grid>
@@ -240,7 +241,7 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
 }
 export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
     return(
-        <Grid container spacing={3}>
+        <Grid container spacing={0}>
             <Grid item xs={12}>
                 <div className="BodyTopHomepage">
                     <CenterPanel cata={props.cata}/>
@@ -319,6 +320,7 @@ export const HomePage: React.FC = () => {
         <div>
             <HeaderHomepage/>
             <BodyHomePage/>
+            <TailBar/>
         </div>
     )
 }

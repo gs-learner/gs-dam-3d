@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import { APIUpdateUserProfile, APIUpdateUserPassword } from '../utils/api';
 import AvatarEditor from 'react-avatar-editor'
 import SearchAppBar from '../bits/miniSearch';
+import TailBar from '../bits/tailBar';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -249,6 +250,7 @@ const EditProfile : React.FC = (props)=>{
             </div>
             </Grid>
             </Grid>
+            <TailBar/>
         </div>
     )
 }
