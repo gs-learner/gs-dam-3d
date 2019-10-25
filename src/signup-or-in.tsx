@@ -162,7 +162,6 @@ const SignupOrIn : React.FC<Props> = (props)=>{
       }catch(e){
         setError(true)
         seterrorMessage("error connect server")
-        //TODO(over)
         pro.set.logState(true);
         pro.set.user(MockUser()) //TODO: delete
         pro.save.login('aaa', 'bbb') //TODO: delete
@@ -240,12 +239,6 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                     <Grid item xs>
                       <ColorButton onClick={() => Signup()}> Sign Up</ColorButton>
                     </Grid>
-                    {/* <Typography gutterBottom variant='subtitle1'>
-                      or
-              </Typography>
-                    <Grid item xs>
-                      <ColorButton onClick={() => setIsSignup(!isSignup)}> Sign In</ColorButton>
-                    </Grid> */}
                   </Grid>
               </TabPanel>
               <TabPanel value={value} index={1} dir={theme.direction}>
@@ -281,21 +274,10 @@ const SignupOrIn : React.FC<Props> = (props)=>{
                     <Grid item xs>
                       <ColorButton onClick={() => Singin()}> Sign In </ColorButton>
                     </Grid>
-                    {/* <Typography gutterBottom variant='subtitle1'>
-                      or
-                </Typography>
-                    <Grid item xs>
-                      <ColorButton onClick={() => setIsSignup(!isSignup)}>Sign Up</ColorButton>
-                    </Grid> */}
                   </Grid>
               </TabPanel>
             </SwipeableViews>
           </div>
-          {/* {
-            isSignup ? 
-            :
-            
-          } */}
         </Dialog>
     )
 }

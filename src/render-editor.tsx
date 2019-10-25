@@ -70,6 +70,7 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
     const [selected, setSelected] = useState(0)
     const [intensity, setIntensity] = useState(0)
     const [distance, setDistance] = useState(0)
+    const [color, setColor] = useState({x:0, y:0, z:0})
     
     useEffect(()=>{
         props.lights.listenAmountChange = (l)=>{
@@ -78,13 +79,23 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
         setTimeout(()=>{
             props.lights.enableEdit(1);
             setControlLevel(1)
-            setIntensity(props.lights.lights[1].intensity)
-            setDistance((props.lights.lights[1] as any).distance)
+            setIntensity(props.lights.lights[1].intensity);
+            setDistance((props.lights.lights[1] as any).distance);
         }, 2000)
     }, [props.lights])
 
     const SetEditingLight = (idx:number) => {
-        
+        setSelected(idx);
+        const level = GetLightTypeId(props.lights.lightsTypeinfo[idx].type)
+        setControlLevel(level)
+        const col = props.lights[idx].color
+
+        setColor(col.r * 255, col)
+        if(level >= 1) { // points & spot
+            setIntensity(props.lights.lights[idx].intensity);
+            setDistance((props.lights.lights[idx] as any).distance);
+            
+        }
     }
 
     
@@ -158,7 +169,8 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                 <RadioGroup aria-label="pick-lights" 
                     name="pick-lights" value={selected} 
                     onChange={(e, v)=>{
-                        setSelected(Number(v))
+                        SetEditingLight(Number(v))
+                        
                     }}>
                     {
                         lightsarr.map((v, idx)=>{

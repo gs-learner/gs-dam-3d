@@ -1,8 +1,28 @@
+# Quick Access
+
 [中文文档](README-CN.md)
 
 [TODO List](TODO.md)
 
 [Server end of this repo](https://github.com/LMN007/dam-3d-server/)
+
+# Introduction
+
+The repo for Digital Assets Management(DAM) final project. 
+
+A DAMS for 3d models, providing following features:
+
+- live preview of 3d model
+
+- authentication, authorization
+
+- categories, tagging
+
+- search
+
+- upload, share
+
+# Build, Test & Compile
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

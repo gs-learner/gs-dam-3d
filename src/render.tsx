@@ -325,6 +325,7 @@ export class LightManager {
             }
             this.lightsTypeinfo.push(l)
         }
+
         if(this.listenAmountChange) {
             this.listenAmountChange(this);
         }
