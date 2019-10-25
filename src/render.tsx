@@ -11,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 
 import { CanvasManager } from './canvas';
 import * as THREE from 'three';
-import { MeshStandardMaterial, Mesh, AnimationMixer } from 'three'
+import { MeshStandardMaterial, Mesh, AnimationMixer, PointLight } from 'three'
 // import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { TrackballControls } from './bits/TrackballControls'
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -20,7 +20,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 // import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 // import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 
-import {D3DModel, RenderConfig, BuiltinLightScheme} from './utils/api';
+import {D3DModel, RenderConfig, BuiltinLightScheme, RenderLight} from './utils/api';
 import PrettoSlider from './bits/pretto-slider';
 
 
@@ -263,6 +263,8 @@ export class LightManager {
     rotateRad = 1.0
     lightsHelper = new Array<THREE.Object3D>()
     listenAmountChange:null|((l:LightManager)=>any) = null
+    lightsTypeinfo = new Array<RenderLight>()
+
 
     constructor(
         public scene: THREE.Scene
@@ -289,6 +291,7 @@ export class LightManager {
             this.scene.remove(l);
         }
         this.lights = []
+        this.lightsTypeinfo = []
 
         for(let l of buitin[scheme]) {
             // console.log('attaching light', l)
@@ -317,6 +320,10 @@ export class LightManager {
                 this.scene.add(light);
                 this.lights.push(light);
             }
+            else {
+                continue; // skip adding to lights type
+            }
+            this.lightsTypeinfo.push(l)
         }
         if(this.listenAmountChange) {
             this.listenAmountChange(this);
@@ -324,6 +331,10 @@ export class LightManager {
     }
 
     private rotateAxis = new THREE.Vector3(0, 1, 0);
+    controlling: null|THREE.Light = null
+    lightHelper: null|THREE.Object3D = null
+    editingIdx: number = -1
+
 
     update() {
         if(!this.rotating) {
@@ -337,8 +348,52 @@ export class LightManager {
         }
     }
 
-    controlling: null|THREE.Light = null
-    lightHelper: null|THREE.Object3D = null
+    
+
+    enableEdit(idx: number){
+        this.clearEdit();
+
+        switch (this.lightsTypeinfo[idx].type) {
+        case 'ambient':
+            break;
+
+        case 'point':
+            this.lightHelper = new THREE.PointLightHelper(this.lights[idx] as THREE.PointLight);
+            break;
+        
+        case 'spot':
+            this.lightHelper = new THREE.SpotLightHelper(this.lights[idx] as THREE.SpotLight);
+            break;
+
+        default:
+            break;
+        }
+
+        if(this.lightHelper) {
+            this.scene.add(this.lightHelper);
+        }
+        this.editingIdx = idx
+    }
+
+
+    clearEdit() {
+        if(this.lightHelper) {
+            this.scene.remove(this.lightHelper);
+            this.lightHelper = null
+        }
+    }
+
+    editColor(r:number, g:number, b:number) {
+        this.lights[this.editingIdx].color.setRGB(r, g, b)
+    }
+
+    editIntensity(intensity:number) {
+        (this.lights[this.editingIdx] as PointLight).intensity = intensity;
+    }
+
+    editDistance(distance:number) {
+        (this.lights[this.editingIdx] as PointLight).distance = distance
+    }
 }
 
 
