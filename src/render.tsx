@@ -8,19 +8,25 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 import { CanvasManager } from './canvas';
 import * as THREE from 'three';
-import { MeshStandardMaterial, Mesh, AnimationMixer, PointLight } from 'three'
+import { MeshStandardMaterial, Mesh, AnimationMixer, PointLight, SpotLight } from 'three'
 // import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { TrackballControls } from './bits/TrackballControls'
+import { DeviceOrientationControls } from 'three/examples/jsm/controls/DeviceOrientationControls';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 // import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 // import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 // import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 
-import {D3DModel, RenderConfig, BuiltinLightScheme, RenderLight} from './utils/api';
+import {D3DModel, RenderConfig, BuiltinLightScheme, RenderLight, LightTypes, MakeEmptyRenderLight} from './utils/api';
 import PrettoSlider from './bits/pretto-slider';
 
 
@@ -72,6 +78,11 @@ const useStyles =  makeStyles((theme: Theme)=>({
     },
     slider: {
         width: '100%'
+    },
+    select: {
+        minWidth: 180,
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
     }
 }))
 
@@ -83,6 +94,7 @@ interface P {
     frameid: string
     openCtrl: boolean
     onhandle?: (handle:HandleType)=>any
+    onlightscheme?: (lightman: LightManager)=>any
     edit?: boolean // it only matters when first render, change it on runtime won't work!
 }
 
@@ -98,6 +110,10 @@ const Render : React.FC<P> = (props)=>{
     const [skeleton, setSkeleton] = useState(true)
     const [hidescene, setHidescene] = useState(true)
     const [rotateLights, setRotateLights] = useState(false)
+    const [lightScheme, setLightScheme] = useState(0)
+    const [allLightSchemes, setAllLightSchemes] = useState([''])
+    const [enableDeviceControl, setEnableDeviceControl] = useState(true)
+
     const sliderRef = useRef<HTMLSpanElement>(null)
     const reportStatus = (what:string) => {
         setProgressStatus([...progressStatus, what]);
@@ -113,10 +129,17 @@ const Render : React.FC<P> = (props)=>{
             }
         }
     }, [sliderRef.current])
+
     useEffect(()=>{
-        const theHandle = RunAll(props.frameid, Boolean(props.edit))
+        const theHandle = RunAll(props.frameid, Boolean(props.edit), (lls)=>{
+            console.log('onlight scheme: ', lls)
+            setAllLightSchemes(Object.keys(lls.availableLightSchemes))
+            if(props.onlightscheme) props.onlightscheme(lls)
+        })
         setHandle(theHandle)
-        if(props.onhandle) props.onhandle(theHandle)
+        if(props.onhandle) {
+             props.onhandle(theHandle)
+        }
         
         console.log('boostrapped on ', props.frameid)
         props.onBgColor(background)
@@ -140,6 +163,14 @@ const Render : React.FC<P> = (props)=>{
             console.log('rerender')
         }
     }, [props.model, handle])
+
+
+    const enableLightScheme = (idx:number) => {
+        setLightScheme(idx);
+        if(handle) {
+            handle.lights.useScheme(allLightSchemes[idx])
+        }
+    }
 
     return (
         <div>
@@ -227,7 +258,21 @@ const Render : React.FC<P> = (props)=>{
                 label="Rotate Lights"
             />
             </Grid>
-            
+            <Grid item>
+            <FormControlLabel
+                control={
+                <Checkbox
+                    checked={!enableDeviceControl}
+                    onChange={()=>{
+                        if(handle) { handle.setDeviceControl(enableDeviceControl) };
+                        setEnableDeviceControl(!enableDeviceControl);
+                    }}
+                    color='primary'
+                />
+                }
+                label="Device Control"
+            />
+            </Grid>
                 <PrettoSlider
                     ref={sliderRef}
                     valueLabelDisplay="auto"
@@ -238,6 +283,26 @@ const Render : React.FC<P> = (props)=>{
                     max={3} min={0} step={0.01}
                     className={classes.slider}
                 />
+            
+            <Grid item xs>
+            <FormControl variant="filled" className={classes.select}>
+                <InputLabel htmlFor={`${props.frameid}-light-scheme`}>Light Scheme</InputLabel>
+                <Select
+                value={lightScheme}
+                onChange={(e)=>enableLightScheme(e.target.value as number)}
+                inputProps={{
+                    name: 'light-scheme',
+                    id: `${props.frameid}-light-scheme`,
+                }}
+                >
+                {
+                allLightSchemes.map((v, idx)=>{return(
+                    <MenuItem key={idx} value={idx}>{v}</MenuItem>
+                )})
+                }
+                </Select>
+            </FormControl>
+            </Grid>
             <Grid item>
             <Button variant="outlined" color="primary" onClick={()=>{
                 if(handle) handle.resetCamara()
@@ -265,6 +330,18 @@ export class LightManager {
     listenAmountChange:null|((l:LightManager)=>any) = null
     lightsTypeinfo = new Array<RenderLight>()
 
+    availableLightSchemes : typeof BuiltinLightScheme = {};
+    onlightscheme: ((k: LightManager)=>any) | null = null
+
+    // set onlightscheme(fn: (k: LightManager)=>any) {
+    //     this._onlightscheme.push(fn);
+    // }
+
+    private _callOnlightscheme() {
+        if(this.onlightscheme !== null) {
+            this.onlightscheme(this)
+        }
+    }
 
     constructor(
         public scene: THREE.Scene
@@ -281,6 +358,7 @@ export class LightManager {
         }
 
         const buitin = BuiltinLightScheme;
+        this.availableLightSchemes = buitin
         if(buitin[scheme] === undefined) {
             return;
         }
@@ -323,9 +401,20 @@ export class LightManager {
             else {
                 continue; // skip adding to lights type
             }
-            this.lightsTypeinfo.push(l)
+            this.lightsTypeinfo.push({...l})
         }
 
+        if(this.listenAmountChange) {
+            this.listenAmountChange(this);
+        }
+        this._callOnlightscheme()
+    }
+
+    delLight(idx:number) {
+        this.clearEdit()
+        const rm = this.lights.splice(idx, 1)
+        this.lightsTypeinfo.splice(idx, 1)
+        this.scene.remove(rm[0])
         if(this.listenAmountChange) {
             this.listenAmountChange(this);
         }
@@ -384,6 +473,10 @@ export class LightManager {
         }
     }
 
+    editPosition(x:number, y:number, z:number) {
+        this.lights[this.editingIdx].position.set(x, y, z)
+    }
+
     editColor(r:number, g:number, b:number) {
         this.lights[this.editingIdx].color.setRGB(r, g, b)
     }
@@ -395,10 +488,81 @@ export class LightManager {
     editDistance(distance:number) {
         (this.lights[this.editingIdx] as PointLight).distance = distance
     }
+
+    editDecay(decay:number) {
+        (this.lights[this.editingIdx] as SpotLight).decay = decay
+    }
+
+    editAngle(angle:number) {
+        (this.lights[this.editingIdx] as SpotLight).angle = angle
+    }
+
+    editPenumbra(penumbra:number) {
+        (this.lights[this.editingIdx] as SpotLight).penumbra = penumbra
+    }
+
+    exportScheme() {
+        const scheme = new Array<RenderLight>()
+        let idx = 0;
+        for(let l of this.lightsTypeinfo) {
+            const s = MakeEmptyRenderLight()
+            s.type = l.type;
+            const ul = this.lights[idx]
+            s.position = [ul.position.x, ul.position.y, ul.position.z]
+            s.color = ul.color.getHex()
+
+            if(l.type === 'point' || l.type === 'spot') {
+                s.distance = (ul as THREE.PointLight).distance
+                s.intensity = (ul as THREE.PointLight).intensity
+            }
+
+            if(l.type === 'spot') {
+                s.decay = (ul as THREE.SpotLight).decay
+                s.angle = (ul as THREE.SpotLight).angle
+                s.penumbra = (ul as THREE.SpotLight).penumbra
+            }
+            scheme.push(l)
+            ++idx;
+        }
+        return scheme
+    }
+
+    addLight(light:LightTypes) {
+        let newL:THREE.Light | null = null;
+
+        switch (light) {
+        case 'ambient': 
+            newL = new THREE.AmbientLight()
+            break
+        case 'point':
+            newL = new THREE.PointLight()
+            break;
+        case 'spot':
+            newL = new THREE.SpotLight()
+            break;
+        default: return;
+        }
+        if(newL) {
+            this.lights.push(newL)
+        }
+        this.lightsTypeinfo.push({
+            type: light,
+            position:[0, 0, 0], 
+            color: 0x404040, 
+            intensity: 1, 
+            distance: 0, decay: 1, 
+            angle: Math.PI/2, penumbra: 0
+        })
+        if(this.listenAmountChange) {
+            this.listenAmountChange(this);
+        }
+    }
+
+
 }
 
 
-function RunAll (frameid: string, enableedit:boolean) {
+function RunAll (frameid: string, enableedit:boolean, onLightScheme: ((k: LightManager)=>any) | null) {
 const frame = document.getElementById(frameid); if(frame === null) return;
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({antialias : true, powerPreference:'high-performance', alpha:true, premultipliedAlpha: false});
@@ -413,7 +577,9 @@ const vertextNormHelper = new Array<THREE.VertexNormalsHelper>()
 const lights = new LightManager(scene);
 const cubicLoader = new THREE.CubeTextureLoader()
 let envMap: THREE.CubeTexture | null = null
-
+lights.onlightscheme = onLightScheme
+let deviceControl = new DeviceOrientationControls(camera)
+deviceControl.enabled = false
 // const renderScene = new RenderPass(scene, camera);
 // const bloomPass = new UnrealBloomPass(new THREE.Vector2(canvas.w, canvas.h), 1.5, 0.4, 0.85);
 // const composer = new EffectComposer(renderer);
@@ -576,7 +742,7 @@ function render(tm : number) {
     // console.log('render')
     requestAnimationFrame(render);
     control.update();
-    
+    deviceControl.update()
     AutoRotate()
     const delta = clock.getDelta()
     if(mixer) {
@@ -631,6 +797,9 @@ return {
     hideObject: (bool: boolean)=>{
         if(!objectScene) return
         objectScene.visible = !bool
+    },
+    setDeviceControl: (bool: boolean)=> {
+        deviceControl.enabled = bool
     },
     setRotateLights: (bool: boolean)=> lights.rotating = bool,
     setRotateLightsSpeed: (speed: number)=> { lights.rotateRad = speed },

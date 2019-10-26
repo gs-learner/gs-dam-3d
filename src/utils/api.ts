@@ -123,9 +123,19 @@ export interface RenderLight {
     penumbra: number // <spot> Percent of the spotlight cone that is attenuated due to penumbra. Takes values between zero and 1. Default is zero.
 }
 
-type RenderSky = 
-    'col' | // background color
-    'sky'  // skybox
+
+export function MakeEmptyRenderLight(): RenderLight {
+    return({
+        type: 'ambient',
+        position: [0, 0, 0],
+        color: 0x404040,
+        intensity: 0,
+        distance: 0,
+        decay: 1,
+        angle: Math.PI/2,
+        penumbra: 0
+    })
+}
 
 export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
     'default': [
@@ -152,6 +162,11 @@ export const BuiltinLightScheme : {[scheme:string]: RenderLight[]} = {
         {type: 'point', position:[-7, 8, -8], color: 0x004307, intensity: 3, distance: 0, decay: 1, angle: Math.PI/2, penumbra: 0},
     ]
 }
+
+type RenderSky = 
+    'col' | // background color
+    'sky'  // skybox
+
 
 export interface RenderConfig {
     renderSky: RenderSky
