@@ -214,7 +214,7 @@ export interface D3DModel {
     tags: string[]
     animated: boolean // 是否包含动画
     // render_config: string // url to json
-    owner: string
+    owner: DUser
 }
 
 type ThreeDModelFormat = 'obj' | 'gltf'

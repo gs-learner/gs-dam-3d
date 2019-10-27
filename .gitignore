@@ -24,5 +24,6 @@ yarn-error.log*
 
 *.tga
 
-
+public/static/skybox
+*.zip
 uuu.ts

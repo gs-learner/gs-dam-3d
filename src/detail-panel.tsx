@@ -9,11 +9,13 @@ import { MockModel } from './utils/mock'
 import {makeStyles, Theme} from '@material-ui/core/styles'
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton'
+import { Button } from '@material-ui/core'
 
 const useStyles = makeStyles((theme:Theme)=>({
     ctrl: {
         position: 'absolute',
         right: 0,
+        top: 0
     }
 }));
 
@@ -29,6 +31,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
     const [canvasBg, setCanvasBg] = useState('');
     const [currentModel, setCurrentModel] = useState<D3DModel|null>(null)
     const [openCtrl, setOpenCtrl] = useState(false)
+    const [offsetY, setOffsetY] = useState(0)
     useEffect(()=>{
         if(props.open) {
             setOpenCtrl(false)
@@ -50,7 +53,9 @@ const DetailPanel : React.FC<Props> = (props)=>{
                 <Grid item xs={12} md={8}>
                     <div className='canvas-frame-wrapper'>
                     <div id='canvas-frame'  className='canvas-frame' style={{background:canvasBg}}>
-                        <Render 
+                        
+                    </div>
+                    <Render 
                             onBgColor={seBgW} 
                             model={currentModel}
                             frameid='canvas-frame'
@@ -63,9 +68,14 @@ const DetailPanel : React.FC<Props> = (props)=>{
                             
                         </div>
                     </div>
-                    </div>
                 </Grid>
                 <Grid item xs={12} md={4}>
+                    <Button onClick={()=>setOpenCtrl(!openCtrl)}>
+                        Toggle Ctrl
+                    </Button>
+                    <Button onClick={()=>setOffsetY(offsetY===0?200:0)}>
+                        MoveDown
+                    </Button>
                     <p>{pro.user.username}</p>
                     This is a test
                     {

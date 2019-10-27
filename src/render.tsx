@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { lighten, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -10,7 +10,6 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -20,6 +19,7 @@ import { MeshStandardMaterial, Mesh, AnimationMixer, PointLight, SpotLight } fro
 // import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { TrackballControls } from './bits/TrackballControls'
 import { DeviceOrientationControls } from 'three/examples/jsm/controls/DeviceOrientationControls';
+import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 // import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
@@ -48,6 +48,7 @@ const useStyles =  makeStyles((theme: Theme)=>({
         position: 'absolute',
         left: 0,
         top: 0,
+        zIndex: 99999
     },
     paper: {
         padding: theme.spacing(2, 2),
@@ -96,6 +97,7 @@ interface P {
     onhandle?: (handle:HandleType)=>any
     onlightscheme?: (lightman: LightManager)=>any
     edit?: boolean // it only matters when first render, change it on runtime won't work!
+    onlightmove?: (moving:boolean)=>any
 }
 
 
@@ -114,21 +116,19 @@ const Render : React.FC<P> = (props)=>{
     const [allLightSchemes, setAllLightSchemes] = useState([''])
     const [enableDeviceControl, setEnableDeviceControl] = useState(true)
 
-    const sliderRef = useRef<HTMLSpanElement>(null)
-    const reportStatus = (what:string) => {
-        setProgressStatus([...progressStatus, what]);
-    }
-
-    useEffect(()=>{
-        if(sliderRef.current) {
-            sliderRef.current.onmousedown = ()=>{
-                if(handle) handle.detachCamEvent()
-            }
-            sliderRef.current.onmouseup = ()=>{
-                if(handle) handle.retachCamEvent()
-            }
-        }
-    }, [sliderRef.current])
+    // remove camera's listener when slider is active, 
+    // which seems unnecessary now, not sure if needed for future use
+    // const sliderRef = useRef<HTMLSpanElement>(null)
+    // useEffect(()=>{
+    //     if(sliderRef.current) {
+    //         sliderRef.current.onmousedown = ()=>{
+    //             if(handle) handle.detachCamEvent()
+    //         }
+    //         sliderRef.current.onmouseup = ()=>{
+    //             if(handle) handle.retachCamEvent()
+    //         }
+    //     }
+    // }, [sliderRef.current])
 
     useEffect(()=>{
         const theHandle = RunAll(props.frameid, Boolean(props.edit), (lls)=>{
@@ -148,6 +148,8 @@ const Render : React.FC<P> = (props)=>{
 
     useEffect(()=>{
         props.onBgColor(background)
+        // props.onBgColor is not of our concern
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [background])
 
     
@@ -156,12 +158,15 @@ const Render : React.FC<P> = (props)=>{
             setProgressStatus([])
             setProgress(0)
             setHideprogress(false)
-            handle.rerender(props.model, setProgress, reportStatus, setBackground, ()=>{
+            handle.rerender(props.model, setProgress, (what:string) => {
+                setProgressStatus([...progressStatus, what]);
+            }, setBackground, ()=>{
                 setHideprogress(true)
             })
-            
             console.log('rerender')
         }
+    // progressStatus is not of our concern
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.model, handle])
 
 
@@ -249,7 +254,12 @@ const Render : React.FC<P> = (props)=>{
                 <Checkbox
                     checked={!rotateLights}
                     onChange={()=>{
-                        if(handle) { handle.setRotateLights(rotateLights) };
+                        if(handle) { 
+                            handle.setRotateLights(rotateLights);
+                            if(props.onlightmove) {
+                                props.onlightmove(rotateLights)
+                            }
+                        };
                         setRotateLights(!rotateLights);
                     }}
                     color='primary'
@@ -274,10 +284,12 @@ const Render : React.FC<P> = (props)=>{
             />
             </Grid>
                 <PrettoSlider
-                    ref={sliderRef}
+                    // ref={sliderRef}
                     valueLabelDisplay="auto"
                     onChange={(e:any, v:any)=>{
-                        if(handle) handle.setRotateLightsSpeed(v)
+                        if(handle) { 
+                            handle.setRotateLightsSpeed(v)
+                        }
                     }} 
                     defaultValue={1}
                     max={3} min={0} step={0.01}
@@ -344,7 +356,9 @@ export class LightManager {
     }
 
     constructor(
-        public scene: THREE.Scene
+        public scene: THREE.Scene,
+        public camera: THREE.PerspectiveCamera,
+        public domEl: HTMLElement
     ) {}
     
     useScheme(scheme:string) {
@@ -501,6 +515,11 @@ export class LightManager {
         (this.lights[this.editingIdx] as SpotLight).penumbra = penumbra
     }
 
+    dragControl: DragControls | null = null
+    enableDrag() {
+        this.dragControl = new DragControls([(this.lights[this.editingIdx] as SpotLight)], this.camera, this.domEl)
+    }
+
     exportScheme() {
         const scheme = new Array<RenderLight>()
         let idx = 0;
@@ -558,6 +577,9 @@ export class LightManager {
         }
     }
 
+    getEditing() {
+        return this.lights[this.editingIdx]
+    }
 
 }
 
@@ -574,9 +596,10 @@ let objectScene : THREE.Scene | null = null
 let rerendersuccess:null|(()=>any) = null
 let skeletonHelper:THREE.SkeletonHelper | null  = null
 const vertextNormHelper = new Array<THREE.VertexNormalsHelper>()
-const lights = new LightManager(scene);
+const lights = new LightManager(scene, camera, frame);
 const cubicLoader = new THREE.CubeTextureLoader()
 let envMap: THREE.CubeTexture | null = null
+let skyBox: THREE.Mesh | null = null
 lights.onlightscheme = onLightScheme
 let deviceControl = new DeviceOrientationControls(camera)
 deviceControl.enabled = false
@@ -632,20 +655,30 @@ const GetJsonFile = (url:string, onprogress: (progress_0_to_1: number)=>any)=>ne
     }, reject)
 })
 
+const loadCubicMap = (path:string) => {
+    return (cubicLoader.setPath(path).load( [
+        'px.png',
+        'nx.png',
+        'py.png',
+        'ny.png',
+        'pz.png',
+        'nz.png'
+    ] ));
+}
+
+const setSkybox = (path:string) => {
+    const skymap = loadCubicMap(path);
+    scene.background = skymap;
+    console.log('set bg')
+}
+
 let mixer: AnimationMixer|null = null;
 const clock = new THREE.Clock(true)
 const setEnvMap = (path:string, scene:THREE.Object3D|null)=>{
     if(!scene) return;
 
     if(path.length) {
-        envMap = cubicLoader.setPath(path).load( [
-            'px.png',
-            'nx.png',
-            'py.png',
-            'ny.png',
-            'pz.png',
-            'nz.png'
-        ] );
+        envMap = loadCubicMap(path);
     }
     else {
         envMap = null
@@ -705,7 +738,8 @@ const ReRender = async (
         reportstatus('Piping data to GPU & Updating scene');
         const scale = 0.00020
         m.scene.scale.set(scale, scale, scale)
-        setEnvMap(renderConfig.skybox, m.scene)
+        setEnvMap(renderConfig.envMap, m.scene)
+        setSkybox(renderConfig.envMap)
         
         if(skeletonHelper) {
             scene.remove(skeletonHelper)
@@ -741,7 +775,10 @@ const ReRender = async (
 function render(tm : number) {
     // console.log('render')
     requestAnimationFrame(render);
-    control.update();
+    if(control.enabled) {
+        control.update();
+    }
+    
     deviceControl.update()
     AutoRotate()
     const delta = clock.getDelta()
@@ -800,6 +837,7 @@ return {
     },
     setDeviceControl: (bool: boolean)=> {
         deviceControl.enabled = bool
+        control.enabled = !bool
     },
     setRotateLights: (bool: boolean)=> lights.rotating = bool,
     setRotateLightsSpeed: (speed: number)=> { lights.rotateRad = speed },

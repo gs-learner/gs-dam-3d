@@ -25,7 +25,8 @@ export class CanvasManager {
         this.canvas = canvas
         this.w = frame.clientWidth
         this.h = frame.clientHeight
-        frame.appendChild(canvas)
+        // frame.appendChild(canvas)
+        frame.prepend(canvas)
         frame.onmouseout = ()=> this.clearPickPosition()
         this.frame = frame
         this.renderer = renderer

@@ -12,6 +12,7 @@ import { APIUpdateUserProfile, APIUpdateUserPassword } from '../utils/api';
 import AvatarEditor from 'react-avatar-editor'
 import SearchAppBar from '../bits/miniSearch';
 import TailBar from '../bits/tailBar';
+import Dropzone from 'react-dropzone';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -116,6 +117,11 @@ const EditProfile : React.FC = (props)=>{
             //TODO: 
         }
     }
+
+
+    const handleImageDrop = ()=> [
+
+    ]
         
     return(
         <div>
@@ -147,7 +153,9 @@ const EditProfile : React.FC = (props)=>{
                 className={classes.tabs}
             >
                 <Tab label="Profile" {...a11yProps(0)} />
-                <Tab label="Security" {...a11yProps(1)} />
+                <Tab label="Avatar" {...a11yProps(1)} />
+                <Tab label="Security" {...a11yProps(2)} />
+                
             </Tabs>
             </Grid>
             <Grid item xs>
@@ -155,15 +163,7 @@ const EditProfile : React.FC = (props)=>{
                 <Typography variant='h6'>
                     {pro.user.username}
                 </Typography>
-                <AvatarEditor
-                    image={pro.user.avatar}
-                    width={250}
-                    height={250}
-                    border={50}
-                    color={[255, 255, 255, 0.6]} // RGBA
-                    scale={1.2}
-                    rotate={0}
-                />
+                
                 <TextField
                     id="outlined-name"
                     label="Display Name"
@@ -178,7 +178,7 @@ const EditProfile : React.FC = (props)=>{
                     label="Brief introduction of You"
                     className={classes.textField}
                     value={p.introduction}
-                    onChange={(n)=>setP({...p, nickname:n.target.value})}
+                    onChange={(n)=>setP({...p, introduction:n.target.value})}
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -188,7 +188,7 @@ const EditProfile : React.FC = (props)=>{
                     label="Your location"
                     className={classes.textField}
                     value={p.location}
-                    onChange={(n)=>setP({...p, nickname:n.target.value})}
+                    onChange={(n)=>setP({...p, location:n.target.value})}
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -198,7 +198,7 @@ const EditProfile : React.FC = (props)=>{
                     label="Your Email"
                     className={classes.textField}
                     value={p.email}
-                    onChange={(n)=>setP({...p, nickname:n.target.value})}
+                    onChange={(n)=>setP({...p, email:n.target.value})}
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -208,7 +208,7 @@ const EditProfile : React.FC = (props)=>{
                     label="Biography"
                     className={classes.textField}
                     value={p.biography}
-                    onChange={(n)=>setP({...p, nickname:n.target.value})}
+                    onChange={(n)=>setP({...p, biography:n.target.value})}
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -218,6 +218,30 @@ const EditProfile : React.FC = (props)=>{
                 </Button>
             </TabPanel>
             <TabPanel value={tab} index={1}>
+                <Typography variant='h6'>
+                    Update Your Avatar
+                </Typography>
+                <Dropzone
+                    onDrop={handleImageDrop}
+                    noClick
+                    
+                >
+                    {({getRootProps, getInputProps}) => (
+                        <div {...getRootProps()} style={{ width: '250px', height: '250px' }}>
+                        <input {...getInputProps()} />
+                            <AvatarEditor
+                                image={pro.user.avatar}
+                                width={250} height={250}
+                                border={50}
+                                color={[255, 255, 255, 0.6]} // RGBA
+                                scale={1.2}
+                                rotate={0}
+                            />
+                        </div>
+                    )}
+                </Dropzone>
+            </TabPanel>
+            <TabPanel value={tab} index={2}>
                 <Typography variant='h6'>
                     Change Your Password
                 </Typography>
@@ -250,7 +274,6 @@ const EditProfile : React.FC = (props)=>{
             </div>
             </Grid>
             </Grid>
-            <TailBar/>
         </div>
     )
 }

@@ -2,17 +2,17 @@ import React, {useState, useEffect} from 'react'
 import { D3DModel, LightTypes } from './utils/api'
 import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
-import Grid from '@material-ui/core/Grid'
+import { MockModel } from './utils/mock'
 
+import { ChromePicker } from 'react-color'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Tooltip from '@material-ui/core/Tooltip'
-import { ChromePicker } from 'react-color'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { MockModel } from './utils/mock'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
@@ -61,6 +61,7 @@ const useLightStyles = makeStyles((theme: Theme) =>
 
 interface LightControlProps {
     lights: LightManager
+    lightmoving: boolean
 }
 
 const LightTypeName= [
@@ -84,6 +85,7 @@ const actions: ({name:LightTypes, icon:any})[] = [
     {name: 'spot', icon: <HighlightIcon />}
 ]
 
+type PosArr = [number, number, number]
 const LightControl : React.FC<LightControlProps> = (props)=>{
     const [controlLevel, setControlLevel] = useState(0)
     const [expanded, setExpanded] = useState(false)
@@ -98,6 +100,8 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
 
     const [color, setColor] = useState({r:0, g:0, b:0})
     const [openAddLight, setOpenAddLight] = React.useState(false);
+
+    const [xyz, setXYZ] = useState<PosArr>([0, 0, 0]);
     
     useEffect(()=>{
         props.lights.listenAmountChange = (l)=>{
@@ -111,6 +115,13 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
     const AddLight = (type: LightTypes)=>{
         props.lights.addLight(type)
     }
+
+    useEffect(()=>{
+        if(!props.lightmoving && controlLevel >= 0) {
+            const pos = props.lights.getEditing().position
+            setXYZ([pos.x, pos.y, pos.z])
+        }
+    }, [props.lightmoving])
 
     const SetEditingLight = (idx:number) => {
         if(idx < 0) {
@@ -188,6 +199,33 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                 : null
             }
             {
+                !props.lightmoving?
+                <div>
+                    <Typography>
+                        position
+                    </Typography>
+                    {
+                        ['x', 'y', 'z'].map((v, idx)=>{return(
+                            <PrettoSlider
+                                key={idx}
+                                min={-30} max={30} step={0.2} valueLabelDisplay="auto"
+                                value={xyz[idx]}
+                                defaultValue={0} onChange={(e,v:any)=>{
+                                    const arr = [...xyz] as PosArr;
+                                    arr[idx] = v as number
+                                    setXYZ(arr)
+                                    props.lights.getEditing().position.set(...arr)
+                            }}/>
+                        )})
+                    }
+                    
+                </div>
+                
+                :<Typography variant='subtitle2'>
+                    Disable Light Moving to enable editing light positions
+                </Typography>
+            }
+            {
                 controlLevel>=1?
                 <div>
                 <Typography gutterBottom>
@@ -252,6 +290,7 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                 </div>
                 :null
             }
+            
             </Grid>
 
 
@@ -268,7 +307,7 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                         lightsarr.map((v, idx)=>{
                             const info = props.lights.lightsTypeinfo[idx]
                             return(
-                            <FormControlLabel value={idx} control={<Radio />} label={'#'+idx.toString() + ' ' + info.type} />
+                            <FormControlLabel key={idx} value={idx} control={<Radio />} label={'#'+idx.toString() + ' ' + info.type} />
                         )})
                     }
                 </RadioGroup>
@@ -340,6 +379,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     const [lights, setLights] = useState<LightManager>()
     const [model, setModel] = useState(MockModel());
     const [openCtrl, setOpenCtrl] = useState(false)
+    const [lightmoving, setLightmoving] = useState(true)
 
     const updateHandle = (h: HandleType)=>{
         if(h) {
@@ -359,6 +399,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                         frameid='edit-frame'
                         openCtrl={openCtrl}
                         onhandle={updateHandle}
+                        onlightmove={setLightmoving}
                     />
                 </div>
                 <div className={classes.ctrl}>
@@ -371,11 +412,13 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
             <Grid item xs={12} md={4}>
                 {
                     lights ?
-                    <LightControl lights={lights}/>
+                    <LightControl lights={lights} lightmoving={lightmoving}/>
                     :
                     null
                 }
-                
+                <Button variant="outlined" color="primary">
+                    Submit
+                </Button>
             </Grid>
         </Grid>
     )
