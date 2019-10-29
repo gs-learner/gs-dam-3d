@@ -111,7 +111,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
                 setIsloaded(true);
             }
             else {
-                console.log('failed');
+                console.log('failed', res);
                 setIsloaded(false);
             }
             

@@ -132,7 +132,7 @@ const SignupOrIn : React.FC<Props> = (props)=>{
         else {
           console.log("format wrong");
           setError(true)
-          seterrorMessage("name has been registered");
+          seterrorMessage("Name already taken");
         }
       }catch(e){
         console.log('error connect server');
@@ -151,17 +151,19 @@ const SignupOrIn : React.FC<Props> = (props)=>{
         if(result.ok) {
           pro.set.user(result.data)
           pro.set.logState(true);
-          props.onClose();
           setError(false);
-          pro.save.login(username, password)
+          pro.save.login(username, password);
+          console.log('Login success: ', result.data);
+          props.onClose();
         }
         else {
           setError(true)
-          seterrorMessage("Info wrong with")
+          seterrorMessage("Invalid Username/Password")
+          console.log('Login failed: ', result);
         }
       }catch(e){
         setError(true)
-        seterrorMessage("error connect server")
+        seterrorMessage("Error connect server")
         pro.set.logState(true);
         pro.set.user(MockUser()) //TODO: delete
         pro.save.login('aaa', 'bbb') //TODO: delete

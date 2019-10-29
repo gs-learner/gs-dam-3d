@@ -14,7 +14,7 @@ import SignUp from './buttonSignUp'
 import { profile } from './store';
 import { Avatar, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { MakeEmptyUser } from '../utils/api';
+import { MakeEmptyUser, APISignout } from '../utils/api';
 
 const useStyles = makeStyles({
     avater:{
@@ -113,6 +113,7 @@ function CustomizedMenus() {
             //   TODO logout(gs)
               pro.set.user(MakeEmptyUser());
               pro.del.login();
+              APISignout()
           }}>
             <ListItemIcon className={classes.listItemIcon}>
               <MeetingRoomIcon fontSize="small" />

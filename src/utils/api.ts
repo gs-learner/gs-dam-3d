@@ -22,6 +22,8 @@ interface DCollection {
     models: string[]
 }
 
+
+
 // D 打头代表Download/Data, 从服务器获取的数据
 export interface DUser {
     username: string
@@ -97,6 +99,7 @@ export const CatalogBound : Record<ModelCatalog, string[]> = {
     'Dinosaurs, dragons, roar!'],
 }
 
+type DRecommends = Record<ModelCatalog, D3DModel[]>
 
 export interface DModelCatalogInfo {
     name: ModelCatalog
@@ -266,11 +269,13 @@ function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to
         }
         xhr.onreadystatechange = ()=>{
             xhr.upload.onprogress = null
-            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status===200){
-                resolve(JSON.parse(xhr.responseText) as U)
-            }
-            else {
-                reject('xhr failed w/ status ' + xhr.status)
+            if(xhr.readyState === XMLHttpRequest.DONE) {
+                if(xhr.status===200){
+                    resolve(JSON.parse(xhr.responseText) as U)
+                }
+                else {
+                    reject('xhr failed w/ status ' + xhr.status)
+                }
             }
         }
         
@@ -290,6 +295,11 @@ export async function APISignin(info: {username:string, password:string}) {
     return RefineResponse(res)
 }
 
+export async function APISignout() {
+    let res = await SendJSON('/api/user/logout', {}) as StandardResponse<undefined>
+    return res
+}
+
 // 这里 Omit 是指 URegisterUser 里去掉 username & password 属性
 // username 的记录应该用服务器的 session 来记录, 否则知道用户名就能改别人的 profile
 export async function APIUpdateUserProfile(info: Omit<URegisterUser, 'username'|'password'>) {
@@ -304,6 +314,16 @@ export async function APIUpdateUserPassword(info: {oldpassword:string,password:s
 
 export async function APIUpdateUserAvatar(info:{avatar:string /* base64 */}){
     let res = await SendJSON('/api/user/update/avatar', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
+export async function APIListModelsByUser(info: {username: string}) {
+    let res = await SendJSON('/api/list/user/models', info) as StandardResponse<D3DModel[]>
+    return RefineResponse(res)
+}
+
+export async function APIListRecommendedModels(){
+    let res = await SendJSON('/api/list/categories/recommend', {catalogs: AllModelCatalogs}) as StandardResponse<DRecommends>
     return RefineResponse(res)
 }
 
@@ -327,11 +347,13 @@ export function StaticGetJsonFile<U>(url: string, onprogress: (progress_0_to_1: 
             onprogress(done / total)
         }
         xhr.onreadystatechange = ()=>{
-            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status===200){
-                resolve(JSON.parse(xhr.responseText) as U)
-            }
-            else {
-                reject('xhr failed w/ status ' + xhr.status)
+            if(xhr.readyState === XMLHttpRequest.DONE) {
+                if(xhr.status===200){
+                    resolve(JSON.parse(xhr.responseText) as U)
+                }
+                else {
+                    reject('xhr failed w/ status ' + xhr.status)
+                }
             }
         }
         
