@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { D3DModel, LightTypes } from './utils/api'
+import { D3DModel, LightTypes, APIModelUpdatePreview } from './utils/api'
 import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
 import { MockModel } from './utils/mock'
@@ -157,6 +157,9 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
         props.lights.delLight(selected)
         setSelected(next)
     }
+
+
+
     
     return (
     <ExpansionPanel expanded={expanded} onChange={()=>setExpanded(!expanded)}>
@@ -388,20 +391,35 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         }
     }
 
+    const updateSnapshot = ()=>{
+        if(!handle) return;
+        if(!model) return;
+        const preview = handle.snapshot(1000, 600)
+        APIModelUpdatePreview({url: model.url, preview: preview})
+    }
+
+    const updateRenderConfig = ()=>{
+        if(!handle) return;
+        if(!model) return;
+        // const preview = handle.sna
+    }
+
+
     return (
         <Grid container>
             <Grid item xs={12} md={8}>
                 <div className='canvas-frame-wrapper'>
                 <div id='edit-frame'  className='canvas-frame'>
-                    <Render 
-                        onBgColor={NotImplFn} 
-                        model={model}
-                        frameid='edit-frame'
-                        openCtrl={openCtrl}
-                        onhandle={updateHandle}
-                        onlightmove={setLightmoving}
-                    />
+                    
                 </div>
+                <Render 
+                    onBgColor={NotImplFn} 
+                    model={model}
+                    frameid='edit-frame'
+                    openCtrl={openCtrl}
+                    onhandle={updateHandle}
+                    onlightmove={setLightmoving}
+                />
                 <div className={classes.ctrl}>
                     <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
                         <SettingsIcon />
@@ -418,6 +436,14 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                 }
                 <Button variant="outlined" color="primary">
                     Submit
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<DeleteIcon />}
+                    onClick={updateSnapshot}
+                >
+                        Update As Preview
                 </Button>
             </Grid>
         </Grid>

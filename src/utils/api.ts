@@ -1,3 +1,5 @@
+// Basics
+// -----------------------------------------------------------
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export const errorCode = {
@@ -12,7 +14,8 @@ interface StandardResponse<T> {
 }
 
 
-// data of login response
+// Users
+// -----------------------------------------------------------
 interface DLogin  {
     token: string
 }
@@ -36,6 +39,9 @@ export interface DUser {
     email: string
     avatar:string
 }
+
+// login response
+export interface RLogin extends StandardResponse<DLogin> {}
 
 // U 打头代表Upload, 发给服务器
 interface URegisterUser {
@@ -62,7 +68,14 @@ export function MakeEmptyUser() : DUser {
     }
 }
 
-
+// Hardcoded Catalog & render configs
+// -----------------------------------------------------------
+// * the catalogs & corresponding images are managed by front end,
+//   hence it is silly to ask server for data
+//
+// * the rendering, including the lights used in render is also 
+//   under complete control of front end, and these data are stored
+//   in render.json, allowing faster iteration of front end
 
 export const AllModelCatalogs = [
     'Animals' , 'Architecture' , 'Cars' , 
@@ -179,6 +192,7 @@ export interface RenderConfig {
     envMap: string
     scale: number
     lights: string[]
+    lights_schemes: {[scheme:string]: RenderLight[]}
 }
 
 export function MakeDefaultRenderConfig() : RenderConfig {
@@ -189,7 +203,8 @@ export function MakeDefaultRenderConfig() : RenderConfig {
         skybox: '',
         envMap: '/static/skybox/hills2/',
         scale: 0.05,
-        lights: ['default']
+        lights: ['default'],
+        lights_schemes: {}
     }
 }
 
@@ -198,6 +213,9 @@ interface Comment {
     content: string
     rating: number
 }
+
+// Models
+// -----------------------------------------------------------
 
 // 文件目录结构
 // /home/models/ <-- root
@@ -216,9 +234,11 @@ export interface D3DModel {
     num_vertices: number
     tags: string[]
     animated: boolean // 是否包含动画
-    // render_config: string // url to json
     owner: DUser
 }
+
+// model list response
+export interface RModels extends StandardResponse<D3DModel[]> {}
 
 type ThreeDModelFormat = 'obj' | 'gltf'
 interface U3DModel {
@@ -230,6 +250,8 @@ interface U3DModel {
     render_config: RenderConfig // save to json
 }
 
+// Utils
+// -----------------------------------------------------------
 interface RefinedResponse<T> extends StandardResponse<T> {
     ok: boolean
 }
@@ -240,12 +262,6 @@ function RefineResponse<T>(res : StandardResponse<T>):RefinedResponse<T> {
         ok: res.code === 0
     }
 }
-
-// login response
-export interface RLogin extends StandardResponse<DLogin> {}
-
-// model list response
-export interface RModels extends StandardResponse<D3DModel[]> {}
 
 async function SendJSON<U, T>(input: RequestInfo, data:T) {
     let res = await fetch(input, {
@@ -284,6 +300,10 @@ function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to
         xhr.send(JSON.stringify(data))
     })
 }
+
+
+// APIs
+// -----------------------------------------------------------
 
 export async function APISignup(info: URegisterUser){
     let res = await SendJSON('/api/user/register', info) as StandardResponse<DUser>
@@ -329,6 +349,16 @@ export async function APIListRecommendedModels(){
 
 export async function APIUploadModel(info: U3DModel, onprogress: (progress_0_to_1: number)=>any) {
     let res = await SendJSONProgress('/api/upload/model', info, onprogress) as StandardResponse<{preview:string}>
+    return RefineResponse(res)
+}
+
+export async function APIModelUpdateRenderConfig(info: {url: string /* url used in d3dmodel */, config: RenderConfig}) {
+    let res = await SendJSON('/api/model/update/render_config', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
+export async function APIModelUpdatePreview(info: {url: string /* url used in d3dmodel */, preview:string /* base64 */ }) {
+    let res = await SendJSON('/api/model/update/preview', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
 

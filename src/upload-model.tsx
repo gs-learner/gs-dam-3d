@@ -33,6 +33,7 @@ interface WaitingItemProps {
     active: number
     onDone: (idx:number)=>any
     globalTags: string[]
+    catOverride: number
 }
 
 const useWaitingStyle = makeStyles((theme: Theme) => ({
@@ -141,6 +142,12 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
     useEffect(()=>{
         setName(props.file.name)
     }, [props.file])
+
+    useEffect(()=>{
+        if(props.catOverride !== -1) {
+            setCatagory(props.catOverride)
+        }
+    }, [props.catOverride])
     
     const inputLabel = React.useRef<HTMLLabelElement>(null);
         const [labelWidth, setLabelWidth] = React.useState(0);
@@ -270,9 +277,10 @@ const UploadModel : React.FC = (props)=>{
     const [uploading, setUploading] = useState(-1)
     const classes = useStyle()
     const [height, setHeight] = useState(80)
-    const [open, setopen] = useState(false)
+    // const [open, setopen] = useState(false)
     const [tags, setTags] = useState(new Array<string>())
     const [curTagIpt, setCurTagIpt] = useState('')
+    const [catOverride, setCatOverride] = useState(-1)
     
     if(!pro.user.username) {
          return null
@@ -300,12 +308,12 @@ const UploadModel : React.FC = (props)=>{
           borderWidth: 3,
         },
       })(StepConnector);
-
+    
     function onDrop<T extends File>(acceptedFiles: T[], rejectedFiles: T[]) {
         // setUploading(0)
         setFiles(acceptedFiles)
         setHeight(100)
-        setopen(true)
+        // setopen(true)
     }
 
     const onUploadDone = (idx : number) => {
@@ -328,6 +336,13 @@ const UploadModel : React.FC = (props)=>{
         setTags([...tags, curTagIpt]);
         setCurTagIpt('')
     }
+    const ClearAll = ()=>{
+        setCatOverride(-1)
+        setUploading(-1)
+        setTags([])
+        setFiles([])
+        setCurTagIpt('')
+    }
 
     return (
         <Dialog open={pro.open.uploadModel} onClose={()=>pro.trigger.uploadModel(false)} scroll='body'>
@@ -347,6 +362,41 @@ const UploadModel : React.FC = (props)=>{
                 <Grid item xs={12}>
                     <Grid container spacing={0}>
                         <Grid item xs={3}>
+                        {
+                                files.length?
+                            <Button
+                                variant='outlined'
+                                onClick={ClearAll}
+                            >
+                                Reset
+                            </Button> 
+                            :null
+                        }
+                            {
+                                files.length?
+                                <FormControl variant="outlined" margin="dense">
+                                    <InputLabel htmlFor="outlined-catagory-simple">
+                                        Set All Categories
+                                    </InputLabel>
+                                    <Select
+                                    value={catOverride}
+                                    onChange={(e)=>setCatOverride(Number(e.target.value))}
+                                    inputProps={{
+                                        name: 'Catagory',
+                                        id: 'outlined-catagory-simple',
+                                    }}
+                                    >
+                                        <MenuItem value={-1} key={-1}>None</MenuItem>
+                                    {
+                                        
+                                        AllModelCatalogs.map((v, idx)=>{return(
+                                            <MenuItem value={idx} key={idx}>{v}</MenuItem>
+                                        )})
+                                    }
+                                    </Select>
+                                </FormControl>
+                                : null
+                            }
                             {files.length?
                             <TextField
                                 style={{
@@ -417,6 +467,7 @@ const UploadModel : React.FC = (props)=>{
                                         onDone={onUploadDone}
                                         key={idx}
                                         globalTags={tags}
+                                        catOverride={catOverride}
                                     />
                                 )
                             }
@@ -440,9 +491,9 @@ const UploadModel : React.FC = (props)=>{
                                             padding: 20,
                                             width: 'auto',
                                             boxSizing: 'border-box',
-                                            backgroundImage:(open?'url(/image/plus.png)':'none'),
+                                            backgroundImage:(files.length?'url(/image/plus.png)':'none'),
                                             backgroundRepeat:'no-repeat',
-                                            backgroundSize:'100% 100%',
+                                            backgroundSize:'50% 100%',
                                             }}>
                                                 
                                             <Grid
@@ -453,9 +504,9 @@ const UploadModel : React.FC = (props)=>{
                                             >
                                                 <Grid item xs>
                                                     <Typography className={classes.hint} display='inline'>
-                                                    {open?'':'Drag File here or'} <span> </span>
+                                                    {files.length?'':'Drag File here or'} <span> </span>
                                                     </Typography>
-                                                    <Typography className={classes.hintLink} display='inline' style={{cursor:'pointer'}}>{open?'':'Browse'}
+                                                    <Typography className={classes.hintLink} display='inline' style={{cursor:'pointer'}}>{files.length?'':'Browse'}
                                                     </Typography>
                                                 </Grid>
                                             </Grid>

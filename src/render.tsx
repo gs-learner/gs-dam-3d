@@ -771,8 +771,14 @@ const ReRender = async (
 }
 
 
+let isPause = false
+
+
 
 function render(tm : number) {
+    if(isPause) {
+        return
+    }
     // console.log('render')
     requestAnimationFrame(render);
     if(control.enabled) {
@@ -801,7 +807,27 @@ function render(tm : number) {
 }
 render(0);
 
+const pause = ()=>{
+    isPause = true
+}
+const resume = ()=>{
+    if(isPause) {
+        isPause = false;
+        render(0)
+    }
+}
 
+const Snapshot = (width: number, height: number)=>{
+    pause()
+    const last_w = canvas.w
+    const last_h = canvas.h
+    
+    canvas.resize(width, height)
+    resume() // make sure on frame is renderered
+    const res = canvas.canvas.toDataURL(); // png by default
+    canvas.resize(last_w, last_h)
+    return res
+}
 
 return {
     setWireframe: (bool : boolean) =>{
@@ -843,7 +869,10 @@ return {
     setRotateLightsSpeed: (speed: number)=> { lights.rotateRad = speed },
     detachCamEvent: ()=>{ control.dispose() },
     retachCamEvent: ()=>{ control.reregister() },
-    lights: lights
+    lights: lights,
+    snapshot: Snapshot,
+    pause: pause,
+    resume: resume,
 }
 
 
