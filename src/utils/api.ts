@@ -79,7 +79,7 @@ export function MakeEmptyUser() : DUser {
 
 export const AllModelCatalogs = [
     'Animals' , 'Architecture' , 'Sports' , 
-    'Characters' , 'Items' , 'Mental' ,
+    'Characters' , 'Items' , 'Metal' ,
     'Sci-fi' , 'Nature' , 'Science&Tech' ,
     'Food', 'Dinosaurs'
 ] as const;
@@ -98,7 +98,7 @@ export const CatalogBound : Record<ModelCatalog, string[]> = {
     'This part contains many kinds of Food models'],
     Items:['/image/car.png','/image/cin.png',
     'This part contains many kinds of Cars models'],
-    Mental:['/image/weapon.png','/image/cin.png',
+    Metal:['/image/weapon.png','/image/cin.png',
     'This part contains many kinds of Weapon models'],
     Nature:['/image/weapon.png','/image/cin.png',
     'This part contains many kinds of Weapon models'],

@@ -147,13 +147,13 @@ const App: React.FC = () => {
           <a ref={toEditRender} href='/model/edit'>x</a>
         </div>
     
-        <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
+        {/* <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
         <button onClick={()=>{
           pro.to.profile();
         }}>To Profile</button>
         <button onClick={()=>{
           pro.to.edit_render(MockModel())
-        }}>Edit Model</button> 
+        }}>Edit Model</button>  */}
       
         <HomePage/>
     

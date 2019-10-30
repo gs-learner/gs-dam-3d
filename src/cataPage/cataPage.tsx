@@ -94,7 +94,7 @@ const HeaderCataPage: React.FC=()=>{
                 {name:'Science&Tech', url:'/image/cin.jpg', disp:'disp catalog'},
                 {name:'Nature', url:'/image/cin.jpg', disp:'disp catalog'},
                 {name:'Sci-fi', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Mental', url:'/image/cin.jpg', disp:'disp catalog'},
+                {name:'Metal', url:'/image/cin.jpg', disp:'disp catalog'},
                 {name:'Characters', url:'/image/cin.jpg', disp:'disp catalog'},
                 {name:'Dinosaurs', url:'/image/cin.jpg', disp:'disp catalog'},
             ]}/>
