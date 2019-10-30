@@ -302,15 +302,14 @@ const BodyHomePage: React.FC = () =>{
         //TODO actually only name is useful
         {name:'Animals', url:'/image/cin.jpg', disp:'disp catalog'},
         {name:'Architecture', url:'/image/cin.jpg', disp:'disp catalog'},
-        {name:'History', url:'/image/cin.jpg', disp:'disp catalog'},
-        {name:'Place', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Sports', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Items', url:'/image/cin.jpg', disp:'disp catalog'},
         {name:'Food', url:'/image/cin.jpg', disp:'disp catalog'},
-        {name:'Furniture', url:'/image/cin.jpg', disp:'disp catalog'},
-        {name:'People', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Science&Tech', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Nature', url:'/image/cin.jpg', disp:'disp catalog'},
         {name:'Sci-fi', url:'/image/cin.jpg', disp:'disp catalog'},
-        {name:'Weapon', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Mental', url:'/image/cin.jpg', disp:'disp catalog'},
         {name:'Characters', url:'/image/cin.jpg', disp:'disp catalog'},
-        {name:'Cars', url:'/image/cin.jpg', disp:'disp catalog'},
         {name:'Dinosaurs', url:'/image/cin.jpg', disp:'disp catalog'},
         ]};
     return(

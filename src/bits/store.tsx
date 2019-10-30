@@ -11,10 +11,10 @@ const default_profile = {
         user: (u: User)=>{},
         logState:(v:boolean)=>{},
         theme: (v:Theme)=>{},
-        currentViewModel:(v:D3DModel|null)=>{},
+        currentViewModel:(v:D3DModel)=>{},
     },
     get:{
-        currentViewModel:():D3DModel|null=>MockModel(),
+        currentViewModel:():D3DModel=>MockModel(),
     },
     save: {
         login: (username:string, password:string)=>{} 

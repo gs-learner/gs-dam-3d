@@ -9,6 +9,7 @@ import FolderList from '../bits/userInfoList';
 import { Package, preViewPackages, D3DModels} from '../homePage/homePage';
 import {D3DModel, DRecommends, APIListModelsByUser } from '../utils/api';
 import TailBar from '../bits/tailBar';
+import { MockModel } from '../utils/mock';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,16 +82,6 @@ const BodyRightUserPage: React.FC = () => {
     )
 }
 const BodyMainUserPage: React.FC = () => {
-    const pkgs: preViewPackages = {
-        preViewPackages: [
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao', avatar: '/logo192.png' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao', avatar: '/image/lol.jpg' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-        ]
-    }
     const [modelGroupData,setModelGroupData] = useState<D3DModel[]>();
     useEffect(() => {
         (async ()=>{
@@ -107,8 +98,8 @@ const BodyMainUserPage: React.FC = () => {
             <Grid container direction='row'>
                 <Grid item xs={9}>
                     {
-                        modelGroupData?
-                        <BodyLeftUserPage D3DModels={modelGroupData} />
+                        !modelGroupData?
+                        <BodyLeftUserPage D3DModels={[MockModel()]} />
                         :<div>Something wrong with proxy</div>
                     }
                 </Grid>

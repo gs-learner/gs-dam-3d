@@ -45,6 +45,16 @@ export class CanvasManager {
         }, false)
     }
 
+    resize(w:number, h:number) {
+        this.canvas.width = w
+        this.canvas.height = h
+        if(this.renderer) {
+            this.renderer.setSize(w, h)
+        }
+        this.w = w
+        this.h = h
+    }
+
     listenResize(target : Resizable) {
         this.resizables.push(target)
     }

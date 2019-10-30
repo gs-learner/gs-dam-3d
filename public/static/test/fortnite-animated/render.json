@@ -3,7 +3,7 @@
     "backgroundColor": "radial-gradient(circle, rgba(224,243,255,1) 0%, rgba(52,50,80,1) 100%, rgba(26,26,186,1) 100%)",
     "backgroundGradient": true,
     "skybox": "",
-    "envMap": "/static/skybox/plants/",
+    "envMap": "/static/skybox/7/",
     "scale": 0.05,
-    "lights": ["bio hazard", "disco", "default"]
+    "lights": ["default", "disco", "bio hazard"]
 }

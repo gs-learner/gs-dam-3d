@@ -361,6 +361,24 @@ export class LightManager {
         public domEl: HTMLElement
     ) {}
     
+    addShemes(what: typeof BuiltinLightScheme) {
+        this.availableLightSchemes = {
+            ...this.availableLightSchemes,
+            ...what
+        };
+        this._callOnlightscheme();
+    }
+
+
+    saveCurrentAsScheme(scheme:string) {
+        const arr = this.exportScheme()
+        this.availableLightSchemes = {
+            ...this.availableLightSchemes,
+            scheme: arr
+        };
+        this._callOnlightscheme();
+    }
+
     useScheme(scheme:string) {
         if(scheme === this.scheme) {
             if(scheme.length && scheme[0] === '*') {
@@ -599,7 +617,6 @@ const vertextNormHelper = new Array<THREE.VertexNormalsHelper>()
 const lights = new LightManager(scene, camera, frame);
 const cubicLoader = new THREE.CubeTextureLoader()
 let envMap: THREE.CubeTexture | null = null
-let skyBox: THREE.Mesh | null = null
 lights.onlightscheme = onLightScheme
 let deviceControl = new DeviceOrientationControls(camera)
 deviceControl.enabled = false
@@ -646,6 +663,7 @@ const AutoRotate = ()=>{
 //TODO(leon): Add render info cache
 const fileLoader = new  THREE.FileLoader();
 const loader = new GLTFLoader()
+let renderConfig: null | RenderConfig = null
 
 const GetJsonFile = (url:string, onprogress: (progress_0_to_1: number)=>any)=>new Promise((resolve, reject)=>{
     fileLoader.load(url, (res)=>{
@@ -707,7 +725,7 @@ const ReRender = async (
     )=>{
     
     reportstatus('Loading render config')
-    const renderConfig = await GetJsonFile(minfo.url + '/render.json', (n)=>onprogress(n*0.05)) as RenderConfig;
+    renderConfig = await GetJsonFile(minfo.url + '/render.json', (n)=>onprogress(n*0.05)) as RenderConfig;
     if(renderConfig.renderSky === 'col') {
         setbackground(renderConfig.backgroundColor, renderConfig.backgroundGradient);
         renderer.setClearColor(0x222222, 0.0);
@@ -738,8 +756,11 @@ const ReRender = async (
         reportstatus('Piping data to GPU & Updating scene');
         const scale = 0.00020
         m.scene.scale.set(scale, scale, scale)
-        setEnvMap(renderConfig.envMap, m.scene)
-        setSkybox(renderConfig.envMap)
+        if(renderConfig) {
+            setEnvMap(renderConfig.envMap, m.scene)
+            setSkybox(renderConfig.envMap)
+        }
+        
         
         if(skeletonHelper) {
             scene.remove(skeletonHelper)
@@ -771,8 +792,14 @@ const ReRender = async (
 }
 
 
+let isPause = false
+
+
 
 function render(tm : number) {
+    if(isPause) {
+        return
+    }
     // console.log('render')
     requestAnimationFrame(render);
     if(control.enabled) {
@@ -801,7 +828,27 @@ function render(tm : number) {
 }
 render(0);
 
+const pause = ()=>{
+    isPause = true
+}
+const resume = ()=>{
+    if(isPause) {
+        isPause = false;
+        render(0)
+    }
+}
 
+const Snapshot = (width: number, height: number)=>{
+    pause()
+    const last_w = canvas.w
+    const last_h = canvas.h
+    
+    canvas.resize(width, height)
+    resume() // make sure on frame is renderered
+    const res = canvas.canvas.toDataURL(); // png by default
+    canvas.resize(last_w, last_h)
+    return res
+}
 
 return {
     setWireframe: (bool : boolean) =>{
@@ -843,7 +890,11 @@ return {
     setRotateLightsSpeed: (speed: number)=> { lights.rotateRad = speed },
     detachCamEvent: ()=>{ control.dispose() },
     retachCamEvent: ()=>{ control.reregister() },
-    lights: lights
+    lights: lights,
+    snapshot: Snapshot,
+    pause: pause,
+    resume: resume,
+    getRenderConfig: ()=> renderConfig
 }
 
 

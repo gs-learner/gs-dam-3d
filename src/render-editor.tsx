@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { D3DModel, LightTypes } from './utils/api'
+import { D3DModel, LightTypes, APIModelUpdatePreview, APIModelUpdateRenderConfig } from './utils/api'
 import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
 import { MockModel } from './utils/mock'
@@ -30,7 +30,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FlareIcon from '@material-ui/icons/Flare';
 import HighlightIcon from '@material-ui/icons/Highlight';
 import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField'
 
 const useLightStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,6 +105,7 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
     const [openAddLight, setOpenAddLight] = React.useState(false);
 
     const [xyz, setXYZ] = useState<PosArr>([0, 0, 0]);
+    const [shemeName, setShemeName] = useState('')
     
     useEffect(()=>{
         props.lights.listenAmountChange = (l)=>{
@@ -158,6 +161,14 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
         props.lights.delLight(selected)
         setSelected(next)
     }
+
+    const saveAsLightScheme = ()=>{
+        if(shemeName.length < 3) {
+            return;
+        }
+        props.lights.saveCurrentAsScheme(shemeName)
+    }
+
     
     return (
     <ExpansionPanel expanded={expanded} onChange={()=>setExpanded(!expanded)}>
@@ -344,6 +355,23 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                     </Grid>
 
                     <Grid item xs >
+                    
+                    
+                    <TextField
+                        id="filled-sheme"
+                        label="Scheme"
+                        margin="normal"
+                        variant="filled"
+                        value={shemeName}
+                        onChange={(e)=>setShemeName(e.target.value)}
+                    />
+                    <Button
+                        variant="outlined"
+                        startIcon={<SaveIcon />}
+                        onClick={saveAsLightScheme}
+                    >
+                        Save Scheme
+                    </Button>
                     <Button
                         variant="contained"
                         color="secondary"
@@ -389,23 +417,49 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
             setLights(h.lights)
         }
     }
-    useEffect(() => {
-        //TODO(data)corresponding model each time open
-    }, []);
+
+    useEffect(()=>{
+        if(props.model) {
+            setModel(props.model)
+        }
+    }, [props.model])
+
+    const updateSnapshot = ()=>{
+        if(!handle) return;
+        if(!model) return;
+        const preview = handle.snapshot(1000, 600)
+        APIModelUpdatePreview({url: model.url, preview: preview})
+    }
+
+    const updateRenderConfig = ()=>{
+        if(!handle) return;
+        if(!model) return;
+        const renderConfig = handle.getRenderConfig()
+        if(renderConfig === null || lights === undefined) return;
+        renderConfig.lights_schemes = lights.availableLightSchemes
+        renderConfig.lights = Object.keys(lights.availableLightSchemes)
+        APIModelUpdateRenderConfig({
+            url: model.url,
+            config: renderConfig
+        })
+    }
+
+
     return (
         <Grid container>
             <Grid item xs={12} md={8}>
                 <div className='canvas-frame-wrapper'>
                 <div id='edit-frame'  className='canvas-frame'>
-                    <Render 
-                        onBgColor={NotImplFn} 
-                        model={model}
-                        frameid='edit-frame'
-                        openCtrl={openCtrl}
-                        onhandle={updateHandle}
-                        onlightmove={setLightmoving}
-                    />
+                    
                 </div>
+                <Render 
+                    onBgColor={NotImplFn} 
+                    model={model}
+                    frameid='edit-frame'
+                    openCtrl={openCtrl}
+                    onhandle={updateHandle}
+                    onlightmove={setLightmoving}
+                />
                 <div className={classes.ctrl}>
                     <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
                         <SettingsIcon />
@@ -420,8 +474,16 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                     :
                     null
                 }
-                <Button variant="outlined" color="primary">
+                <Button variant="outlined" color="primary" onClick={updateRenderConfig}>
                     Submit
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<DeleteIcon />}
+                    onClick={updateSnapshot}
+                >
+                        Update As Preview
                 </Button>
             </Grid>
         </Grid>

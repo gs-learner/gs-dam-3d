@@ -12,6 +12,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import SendIcon from '@material-ui/icons/Send';
+import { Divider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       maxWidth: 360,
       backgroundColor: theme.palette.background.paper,
+    },
+    divider:{
+      margin: theme.spacing(2, 1),
     },
   }),
 );

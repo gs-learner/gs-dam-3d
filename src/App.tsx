@@ -57,7 +57,7 @@ const App: React.FC = () => {
   const [openUploadModel, setOpenUploadModel] = useState(false)
   const [logState, setLogState] = useState(false)
   const [editingModel, setEditingodel] = useState<D3DModel>();
-  const [currentViewModel, setCurrentViewModel] = useState<D3DModel|null>(MockModel());//better to mock
+  const [currentViewModel, setCurrentViewModel] = useState<D3DModel>(MockModel());//better to mock
   useEffect(()=>{
     const username = persGet('username')
     const password = persGet('password')
