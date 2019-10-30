@@ -99,7 +99,7 @@ export const CatalogBound : Record<ModelCatalog, string[]> = {
     'Dinosaurs, dragons, roar!'],
 }
 
-type DRecommends = Record<ModelCatalog, D3DModel[]>
+export type DRecommends = Record<ModelCatalog, D3DModel[]>
 
 export interface DModelCatalogInfo {
     name: ModelCatalog

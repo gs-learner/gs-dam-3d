@@ -26,7 +26,6 @@ interface Props {
 
 const DetailPanel : React.FC<Props> = (props)=>{
     const classes = useStyles();
-    const tm = [1,1,1,1,1,1,1,1]
     const pro = useContext(profile)
     const [canvasBg, setCanvasBg] = useState('');
     const [currentModel, setCurrentModel] = useState<D3DModel|null>(null)
@@ -36,7 +35,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
         if(props.open) {
             setOpenCtrl(false)
             console.log('triggering rerender')
-            setCurrentModel(MockModel())
+            setCurrentModel(pro.get.currentViewModel());
         }
 
     }, [props.open])
@@ -52,35 +51,26 @@ const DetailPanel : React.FC<Props> = (props)=>{
             <Grid container>
                 <Grid item xs={12} md={8}>
                     <div className='canvas-frame-wrapper'>
-                    <div id='canvas-frame'  className='canvas-frame' style={{background:canvasBg}}>
-                        
+                        <div id='canvas-frame'  className='canvas-frame' style={{background:canvasBg}}>
                     </div>
                     <Render 
-                            onBgColor={seBgW} 
-                            model={currentModel}
-                            frameid='canvas-frame'
-                            openCtrl={openCtrl}
-                        />
-                        <div className={classes.ctrl}>
-                            <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
-                                <SettingsIcon />
-                            </IconButton>
-                            
-                        </div>
+                        onBgColor={seBgW} 
+                        model={currentModel}
+                        frameid='canvas-frame'
+                        openCtrl={openCtrl}
+                    />
+                    <div className={classes.ctrl}>
+                        <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
+                            <SettingsIcon />
+                        </IconButton>
+                        
+                    </div>
                     </div>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                    <Button onClick={()=>setOpenCtrl(!openCtrl)}>
-                        Toggle Ctrl
-                    </Button>
-                    <Button onClick={()=>setOffsetY(offsetY===0?200:0)}>
-                        MoveDown
-                    </Button>
-                    <p>{pro.user.username}</p>
-                    This is a test
-                    {
-                        tm.map((v, idx)=><p key={idx}>FFFFFFF</p>)
-                    }
+                    <Grid container>
+
+                    </Grid>
                 </Grid>
             </Grid>
             

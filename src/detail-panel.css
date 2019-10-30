@@ -1,19 +1,20 @@
 .canvas-frame-wrapper {
+    /* whatever width you want */
     width: 100%;
     padding-top: 60%;
-    /* whatever width you want */
+    height: 60%;
     display: inline-block;
     position: relative;
 }
 
 .canvas-frame {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
     /* fill parent */
     /* background-color: deepskyblue; */
     /* let's see it! */
+    position: absolute;
+    top: 0;
+    bottom: -5px;
+    right: 0;
+    left: 0;
     color: white;
 }

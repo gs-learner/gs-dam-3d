@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import CustomizedInputBase from '../bits/search';
 import './homePage.css'
 import Typography from '@material-ui/core/Typography'
@@ -12,7 +12,8 @@ import { profile } from '../bits/store';
 import TailBar from '../bits/tailBar';
 
 import {CenterPanel} from '../bits/centerPanel'
-import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound } from '../utils/api';
+import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound,
+    APIListRecommendedModels, DRecommends} from '../utils/api';
 import { lightGreen } from '@material-ui/core/colors'
 
 
@@ -30,6 +31,9 @@ export interface iconInfo{
 export interface iconInfos{
     cata:iconInfo[];
 }
+export interface D3DModels{
+    D3DModels: D3DModel[];
+}
 interface preViewPackage{
     name:string;
     format:string;
@@ -42,7 +46,7 @@ export interface preViewPackages{
 }
 interface preViewBar{
     cata:iconInfo;
-    preViewPackages:preViewPackages;
+    D3DModels:D3DModel[];
     idx: number;
 }
 const TotalNum: React.FC<TotalNum> = (props) =>{
@@ -163,7 +167,7 @@ const useStyles = makeStyles((theme:Theme)=>({
     }
   }));
 
-export const Package: React.FC<preViewPackage>=(props)=>{
+export const Package: React.FC<D3DModel>=(props)=>{
     // const [action, setAction] = useState(false)
     const classes = useStyles();
 
@@ -173,11 +177,11 @@ export const Package: React.FC<preViewPackage>=(props)=>{
                 <div className="icon-mask"  >
                     <div className="zoom-icon"><ZoomInIcon htmlColor='white' fontSize='large'/></div>
                     <div className="bigger-img">
-                        <img src={props.imgUrl} alt={props.name}></img>
+                        <img src={props.url+'/'+props.name+'.png'} alt={props.name}></img>
                         <h2>{props.name}</h2>
                     </div>
                 </div>
-                <img className="small-img" src={props.imgUrl} alt={props.name}></img>
+                <img className="small-img" src={props.url+'/'+props.name+'.png'} alt={props.name}></img>
             </div>
             <div className="Package-down">
                 <div>
@@ -190,11 +194,11 @@ export const Package: React.FC<preViewPackage>=(props)=>{
 
                 <Grid item xs={2}>
                 {
-                    props.avatar !== undefined && props.avatar.length ? 
-                    <Avatar alt={props.author} src={props.avatar} className={classes.avatar}/> 
+                    props.owner.avatar !== undefined && props.owner.avatar.length ? 
+                    <Avatar alt={props.owner.nickname} src={props.owner.avatar} className={classes.avatar}/> 
                     :
                     <Avatar className={classes.avatar}>
-                        {props.author[0]}
+                        {props.owner.nickname[0]}
                     </Avatar>
                 }
                 </Grid>
@@ -207,8 +211,8 @@ export const Package: React.FC<preViewPackage>=(props)=>{
         </div>
     )
 }
-const ModelPreview: React.FC<preViewPackages>=(props)=>{
-    const pkgs=props.preViewPackages;
+const ModelPreview: React.FC<D3DModels>=(props)=>{
+    const pkgs=props.D3DModels;
     return(
         <div className="ModelPreview">
             {
@@ -223,7 +227,7 @@ const ModelPreview: React.FC<preViewPackages>=(props)=>{
 }
 const PreViewBar: React.FC<preViewBar>=(props)=>{
     const cata = props.cata;
-    const pkgs = props.preViewPackages;
+    const pkgs = props.D3DModels;
     return(
         //TODO change background
         <div className="PreViewBarPlus" style={{backgroundImage:`url(${CatalogBound[props.cata.name][0]})`, zIndex:40-props.idx}}>
@@ -234,7 +238,7 @@ const PreViewBar: React.FC<preViewBar>=(props)=>{
             </div>
             <div className="PreViewBar">
                 <CataPreView name={cata.name} url={CatalogBound[props.cata.name][1]} disp={CatalogBound[props.cata.name][2]}/>
-                <ModelPreview preViewPackages={pkgs.preViewPackages}/>
+                <ModelPreview D3DModels={pkgs}/>
             </div>
         </div>
     )
@@ -250,38 +254,42 @@ export const BodyTopHomepage: React.FC<iconInfos> = (props) =>{
         </Grid>
     )
 }
-const BodyMainHomepage: React.FC=()=>{
-    const cata:iconInfo[] = [
-        //TODO actually only name is useful
-        {name:'Animals', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Architecture', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'History', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Place', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Food', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Furniture', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'People', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Sci-fi', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Weapon', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Characters', url:'/image/cin.png', disp:'disp catalog'},
-        {name:'Cars', url:'/image/cin.png', disp:'disp catalog'},
-    ];
-    const pkgs:preViewPackages = {preViewPackages:[
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/logo192.png'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/image/lol.jpg'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-    ]}
+const BodyMainHomepage: React.FC<iconInfos>=(props)=>{
+    // const cata:iconInfo[] = [
+    //     //This part is now for debuging
+    //     //the order of model must be in this  catagory order
+    //     {name:'Animals', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Architecture', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'History', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Place', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Food', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Furniture', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'People', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Sci-fi', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Weapon', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Characters', url:'/image/cin.png', disp:'disp catalog'},
+    //     {name:'Cars', url:'/image/cin.png', disp:'disp catalog'},
+    // ];
+    //TODO(data)
+    const [model8GroupData,setModel8GroupData] = useState<DRecommends>();
+    useEffect(() => {
+        (async ()=>{
+            const model8Group = await APIListRecommendedModels();
+            if(model8Group.ok) {
+                setModel8GroupData(model8Group.data);
+            }
+        })()
+        
+    }, []);
 
     return(
         <div className="BodyMainHomepage">
             {
-                cata.map((v,idx)=>{
-                    return <PreViewBar idx={idx} cata={cata[idx]} preViewPackages={pkgs} key={idx}/>
+                model8GroupData?
+                props.cata.map((v,idx)=>{
+                    return <PreViewBar idx={idx} cata={props.cata[idx]} D3DModels={model8GroupData[props.cata[idx].name]} key={idx}/>
                 })
+                : <div>something wrong with Recommend data</div>
             }
             {/* <PreViewBar cata={cata} preViewPackages={pkgs}/>
             <PreViewBar cata={cata} preViewPackages={pkgs}/> */}
@@ -290,23 +298,25 @@ const BodyMainHomepage: React.FC=()=>{
 }
 
 const BodyHomePage: React.FC = () =>{
+    const catagory:iconInfos = {cata:[
+        //TODO actually only name is useful
+        {name:'Animals', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Architecture', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'History', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Place', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Food', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Furniture', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'People', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Sci-fi', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Weapon', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Characters', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Cars', url:'/image/cin.jpg', disp:'disp catalog'},
+        {name:'Dinosaurs', url:'/image/cin.jpg', disp:'disp catalog'},
+        ]};
     return(
         <div className="BodyHomePage">
-            <BodyTopHomepage cata={[
-                //TODO actually only name is useful
-                {name:'Animals', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Architecture', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'History', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Place', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Food', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Furniture', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'People', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Sci-fi', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Weapon', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Characters', url:'/image/cin.jpg', disp:'disp catalog'},
-                {name:'Cars', url:'/image/cin.jpg', disp:'disp catalog'},
-                ]}/>
-            <BodyMainHomepage/>
+            <BodyTopHomepage cata={catagory.cata}/>
+            <BodyMainHomepage cata={catagory.cata}/>
         </div>
     )
 }

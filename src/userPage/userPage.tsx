@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Divider, Grid } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
@@ -6,7 +6,8 @@ import './userPage.css'
 import SearchAppBar from '../bits/miniSearch';
 import UploadButton from '../bits/buttonUpload';
 import FolderList from '../bits/userInfoList';
-import { Package, preViewPackages } from '../homePage/homePage';
+import { Package, preViewPackages, D3DModels} from '../homePage/homePage';
+import {D3DModel, DRecommends, APIListModelsByUser } from '../utils/api';
 import TailBar from '../bits/tailBar';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -55,13 +56,12 @@ const BodyTopUserPage: React.FC = () => {
         </div>
     )
 }
-const BodyLeftUserPage: React.FC<preViewPackages> = (props) => {
-    const pkgs = props.preViewPackages;
+const BodyLeftUserPage: React.FC<D3DModels> = (props) => {
     return (
         <div className="BodyLeftUserPage">
             <Grid container spacing={7}>
                 {
-                    pkgs.map((v, idx) => {
+                    props.D3DModels.map((v, idx) => {
                         return (
                             <Grid key={idx} item xs={12} md={5} lg={3} xl={2}>
                                 <Package {...v} />
@@ -91,11 +91,26 @@ const BodyMainUserPage: React.FC = () => {
             { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
         ]
     }
+    const [modelGroupData,setModelGroupData] = useState<D3DModel[]>();
+    useEffect(() => {
+        (async ()=>{
+            //TODO(data) the name of the user must be given
+            const modelGroup = await APIListModelsByUser({username:'lzw'});
+            if(modelGroup.ok) {
+                setModelGroupData(modelGroup.data);
+            }
+        })()
+        
+    }, []);
     return (
         <div className="BodyMainUserPage">
             <Grid container direction='row'>
                 <Grid item xs={9}>
-                    <BodyLeftUserPage preViewPackages={pkgs.preViewPackages} />
+                    {
+                        modelGroupData?
+                        <BodyLeftUserPage D3DModels={modelGroupData} />
+                        :<div>Something wrong with proxy</div>
+                    }
                 </Grid>
                 <Grid item xs={3}>
                     <BodyRightUserPage />

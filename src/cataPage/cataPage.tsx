@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import SearchAppBar from '../bits/miniSearch';
+import {D3DModel, APIListModelsByUser} from '../utils/api';
 import './cataPage.css'
-import {Package, iconInfos, preViewPackages} from '../homePage/homePage';
+import {Package, iconInfos, preViewPackages,D3DModels,} from '../homePage/homePage';
 import {CenterPanel} from '../bits/centerPanel'
 import { Divider } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -65,13 +66,12 @@ const BodyTopCataPage:React.FC =()=>{
         </div>
     )
 }
-const BodyMainCataPage:React.FC<preViewPackages>=(props)=>{
-    const pkgs=props.preViewPackages;
+const BodyMainCataPage:React.FC<D3DModels>=(props)=>{
     return(
         <div className="BodyMainCataPage">
             <div className="bodyContCataPage">
             {
-                pkgs.map((v,idx)=>{
+                props.D3DModels.map((v,idx)=>{
                     return(
                         <Package key={idx} {...v}/>
                     )
@@ -103,19 +103,35 @@ const HeaderCataPage: React.FC=()=>{
 }
 const BodyCataPage:React.FC=()=>{
     const classes = useStyles();
-    const pkgs:preViewPackages = {preViewPackages:[
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/logo192.png'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/image/lol.jpg'},
-        {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
-    ]}
+    // const pkgs:preViewPackages = {preViewPackages:[
+    //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/logo192.png'},
+    //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+    //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+    //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+    //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/image/lol.jpg'},
+    //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
+    // ]}
+    //TODO(data)API
+    const [modelGroupData,setModelGroupData] = useState<D3DModel[]>();
+    useEffect(() => {
+        (async ()=>{
+            //TODO(data) search result API
+            const modelGroup = await APIListModelsByUser({username:'lzw'});
+            if(modelGroup.ok) {
+                setModelGroupData(modelGroup.data);
+            }
+        })()
+        
+    }, []);
     return(
         <div className="BodyCataPage">
             <BodyTopCataPage/>
             <Divider className={classes.divider}/>
-            <BodyMainCataPage preViewPackages={pkgs.preViewPackages}/>
+            {
+                modelGroupData?
+                <BodyMainCataPage D3DModels={modelGroupData}/>
+                :<div>something wrong with proxy</div>
+            }
         </div>
     )
 }
