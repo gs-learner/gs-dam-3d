@@ -646,6 +646,7 @@ const AutoRotate = ()=>{
 //TODO(leon): Add render info cache
 const fileLoader = new  THREE.FileLoader();
 const loader = new GLTFLoader()
+let renderConfig: null | RenderConfig = null
 
 const GetJsonFile = (url:string, onprogress: (progress_0_to_1: number)=>any)=>new Promise((resolve, reject)=>{
     fileLoader.load(url, (res)=>{
@@ -707,7 +708,7 @@ const ReRender = async (
     )=>{
     
     reportstatus('Loading render config')
-    const renderConfig = await GetJsonFile(minfo.url + '/render.json', (n)=>onprogress(n*0.05)) as RenderConfig;
+    renderConfig = await GetJsonFile(minfo.url + '/render.json', (n)=>onprogress(n*0.05)) as RenderConfig;
     if(renderConfig.renderSky === 'col') {
         setbackground(renderConfig.backgroundColor, renderConfig.backgroundGradient);
         renderer.setClearColor(0x222222, 0.0);
@@ -738,8 +739,11 @@ const ReRender = async (
         reportstatus('Piping data to GPU & Updating scene');
         const scale = 0.00020
         m.scene.scale.set(scale, scale, scale)
-        setEnvMap(renderConfig.envMap, m.scene)
-        setSkybox(renderConfig.envMap)
+        if(renderConfig) {
+            setEnvMap(renderConfig.envMap, m.scene)
+            setSkybox(renderConfig.envMap)
+        }
+        
         
         if(skeletonHelper) {
             scene.remove(skeletonHelper)
@@ -873,6 +877,7 @@ return {
     snapshot: Snapshot,
     pause: pause,
     resume: resume,
+    getRenderConfig: ()=> renderConfig
 }
 
 

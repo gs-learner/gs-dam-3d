@@ -480,9 +480,9 @@ const UploadModel : React.FC = (props)=>{
                     <Dropzone onDrop={onDrop}>
                         {({getRootProps, getInputProps}) => (
                             
-                            <div {...getRootProps()} style={{textAlign:"center", backgroundColor: '#f1f5ff'}}>
+                            <div {...getRootProps()} style={{textAlign:"center", backgroundColor: '#f1f5ff', border:'none!important'}}>
                                     <input {...getInputProps()} />
-                                    <div style={{padding:'20px'}}>
+                                    <div style={{padding:'20px', border:'none!important'}}>
                                         <div id="plusIcon" style={{
                                             borderStyle:"dashed",
                                             borderWidth:4,
@@ -494,6 +494,7 @@ const UploadModel : React.FC = (props)=>{
                                             backgroundImage:(files.length?'url(/image/plus.png)':'none'),
                                             backgroundRepeat:'no-repeat',
                                             backgroundSize:'50% 100%',
+                                            backgroundPositionX: '50%'
                                             }}>
                                                 
                                             <Grid

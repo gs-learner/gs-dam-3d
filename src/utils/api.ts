@@ -367,6 +367,31 @@ export async function APISearch(info:string) {
     return RefineResponse(res)
 }
 
+export async function APICommunityCreate(info:{name:string}) {
+    let res = await SendJSON('/api/community/create', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
+// export async function APICommunityJoin(info:{name:string}) {
+//     let res = await SendJSON('/api/community/join', {key:info}) as StandardResponse<undefined>
+//     return RefineResponse(res)
+// }
+
+export async function APIListModelsByCommunity(info:{name:string}) {
+    let res = await SendJSON('/api/list/community/models', info) as StandardResponse<{results:D3DModel[]}>
+    return RefineResponse(res)
+}
+
+export async function APIListAllCommunities() {
+    let res = await SendJSON('/api/list/community', {}) as StandardResponse<{name:string}>
+    return RefineResponse(res)
+}
+
+export async function APIAttachModelToCommunity(info: {url: string /* url in d3dmodels */, name: string}) {
+    let res = await SendJSON('/api/community/attach', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
 export function StaticGetJsonFile<U>(url: string, onprogress: (progress_0_to_1: number)=>any) {
     return new Promise((resolve : (v:U)=>void, reject)=>{
         const xhr = new XMLHttpRequest()

@@ -29,6 +29,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FlareIcon from '@material-ui/icons/Flare';
 import HighlightIcon from '@material-ui/icons/Highlight';
 import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 
 const useLightStyles = makeStyles((theme: Theme) =>
@@ -354,6 +355,13 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                     >
                         Delete
                     </Button>
+                    
+                    <Button
+                        variant="outlined"
+                        startIcon={<SaveIcon />}
+                    >
+                        Save Scheme
+                    </Button>
                     </Grid>
                 </Grid>
                 </Grid>
@@ -401,7 +409,9 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     const updateRenderConfig = ()=>{
         if(!handle) return;
         if(!model) return;
-        // const preview = handle.sna
+        const renderConfig = handle.getRenderConfig()
+        if(renderConfig === null) return;
+        
     }
 
 
