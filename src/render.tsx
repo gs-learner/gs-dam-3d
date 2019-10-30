@@ -283,6 +283,9 @@ const Render : React.FC<P> = (props)=>{
                 label="Device Control"
             />
             </Grid>
+                <Typography variant='subtitle2'>
+                    Light rotate speed
+                </Typography>
                 <PrettoSlider
                     // ref={sliderRef}
                     valueLabelDisplay="auto"
@@ -295,7 +298,36 @@ const Render : React.FC<P> = (props)=>{
                     max={3} min={0} step={0.01}
                     className={classes.slider}
                 />
-            
+                <Typography variant='subtitle2'>
+                    Skybox rotate
+                </Typography>
+                <PrettoSlider
+                    valueLabelDisplay="auto"
+                    onChange={(e:any, v:any)=>{
+                        if(handle) { 
+                            handle.rotateSkybox(v)
+                        }
+                    }} 
+                    defaultValue={0}
+                    max={3} min={-3} step={0.01}
+                    className={classes.slider}
+                >
+                </PrettoSlider>
+                <Typography variant='subtitle2'>
+                    Scene model rotate
+                </Typography>
+                <PrettoSlider
+                    valueLabelDisplay="auto"
+                    onChange={(e:any, v:any)=>{
+                        if(handle) { 
+                            handle.rotateSceneModel(v)
+                        }
+                    }} 
+                    defaultValue={0}
+                    max={3} min={-2} step={0.01}
+                    className={classes.slider}
+                >
+                </PrettoSlider>
             <Grid item xs>
             <FormControl variant="filled" className={classes.select}>
                 <InputLabel htmlFor={`${props.frameid}-light-scheme`}>Light Scheme</InputLabel>
@@ -703,9 +735,7 @@ const setEnvMap = (path:string, scene:THREE.Object3D|null)=>{
     }
     
     scene.traverse(obj =>{
-        // console.log('a', obj);
         if(obj instanceof Mesh) {
-            // console.log('b', obj);
             obj.frustumCulled = false;
             // (obj.material as MeshStandardMaterial).envMapIntensity = 2;
 
@@ -795,8 +825,7 @@ const ReRender = async (
 let isPause = false
 
 
-
-function render(tm : number) {
+function render() {
     if(isPause) {
         return
     }
@@ -826,7 +855,7 @@ function render(tm : number) {
     // renderer.autoClear = false;
     // renderer.render(flatScene, flatCamera);
 }
-render(0);
+render();
 
 const pause = ()=>{
     isPause = true
@@ -834,7 +863,7 @@ const pause = ()=>{
 const resume = ()=>{
     if(isPause) {
         isPause = false;
-        render(0)
+        render()
     }
 }
 
@@ -844,11 +873,17 @@ const Snapshot = (width: number, height: number)=>{
     const last_h = canvas.h
     
     canvas.resize(width, height)
+    renderer.setSize(width, height)
+    renderer.render(scene, camera);
+    renderer.render(scene, camera);
+    renderer.render(scene, camera);
     resume() // make sure on frame is renderered
     const res = canvas.canvas.toDataURL(); // png by default
     canvas.resize(last_w, last_h)
     return res
 }
+
+const _yAxis = new THREE.Vector3(0, 1, 0)
 
 return {
     setWireframe: (bool : boolean) =>{
@@ -894,7 +929,20 @@ return {
     snapshot: Snapshot,
     pause: pause,
     resume: resume,
-    getRenderConfig: ()=> renderConfig
+    getRenderConfig: ()=> renderConfig,
+    rotateSkybox: (n : number)=>{
+        if(scene.background instanceof THREE.Texture) {
+            scene.background.center = new THREE.Vector2(0.5, 0.5)
+            scene.background.rotation = n;
+            (scene.background as any).updateMatrix()
+            // scene.background.matrixAutoUpdate = true
+        }
+    },
+    rotateSceneModel: (n : number)=>{
+        if(objectScene) {
+            objectScene.setRotationFromAxisAngle(_yAxis, n)
+        }
+    }
 }
 
 
