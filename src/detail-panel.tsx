@@ -42,9 +42,6 @@ const DetailPanel : React.FC<Props> = (props)=>{
     }, [props.open])
     const seBgW = (bg:string) => {
         console.log(bg);
-        // if(!bg.startsWith('radial-gradient(circle, rgba(35')) {
-        //     debugger
-        // }
         setCanvasBg(bg)
     }
     return(
@@ -52,10 +49,10 @@ const DetailPanel : React.FC<Props> = (props)=>{
             <Grid container>
                 <Grid item xs={12} md={8}>
                     <div className='canvas-frame-wrapper'>
-                    <div id='canvas-frame'  className='canvas-frame' style={{background:canvasBg}}>
-                        
-                    </div>
-                    <Render 
+                        <div id='canvas-frame'  className='canvas-frame' style={{background:canvasBg}}>
+                            
+                        </div>
+                        <Render 
                             onBgColor={seBgW} 
                             model={currentModel}
                             frameid='canvas-frame'
@@ -65,7 +62,6 @@ const DetailPanel : React.FC<Props> = (props)=>{
                             <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
                                 <SettingsIcon />
                             </IconButton>
-                            
                         </div>
                     </div>
                 </Grid>

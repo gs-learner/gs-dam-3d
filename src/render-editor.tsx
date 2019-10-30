@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { D3DModel, LightTypes, APIModelUpdatePreview } from './utils/api'
+import { D3DModel, LightTypes, APIModelUpdatePreview, APIModelUpdateRenderConfig } from './utils/api'
 import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
 import { MockModel } from './utils/mock'
@@ -31,6 +31,7 @@ import HighlightIcon from '@material-ui/icons/Highlight';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField'
 
 const useLightStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,6 +104,7 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
     const [openAddLight, setOpenAddLight] = React.useState(false);
 
     const [xyz, setXYZ] = useState<PosArr>([0, 0, 0]);
+    const [shemeName, setShemeName] = useState('')
     
     useEffect(()=>{
         props.lights.listenAmountChange = (l)=>{
@@ -159,7 +161,12 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
         setSelected(next)
     }
 
-
+    const saveAsLightScheme = ()=>{
+        if(shemeName.length < 3) {
+            return;
+        }
+        props.lights.saveCurrentAsScheme(shemeName)
+    }
 
     
     return (
@@ -347,6 +354,23 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                     </Grid>
 
                     <Grid item xs >
+                    
+                    
+                    <TextField
+                        id="filled-sheme"
+                        label="Scheme"
+                        margin="normal"
+                        variant="filled"
+                        value={shemeName}
+                        onChange={(e)=>setShemeName(e.target.value)}
+                    />
+                    <Button
+                        variant="outlined"
+                        startIcon={<SaveIcon />}
+                        onClick={saveAsLightScheme}
+                    >
+                        Save Scheme
+                    </Button>
                     <Button
                         variant="contained"
                         color="secondary"
@@ -354,13 +378,6 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                         onClick={delEditingLight}
                     >
                         Delete
-                    </Button>
-                    
-                    <Button
-                        variant="outlined"
-                        startIcon={<SaveIcon />}
-                    >
-                        Save Scheme
                     </Button>
                     </Grid>
                 </Grid>
@@ -399,6 +416,12 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         }
     }
 
+    useEffect(()=>{
+        if(props.model) {
+            setModel(props.model)
+        }
+    }, [props.model])
+
     const updateSnapshot = ()=>{
         if(!handle) return;
         if(!model) return;
@@ -410,8 +433,13 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         if(!handle) return;
         if(!model) return;
         const renderConfig = handle.getRenderConfig()
-        if(renderConfig === null) return;
-        
+        if(renderConfig === null || lights === undefined) return;
+        renderConfig.lights_schemes = lights.availableLightSchemes
+        renderConfig.lights = Object.keys(lights.availableLightSchemes)
+        APIModelUpdateRenderConfig({
+            url: model.url,
+            config: renderConfig
+        })
     }
 
 
@@ -444,7 +472,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                     :
                     null
                 }
-                <Button variant="outlined" color="primary">
+                <Button variant="outlined" color="primary" onClick={updateRenderConfig}>
                     Submit
                 </Button>
                 <Button

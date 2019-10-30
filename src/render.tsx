@@ -361,6 +361,24 @@ export class LightManager {
         public domEl: HTMLElement
     ) {}
     
+    addShemes(what: typeof BuiltinLightScheme) {
+        this.availableLightSchemes = {
+            ...this.availableLightSchemes,
+            ...what
+        };
+        this._callOnlightscheme();
+    }
+
+
+    saveCurrentAsScheme(scheme:string) {
+        const arr = this.exportScheme()
+        this.availableLightSchemes = {
+            ...this.availableLightSchemes,
+            scheme: arr
+        };
+        this._callOnlightscheme();
+    }
+
     useScheme(scheme:string) {
         if(scheme === this.scheme) {
             if(scheme.length && scheme[0] === '*') {
@@ -599,7 +617,6 @@ const vertextNormHelper = new Array<THREE.VertexNormalsHelper>()
 const lights = new LightManager(scene, camera, frame);
 const cubicLoader = new THREE.CubeTextureLoader()
 let envMap: THREE.CubeTexture | null = null
-let skyBox: THREE.Mesh | null = null
 lights.onlightscheme = onLightScheme
 let deviceControl = new DeviceOrientationControls(camera)
 deviceControl.enabled = false

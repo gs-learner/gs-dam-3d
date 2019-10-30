@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 import { APIUpdateUserProfile, APIUpdateUserPassword } from '../utils/api';
 import AvatarEditor from 'react-avatar-editor'
 import SearchAppBar from '../bits/miniSearch';
-import TailBar from '../bits/tailBar';
 import Dropzone from 'react-dropzone';
 
 interface TabPanelProps {
