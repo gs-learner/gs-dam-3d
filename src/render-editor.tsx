@@ -31,7 +31,9 @@ import HighlightIcon from '@material-ui/icons/Highlight';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField'
+import TextField from '@material-ui/core/TextField';
+import CameraEnhanceIcon from '@material-ui/icons/CameraEnhance';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 const useLightStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -112,6 +114,7 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
         }
         setTimeout(()=>{
             setSelected(0)
+            props.lights.enableEdit(0)
         }, 2000) //TODO: Better solution
     }, [props.lights])
 
@@ -442,6 +445,15 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         })
     }
 
+    const downloadSnapshot = ()=>{
+        if(!handle) return;
+        if(!model) return;
+        const preview = handle.snapshot(2000, 1200)
+        const link = document.createElement('a');
+        link.download = `${model.name}-preview.2000x1200.png`;
+        link.href = preview;
+        link.click();
+    }
 
     return (
         <Grid container>
@@ -472,16 +484,24 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                     :
                     null
                 }
-                <Button variant="outlined" color="primary" onClick={updateRenderConfig}>
+                <Button variant="outlined" color="primary" startIcon={<CloudUploadIcon/>} onClick={updateRenderConfig}>
                     Submit
                 </Button>
                 <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<DeleteIcon />}
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<CameraEnhanceIcon />}
                     onClick={updateSnapshot}
                 >
                         Update As Preview
+                </Button>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<SaveIcon />}
+                    onClick={downloadSnapshot}
+                >
+                    Download Snapshot
                 </Button>
             </Grid>
         </Grid>
