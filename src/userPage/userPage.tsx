@@ -139,8 +139,11 @@ const BodyMainUserPage: React.FC = () => {
             <Grid container direction='row'>
                 <Grid item xs={9}>
                     {//TODO(must recover)
-                        !modelGroupData?
-                        <BodyLeftUserPage D3DModels={[MockModel()]} />
+                        // !modelGroupData?
+                        // <BodyLeftUserPage D3DModels={[MockModel()]} />
+                        // :<div>Something wrong with proxy</div>
+                        modelGroupData?
+                        <BodyLeftUserPage D3DModels={modelGroupData} />
                         :<div>Something wrong with proxy</div>
                     }
                 </Grid>
