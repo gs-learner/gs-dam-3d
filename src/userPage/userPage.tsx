@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Divider, Grid } from '@material-ui/core';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import React, { useState, useEffect, useContext } from 'react'
+import { Divider, Grid, IconButton, createMuiTheme } from '@material-ui/core';
+import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles';
 
 import './userPage.css'
 import SearchAppBar from '../bits/miniSearch';
@@ -10,6 +10,10 @@ import { Package, preViewPackages, D3DModels} from '../homePage/homePage';
 import {D3DModel, DRecommends, APIListModelsByUser } from '../utils/api';
 import TailBar from '../bits/tailBar';
 import { MockModel } from '../utils/mock';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import {lightBlue, orange} from '@material-ui/core/colors';
+import { profile } from '../bits/store';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,8 +34,27 @@ const useStyles = makeStyles((theme: Theme) =>
             gridTemplateColumns: 'repeat(12, 1fr)',
             gridGap: theme.spacing(3),
         },
+        button: {
+            margin: theme.spacing(1),
+        },
+        input: {
+            display: 'none',
+        },
     }),
 );
+
+const theme = createMuiTheme({
+    palette: {
+        type: 'dark',
+      primary: lightBlue,
+      secondary: orange,
+      background: {
+        default: '#2a2d35',
+        paper: '#2a2d35',
+      }
+    },
+    
+  })
 
 const BodyTopUserPage: React.FC = () => {
     const classes = useStyles();
@@ -58,19 +81,37 @@ const BodyTopUserPage: React.FC = () => {
     )
 }
 const BodyLeftUserPage: React.FC<D3DModels> = (props) => {
+    const classes = useStyles();
+    const pro = useContext(profile);
     return (
         <div className="BodyLeftUserPage">
-            <Grid container spacing={7}>
-                {
-                    props.D3DModels.map((v, idx) => {
-                        return (
-                            <Grid key={idx} item xs={12} md={5} lg={3} xl={2}>
-                                <Package {...v} />
-                            </Grid>
-                        )
-                    })
-                }
-            </Grid>
+            <ThemeProvider theme={theme}>
+                <Grid container spacing={7}>
+                    {
+                        props.D3DModels.map((v, idx) => {
+                            return (
+                                <Grid key={idx} item xs={12} md={5} lg={3} xl={2}>
+                                    <div style={{
+                                        position:'relative',
+                                    }}>
+                                        <div className="editButtons">
+                                        <IconButton className={classes.button} aria-label="edit" size='small' color="primary"
+                                        onClick={()=>{pro.to.edit_render(v)}}
+                                        >
+                                            <EditIcon/>
+                                        </IconButton>
+                                        <IconButton className={classes.button} aria-label="delete" size='small' color="secondary">
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                        </div>
+                                        <Package {...v} />
+                                    </div>
+                                </Grid>
+                            )
+                        })
+                    }
+                </Grid>
+            </ThemeProvider>
         </div>
     )
 }
@@ -97,7 +138,7 @@ const BodyMainUserPage: React.FC = () => {
         <div className="BodyMainUserPage">
             <Grid container direction='row'>
                 <Grid item xs={9}>
-                    {
+                    {//TODO(must recover)
                         !modelGroupData?
                         <BodyLeftUserPage D3DModels={[MockModel()]} />
                         :<div>Something wrong with proxy</div>

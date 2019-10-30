@@ -170,18 +170,21 @@ const useStyles = makeStyles((theme:Theme)=>({
 export const Package: React.FC<D3DModel>=(props)=>{
     // const [action, setAction] = useState(false)
     const classes = useStyles();
-
+    const pro = useContext(profile);
     return(
         <div className="Package">
-            <div className="Package-up">
+            <div className="Package-up" onClick={()=>{
+                pro.set.currentViewModel(props);
+                pro.open.openDetail(true);
+                }}>
                 <div className="icon-mask"  >
                     <div className="zoom-icon"><ZoomInIcon htmlColor='white' fontSize='large'/></div>
                     <div className="bigger-img">
-                        <img src={props.url+'/'+props.name+'.png'} alt={props.name}></img>
+                        <img src={props.url+'/'+'preview.png'} alt={props.name}></img>
                         <h2>{props.name}</h2>
                     </div>
                 </div>
-                <img className="small-img" src={props.url+'/'+props.name+'.png'} alt={props.name}></img>
+                <img className="small-img" src={props.url+'/'+'preview.png'} alt={props.name}></img>
             </div>
             <div className="Package-down">
                 <div>

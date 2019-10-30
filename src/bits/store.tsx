@@ -34,6 +34,7 @@ const default_profile = {
     },
     open: {
         uploadModel: false,
+        openDetail:(v:boolean)=>{}
     },
     trigger: {
         uploadModel: (v:boolean)=>{},

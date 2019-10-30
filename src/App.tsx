@@ -118,7 +118,8 @@ const App: React.FC = () => {
       }
     },
     open: {
-      uploadModel: openUploadModel
+      uploadModel: openUploadModel,
+      openDetail: setOpenDetail,
     },
     State:{
       logState: logState
