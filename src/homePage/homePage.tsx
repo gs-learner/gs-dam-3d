@@ -13,8 +13,9 @@ import TailBar from '../bits/tailBar';
 
 import {CenterPanel} from '../bits/centerPanel'
 import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound,
-    APIListRecommendedModels, DRecommends} from '../utils/api';
+    APIListRecommendedModels, DRecommends, APITotalModelNum} from '../utils/api';
 import { lightGreen } from '@material-ui/core/colors'
+import { async } from 'q';
 
 
 interface TotalNum{
@@ -58,11 +59,21 @@ const TotalNum: React.FC<TotalNum> = (props) =>{
 }
 
 const HeaderBarHomepage: React.FC = () =>{
+    //TODO total number
+    const [totalNum, setTotalNum] = useState(9999);
+    useEffect(() => {
+        (async ()=>{
+            const num = await APITotalModelNum();
+            if(num.ok){
+                setTotalNum(num.data)
+            }
+        })()
+    }, []);
     return(
         <div className="HeaderBarHomepage">
             <Grid container spacing={3}>
                 <Grid item xs={6}>
-                    <TotalNum number={9999}/>
+                    <TotalNum number={totalNum}/>
                 </Grid>
                 <Grid item xs={6}>
                     <LogBar/>
@@ -206,7 +217,7 @@ export const Package: React.FC<D3DModel>=(props)=>{
                 }
                 </Grid>
                 <Grid item xs>
-                    <Typography> {props.name} </Typography>
+                    <Typography> {props.name.substring(0,15)}{(props.name.length>15)?'...':null} </Typography>
                 </Grid>
                 </Grid>
                 </div>
