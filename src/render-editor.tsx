@@ -194,13 +194,21 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
             {
             controlLevel>=0?
                 <Grid item xs>
-                <ChromePicker color={color} onChange={e=>{
+                <ChromePicker color={color} 
+                styles={{
+                    default:{
+                        picker: {
+                            width: '100%'
+                        }
+                    }
+                }}
+                onChange={e=>{
                     setColor({...e.rgb})
                     props.lights.editColor(e.rgb.r / 255.0, e.rgb.g / 255.0, e.rgb.b / 255.0)
+                    
                 }}/>
                 </Grid> : <Typography>No Lights Selected, Click on add lights to add</Typography>
             }
-
 
             <Grid item xs={4}>
             {

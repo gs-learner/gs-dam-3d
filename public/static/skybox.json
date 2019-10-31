@@ -1,0 +1,28 @@
+{
+    "data": {
+        "Cloudy Sky": {
+            "path": "static/skybox/2.Cloudy Sky/"
+        },
+        "Dawn": {
+            "path": "static/skybox/3.Dawn/"
+        },
+        "Sky & Lake": {
+            "path": "static/skybox/4.Sky & Lake/"
+        },
+        "Glorious Pink": {
+            "path": "static/skybox/5.Sky & Lake"
+        },
+        "Moon Light": {
+            "path": "static/skybox/6.Moonlight"
+        },
+        "Earth in Cosmos": {
+            "path": "static/skybox/7"
+        },
+        "Lake": {
+            "path": "static/skybox/lake"
+        },
+        "Plants": {
+            "path": "static/skybox/plants"
+        }
+    }
+}

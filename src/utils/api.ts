@@ -70,6 +70,20 @@ export function MakeEmptyUser() : DUser {
     }
 }
 
+interface DModelTodo {
+    aspect: string
+    comment: string
+    claimed: DUser[]
+}
+
+interface DCommunity {
+    name: string
+    introduction: string
+    members: DUser[]
+    document: string
+    todos: Record<string, DModelTodo>
+}
+
 // Hardcoded Catalog & render configs
 // -----------------------------------------------------------
 // * the catalogs & corresponding images are managed by front end,
@@ -388,12 +402,22 @@ export async function APIListModelsByCommunity(info:{name:string}) {
 }
 
 export async function APIListAllCommunities() {
-    let res = await SendJSON('/api/list/community', {}) as StandardResponse<{name:string}>
+    let res = await SendJSON('/api/list/community', {}) as StandardResponse<DCommunity[]>
     return RefineResponse(res)
 }
 
 export async function APIAttachModelToCommunity(info: {url: string /* url in d3dmodels */, name: string}) {
     let res = await SendJSON('/api/community/attach', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
+export async function APICommunityUpdateTodo(info: DCommunity) {
+    let res = await SendJSON('/api/community/update/misc', info) as StandardResponse<undefined>
+    return RefineResponse(res)
+}
+
+export async function APICommunityUpdateMisc(info: DCommunity) {
+    let res = await SendJSON('/api/community/update/misc', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
 
