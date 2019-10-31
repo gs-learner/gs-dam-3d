@@ -5,6 +5,7 @@ import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/cor
 import './userPage.css'
 import SearchAppBar from '../bits/miniSearch';
 import UploadButton from '../bits/buttonUpload';
+import CommButton from '../bits/buttonComm';
 import FolderList from '../bits/userInfoList';
 import { Package, D3DModels} from '../homePage/homePage';
 import {D3DModel, APIListModelsByUser } from '../utils/api';
@@ -25,8 +26,9 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 60,
         },
         upload: {
-            paddingTop: '120px',
+            paddingTop: '80px',
             paddingLeft:'30px',
+            paddingRight:'90px',
         },
         container: {
             display: 'grid',
@@ -72,6 +74,8 @@ const BodyTopUserPage: React.FC = () => {
                 <Grid item xs={3}>
                     <div className={classes.upload}>
                         <UploadButton />
+                        <div style={{height:'10px'}}></div>
+                        <CommButton/>
                     </div>
                 </Grid>
             </Grid>

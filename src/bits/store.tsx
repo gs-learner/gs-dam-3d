@@ -28,6 +28,7 @@ const default_profile = {
         edit_profile: ()=>{},
         edit_render: (model: D3DModel)=>{},
         catalog:()=>{},
+        community:()=>{},
     },
     State:{
         logState: false,
