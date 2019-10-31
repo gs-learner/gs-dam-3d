@@ -1,15 +1,17 @@
-filename, language, TypeScript React, TypeScript, CSS, Markdown, XML, JavaScript, comment, blank, total
+filename, language, TypeScript React, CSS, TypeScript, Markdown, XML, JavaScript, comment, blank, total
 .VSCodeCounter\details.md, Markdown, 0, 0, 0, 52, 0, 0, 0, 6, 58
 .VSCodeCounter\results.md, Markdown, 0, 0, 0, 24, 0, 0, 0, 7, 31
-App.css, CSS, 0, 0, 21, 0, 0, 0, 0, 4, 25
+App.css, CSS, 0, 21, 0, 0, 0, 0, 0, 4, 25
 App.test.tsx, TypeScript React, 8, 0, 0, 0, 0, 0, 0, 2, 10
-App.tsx, TypeScript React, 163, 0, 0, 0, 0, 0, 1, 15, 179
-bits\TrackballControls.d.ts, TypeScript, 0, 37, 0, 0, 0, 0, 2, 20, 59
+App.tsx, TypeScript React, 172, 0, 0, 0, 0, 0, 6, 15, 193
+bits\TrackballControls.d.ts, TypeScript, 0, 0, 37, 0, 0, 0, 2, 20, 59
 bits\TrackballControls.js, JavaScript, 0, 0, 0, 0, 0, 443, 20, 291, 754
+bits\billTable.tsx, TypeScript React, 365, 0, 0, 0, 0, 0, 0, 30, 395
+bits\buttonComm.tsx, TypeScript React, 24, 0, 0, 0, 0, 0, 2, 4, 30
 bits\buttonSignIn.tsx, TypeScript React, 23, 0, 0, 0, 0, 0, 2, 3, 28
 bits\buttonSignUp.tsx, TypeScript React, 25, 0, 0, 0, 0, 0, 2, 3, 30
 bits\buttonUpload.tsx, TypeScript React, 24, 0, 0, 0, 0, 0, 2, 4, 30
-bits\centerPanel.css, CSS, 0, 0, 22, 0, 0, 0, 1, 0, 23
+bits\centerPanel.css, CSS, 0, 22, 0, 0, 0, 0, 1, 0, 23
 bits\centerPanel.tsx, TypeScript React, 17, 0, 0, 0, 0, 0, 0, 2, 19
 bits\edit.tsx, TypeScript React, 40, 0, 0, 0, 0, 0, 2, 6, 48
 bits\logBar.tsx, TypeScript React, 153, 0, 0, 0, 0, 0, 4, 7, 164
@@ -17,32 +19,34 @@ bits\miniSearch.tsx, TypeScript React, 102, 0, 0, 0, 0, 0, 2, 1, 105
 bits\pretto-slider.tsx, TypeScript React, 32, 0, 0, 0, 0, 0, 0, 2, 34
 bits\rate.tsx, TypeScript React, 47, 0, 0, 0, 0, 0, 0, 3, 50
 bits\search.tsx, TypeScript React, 46, 0, 0, 0, 0, 0, 0, 3, 49
-bits\store.tsx, TypeScript React, 37, 0, 0, 0, 0, 0, 0, 5, 42
+bits\store.tsx, TypeScript React, 44, 0, 0, 0, 0, 0, 0, 5, 49
 bits\tab.tsx, TypeScript React, 85, 0, 0, 0, 0, 0, 0, 9, 94
 bits\tailBar.tsx, TypeScript React, 43, 0, 0, 0, 0, 0, 2, 3, 48
-bits\userInfoList.tsx, TypeScript React, 74, 0, 0, 0, 0, 0, 0, 3, 77
-canvas.ts, TypeScript, 0, 84, 0, 0, 0, 0, 3, 16, 103
-cataPage\cataPage.css, CSS, 0, 0, 34, 0, 0, 0, 0, 0, 34
-cataPage\cataPage.tsx, TypeScript React, 127, 0, 0, 0, 0, 0, 0, 4, 131
-detail-panel.css, CSS, 0, 0, 14, 0, 0, 0, 4, 1, 19
-detail-panel.tsx, TypeScript React, 80, 0, 0, 0, 0, 0, 0, 9, 89
-fonts\proxima-nova.css, CSS, 0, 0, 42, 0, 0, 0, 0, 2, 44
-homePage\homePage.css, CSS, 0, 0, 243, 0, 0, 0, 25, 11, 279
-homePage\homePage.tsx, TypeScript React, 306, 0, 0, 0, 0, 0, 8, 14, 328
-index.css, CSS, 0, 0, 12, 0, 0, 0, 0, 2, 14
+bits\treeView.tsx, TypeScript React, 162, 0, 0, 0, 0, 0, 0, 8, 170
+bits\userInfoList.tsx, TypeScript React, 89, 0, 0, 0, 0, 0, 0, 3, 92
+canvas.ts, TypeScript, 0, 0, 84, 0, 0, 0, 3, 16, 103
+cataPage\cataPage.css, CSS, 0, 34, 0, 0, 0, 0, 0, 0, 34
+cataPage\cataPage.tsx, TypeScript React, 132, 0, 0, 0, 0, 0, 10, 5, 147
+commPage\communityPage.tsx, TypeScript React, 187, 0, 0, 0, 0, 0, 0, 10, 197
+detail-panel.css, CSS, 0, 15, 0, 0, 0, 0, 4, 1, 20
+detail-panel.tsx, TypeScript React, 307, 0, 0, 0, 0, 0, 3, 9, 319
+fonts\proxima-nova.css, CSS, 0, 42, 0, 0, 0, 0, 0, 2, 44
+homePage\homePage.css, CSS, 0, 243, 0, 0, 0, 0, 25, 11, 279
+homePage\homePage.tsx, TypeScript React, 303, 0, 0, 0, 0, 0, 23, 14, 340
+index.css, CSS, 0, 12, 0, 0, 0, 0, 0, 2, 14
 index.tsx, TypeScript React, 10, 0, 0, 0, 0, 0, 3, 3, 16
 logo.svg, XML, 0, 0, 0, 0, 1, 0, 0, 0, 1
 react-app-env.d.ts, TypeScript, 0, 0, 0, 0, 0, 0, 1, 1, 2
-render-editor.tsx, TypeScript React, 443, 0, 0, 0, 0, 0, 0, 48, 491
-render.tsx, TypeScript React, 738, 0, 0, 0, 0, 0, 50, 113, 901
-serviceWorker.ts, TypeScript, 0, 99, 0, 0, 0, 0, 31, 14, 144
+render-editor.tsx, TypeScript React, 592, 0, 0, 0, 0, 0, 23, 56, 671
+render.tsx, TypeScript React, 810, 0, 0, 0, 0, 0, 49, 113, 972
+serviceWorker.ts, TypeScript, 0, 0, 99, 0, 0, 0, 31, 14, 144
 signup-or-in.tsx, TypeScript React, 270, 0, 0, 0, 0, 0, 0, 17, 287
-upload-model.css, CSS, 0, 0, 6, 0, 0, 0, 0, 0, 6
-upload-model.tsx, TypeScript React, 487, 0, 0, 0, 0, 0, 10, 32, 529
+upload-model.css, CSS, 0, 6, 0, 0, 0, 0, 0, 0, 6
+upload-model.tsx, TypeScript React, 462, 0, 0, 0, 0, 0, 13, 37, 512
 userPage\edit-profile.tsx, TypeScript React, 255, 0, 0, 0, 0, 0, 6, 19, 280
-userPage\userPage.css, CSS, 0, 0, 17, 0, 0, 0, 1, 0, 18
-userPage\userPage.tsx, TypeScript React, 126, 0, 0, 0, 0, 0, 0, 6, 132
-utils\api.ts, TypeScript, 0, 322, 0, 0, 0, 0, 41, 59, 422
-utils\mock.ts, TypeScript, 0, 28, 0, 0, 0, 0, 0, 3, 31
-utils\utils.ts, TypeScript, 0, 22, 0, 0, 0, 0, 0, 3, 25
-Total, -, 3761, 592, 411, 76, 1, 443, 223, 776, 6283
+userPage\userPage.css, CSS, 0, 22, 0, 0, 0, 0, 1, 0, 23
+userPage\userPage.tsx, TypeScript React, 172, 0, 0, 0, 0, 0, 4, 9, 185
+utils\api.ts, TypeScript, 0, 0, 362, 0, 0, 0, 41, 68, 471
+utils\mock.ts, TypeScript, 0, 0, 44, 0, 0, 0, 0, 3, 47
+utils\utils.ts, TypeScript, 0, 0, 22, 0, 0, 0, 0, 3, 25
+Total, -, 5001, 417, 648, 76, 1, 443, 287, 854, 7727
