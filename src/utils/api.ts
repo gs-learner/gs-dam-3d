@@ -112,19 +112,19 @@ export const CatalogBound : Record<ModelCatalog, string[]> = {
     Characters:['/image/character.png','/image/cin.png',
     'This part contains many kinds of Characters models'],
     Dinosaurs:['/image/common.png','/image/cin.png',
-    'Dinosaurs, dragons, roar!'],
+    'This part contains many kinds of Dinosaurs models'],
     Food:['/image/common.png','/image/cin.png',
     'This part contains many kinds of Food models'],
     Items:['/image/car.png','/image/cin.png',
-    'This part contains many kinds of Cars models'],
+    'This part contains many kinds of Items models'],
     Metal:['/image/weapon.png','/image/cin.png',
-    'This part contains many kinds of Weapon models'],
+    'This part contains many kinds of Metal models'],
     Nature:['/image/weapon.png','/image/cin.png',
-    'This part contains many kinds of Weapon models'],
+    'This part contains many kinds of Nature models'],
     "Science&Tech":['/image/weapon.png','/image/cin.png',
-    'This part contains many kinds of Weapon models'],
+    'This part contains many kinds of Science&Tech models'],
     Sports:['/image/people.png','/image/cin.png',
-    'This part contains many kinds of People models'],
+    'This part contains many kinds of Sports models'],
     "Sci-fi":['/image/scifi.png','/image/cin.png',
     'This part contains many kinds of Sci-fi models'],
 }
@@ -321,6 +321,10 @@ function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to
 
 // APIs
 // -----------------------------------------------------------
+export async function APITotalModelNum(){
+    let res = await SendJSON('',{}) as StandardResponse<number>
+    return RefineResponse(res)
+}
 
 export async function APISignup(info: URegisterUser){
     let res = await SendJSON('/api/user/register', info) as StandardResponse<DUser>
