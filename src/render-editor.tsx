@@ -540,6 +540,15 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         if(renderConfig === null || lights === undefined) return;
         renderConfig.lights_schemes = lights.availableLightSchemes
         renderConfig.lights = Object.keys(lights.availableLightSchemes)
+        if(currentSkybox < 0) {
+            renderConfig.skybox = defaultSkybox
+        }
+        else {
+            const item = allSkybox.data[allSkyboxKeys[currentSkybox]]
+            if(item) {
+                renderConfig.skybox = item.path
+            }
+        }
         APIModelUpdateRenderConfig({
             url: model.url,
             config: renderConfig
