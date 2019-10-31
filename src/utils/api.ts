@@ -25,7 +25,9 @@ interface DCollection {
     models: string[]
 }
 
-
+interface DSkybox {
+    path: string
+}
 
 // D 打头代表Download/Data, 从服务器获取的数据
 export interface DUser {
@@ -340,6 +342,11 @@ export async function APIUpdateUserAvatar(info:{avatar:string /* base64 */}){
 export async function APIListModelsByUser(info: {username: string}) {
     let res = await SendJSON('/api/list/user/models', info) as StandardResponse<D3DModel[]>
     return RefineResponse(res)
+}
+
+export async function APIListSkybox() {
+    let res = await SendJSON('/api/list/skybox', {}) as StandardResponse<Record<string, DSkybox>>
+    return res;
 }
 
 export async function APIListRecommendedModels(){
