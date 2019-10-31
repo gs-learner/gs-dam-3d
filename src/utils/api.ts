@@ -356,10 +356,7 @@ export async function APIListModelsByUser(info: {username: string}) {
     return RefineResponse(res)
 }
 
-export async function APIListSkybox() {
-    let res = await SendJSON('/api/list/skybox', {}) as StandardResponse<Record<string, DSkybox>>
-    return res;
-}
+
 
 export async function APIListRecommendedModels(){
     let res = await SendJSON('/api/list/categories/recommend', {catalogs: AllModelCatalogs}) as StandardResponse<DRecommends>
@@ -440,10 +437,26 @@ export function StaticGetJsonFile<U>(url: string, onprogress: (progress_0_to_1: 
                 }
             }
         }
-        
         xhr.open('GET', url, true);
         xhr.send();
     })
+}
+
+interface DSkyboxItem {
+    path: string
+}
+interface DSkyboxList {
+    data: Record<string, DSkyboxItem>
+}
+
+export function MakeEmptySkyboxList():DSkyboxList {return{
+    data: {}
+}}
+
+export async function APIListSkybox() {
+    const res = await StaticGetJsonFile<DSkyboxList>('/static/skybox.json', ()=>{})
+    console.log('list skybox', res)
+    return res
 }
 
 // export async function APICheckUserExists(info:{username:string}){

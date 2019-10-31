@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { D3DModel, LightTypes, APIModelUpdatePreview, APIModelUpdateRenderConfig } from './utils/api'
+import { D3DModel, LightTypes, APIModelUpdatePreview, APIModelUpdateRenderConfig, MakeEmptySkyboxList, APIListSkybox } from './utils/api'
 import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
 import { MockModel } from './utils/mock'
@@ -16,11 +16,17 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Tooltip from '@material-ui/core/Tooltip'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControl from '@material-ui/core/FormControl';
+
 import FormLabel from '@material-ui/core/FormLabel';
 import PrettoSlider from './bits/pretto-slider';
 import SettingsIcon from '@material-ui/icons/Settings';
+
 import IconButton from '@material-ui/core/IconButton';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
@@ -444,6 +450,42 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     const [lightmoving, setLightmoving] = useState(true)
     const pro = useContext(profile);
     const [canvasBg, setCanvasBg] = useState('');
+    const [allSkybox, setAllSkybox] = useState(MakeEmptySkyboxList())
+    const [allSkyboxKeys, setAllSkyboxKeys] = useState(new Array<string>())
+    const [currentSkybox, setCurrentSkybox] = useState(-1)
+    const [defaultSkybox, setDefaultSkybox] = useState('')
+
+    const renderDone = ()=>{
+        if(handle) {
+            const cfg = handle.getRenderConfig()
+            if(cfg) {
+                setCurrentSkybox(-1)
+            }
+        }
+    }
+
+    const pickSkybox = (n :number) => {
+        if(!handle) return;
+        if(n === currentSkybox) return;
+        setCurrentSkybox(n)
+        if(n < 0) {
+            handle.setSkybox(defaultSkybox)
+        }
+        else {
+            const item = allSkybox.data[allSkyboxKeys[n]]
+            if(item) {
+                handle.setSkybox(item.path)
+            }
+        }
+    }
+
+    useEffect(()=>{
+        APIListSkybox().then(sk=>{
+            setAllSkybox(sk)
+            setAllSkyboxKeys(Object.keys(sk.data))
+            console.log(sk)
+        })
+    }, [])
 
     const updateHandle = (h: HandleType)=>{
         if(h) {
@@ -455,6 +497,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     useEffect(()=>{
         if(props.model) {
             setModel(props.model)
+
         }
     }, [props.model])
 
@@ -497,13 +540,20 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         if(renderConfig === null || lights === undefined) return;
         renderConfig.lights_schemes = lights.availableLightSchemes
         renderConfig.lights = Object.keys(lights.availableLightSchemes)
+        if(currentSkybox < 0) {
+            renderConfig.skybox = defaultSkybox
+        }
+        else {
+            const item = allSkybox.data[allSkyboxKeys[currentSkybox]]
+            if(item) {
+                renderConfig.skybox = item.path
+            }
+        }
         APIModelUpdateRenderConfig({
             url: model.url,
             config: renderConfig
         })
     }
-
-    
 
     return (
         <div style={{
@@ -575,6 +625,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                         openCtrl={openCtrl}
                         onhandle={updateHandle}
                         onlightmove={setLightmoving}
+                        onrerenderdone={renderDone}
                     />
                     <div className={classes.ctrl}>
                         <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
@@ -590,7 +641,27 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
                         :
                         null
                     }
+                    
                 </Grid>
+                <FormControl variant="outlined">
+                    <InputLabel htmlFor="pick-skybox">
+                        Skybox
+                    </InputLabel>
+                    <Select
+                    id="pick-skybox"
+                    value={currentSkybox}
+                    onChange={(e)=>pickSkybox(e.target.value as number)}
+                    >
+                    <MenuItem value={-1}>
+                        [Default]
+                    </MenuItem>
+                    {
+                    allSkyboxKeys.map((v, idx)=>{
+                        return <MenuItem key={idx} value={idx}>{v}</MenuItem>
+                    })
+                    }
+                    </Select>
+                </FormControl>
             </Grid>
             </ThemeProvider>
         </div>
