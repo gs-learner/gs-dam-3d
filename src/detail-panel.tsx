@@ -126,6 +126,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
                         <div id='canvas-frame'  className='canvas-frame' style={{
                             background:canvasBg,
                             borderRadius: '10px',
+                            overflow: 'hidden'
                             }}></div>
                         <Render 
                             onBgColor={seBgW} 
@@ -146,7 +147,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
                             {
                                 currentModel.comments.map((v,idx)=>{
                                     return(
-                                        <ListItem alignItems="flex-start">
+                                        <ListItem alignItems="flex-start" key={idx}>
                                             <ListItemAvatar>
                                             <Avatar alt="Remy Sharp" src="image/avater.jpg" />
                                             </ListItemAvatar>

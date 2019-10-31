@@ -48,7 +48,6 @@ const useStyles =  makeStyles((theme: Theme)=>({
         position: 'absolute',
         left: 0,
         top: 0,
-        zIndex: 99999
     },
     paper: {
         padding: theme.spacing(2, 2),
@@ -329,7 +328,7 @@ const Render : React.FC<P> = (props)=>{
                 >
                 </PrettoSlider>
                 <Typography variant='subtitle2'>
-                    Control Rotate Speed
+                    Mouse Sensitivity
                 </Typography>
                 <PrettoSlider
                     valueLabelDisplay="auto"
@@ -343,6 +342,7 @@ const Render : React.FC<P> = (props)=>{
                     className={classes.slider}
                 >
                 </PrettoSlider>
+            
             <Grid item xs>
             <FormControl variant="filled" className={classes.select}>
                 <InputLabel htmlFor={`${props.frameid}-light-scheme`}>Light Scheme</InputLabel>

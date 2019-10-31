@@ -4,9 +4,9 @@ import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
 import { MockModel } from './utils/mock'
 import {profile} from './bits/store';
-
+import SearchAppBar from './bits/miniSearch';
 import { ChromePicker } from 'react-color'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles, createStyles, Theme, createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -35,6 +35,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CameraEnhanceIcon from '@material-ui/icons/CameraEnhance';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { lightBlue,orange } from '@material-ui/core/colors'
 
 const useLightStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,6 +64,19 @@ const useLightStyles = makeStyles((theme: Theme) =>
     }
   }),
 );
+
+const theme = createMuiTheme({
+    palette: {
+        type: 'dark',
+      primary: lightBlue,
+      secondary: orange,
+      background: {
+        default: '#2a2d35',
+        paper: '#2a2d35',
+      }
+    },
+    
+  })
 
 interface LightControlProps {
     lights: LightManager
@@ -93,7 +107,7 @@ const actions: ({name:LightTypes, icon:any})[] = [
 type PosArr = [number, number, number]
 const LightControl : React.FC<LightControlProps> = (props)=>{
     const [controlLevel, setControlLevel] = useState(0)
-    const [expanded, setExpanded] = useState(false)
+    // const [expanded, setExpanded] = useState(false)
     const [lightsarr, setLightsArr] = useState([...props.lights.lights])
     const classes = useLightStyles();
     const [selected, setSelected] = useState(0)
@@ -174,35 +188,39 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
 
     
     return (
-    <ExpansionPanel expanded={expanded} onChange={()=>setExpanded(!expanded)}>
-        <ExpansionPanelSummary
+    // <ExpansionPanel expanded={expanded} onChange={()=>setExpanded(!expanded)}>
+    <div>
+        {/* <ExpansionPanelSummary
         aria-controls="panel-render-lights"
         id="panel-render-lights"
         expandIcon={<ExpandMoreIcon />}
         >
             <Typography className={classes.heading}>Lighting</Typography>
             <Typography className={classes.secondaryHeading}>Tweak Lights or turn on more lights</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        </ExpansionPanelSummary> */}
 
+        <ExpansionPanelDetails>
             <Grid
             container
-            direction="row"
             justify="flex-start"
             alignItems="flex-start"
+            spacing = {3}
             >
             {
             controlLevel>=0?
-                <Grid item xs>
-                <ChromePicker color={color} 
+                <Grid item xs={12}>
+                <ChromePicker 
                 styles={{
                     default:{
-                        picker: {
-                            width: '100%'
+                        picker:{
+                            width:'100%',
+                        },
+                        body:{
+                            backgroundColor:'#31343C',
                         }
                     }
                 }}
-                onChange={e=>{
+                color={color} onChange={e=>{
                     setColor({...e.rgb})
                     props.lights.editColor(e.rgb.r / 255.0, e.rgb.g / 255.0, e.rgb.b / 255.0)
                     
@@ -317,28 +335,32 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
             </Grid>
 
 
-            <Grid item xs >
-            <FormControl component="fieldset">
-                <FormLabel component="legend">Pick Lights in the Scene</FormLabel>
-                <RadioGroup aria-label="pick-lights" 
-                    name="pick-lights" value={selected} 
-                    onChange={(e, v)=>{
-                        SetEditingLight(Number(v))
-                        
-                    }}>
-                    {
-                        lightsarr.map((v, idx)=>{
-                            const info = props.lights.lightsTypeinfo[idx]
-                            return(
-                            <FormControlLabel key={idx} value={idx} control={<Radio />} label={'#'+idx.toString() + ' ' + info.type} />
-                        )})
-                    }
-                </RadioGroup>
-            </FormControl> 
+            <Grid item xs={8}>
+                <div style={{
+                    paddingLeft:'30px',
+                }}>
+                    <FormControl component="fieldset">
+                        <FormLabel component="legend">Pick Lights in the Scene</FormLabel>
+                        <RadioGroup aria-label="pick-lights" 
+                            name="pick-lights" value={selected} 
+                            onChange={(e, v)=>{
+                                SetEditingLight(Number(v))
+                                
+                            }}>
+                            {
+                                lightsarr.map((v, idx)=>{
+                                    const info = props.lights.lightsTypeinfo[idx]
+                                    return(
+                                    <FormControlLabel key={idx} value={idx} control={<Radio />} label={'#'+idx.toString() + ' ' + info.type} />
+                                )})
+                            }
+                        </RadioGroup>
+                    </FormControl> 
+                </div>
             </Grid>
 
 
-            <Grid item xs >
+            <Grid item xs={12}>
                 <Grid
                     container
                     direction="column"
@@ -396,7 +418,8 @@ const LightControl : React.FC<LightControlProps> = (props)=>{
                 </Grid>
             </Grid>
             </ExpansionPanelDetails>
-        </ExpansionPanel>
+            </div>
+        // </ExpansionPanel>
     )
 }
 
@@ -413,7 +436,6 @@ const useStyles = makeStyles((theme:Theme)=>({
 }));
 
 const RenderEditor: React.FC<EditProps> = (props)=>{
-    const NotImplFn = ()=>{}
     const classes = useStyles();
     const [handle, setHandle] = useState<HandleType>()
     const [lights, setLights] = useState<LightManager>()
@@ -421,6 +443,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     const [openCtrl, setOpenCtrl] = useState(false)
     const [lightmoving, setLightmoving] = useState(true)
     const pro = useContext(profile);
+    const [canvasBg, setCanvasBg] = useState('');
 
     const updateHandle = (h: HandleType)=>{
         if(h) {
@@ -483,55 +506,94 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     
 
     return (
-        <Grid container>
-            <Grid item xs={12} md={8}>
-                <div className='canvas-frame-wrapper'>
-                <div id='edit-frame'  className='canvas-frame'>
-                    
-                </div>
-                <Render 
-                    onBgColor={NotImplFn} 
-                    model={model}
-                    frameid='edit-frame'
-                    openCtrl={openCtrl}
-                    onhandle={updateHandle}
-                    onlightmove={setLightmoving}
-                />
-                <div className={classes.ctrl}>
-                    <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
-                        <SettingsIcon />
-                    </IconButton>
-                </div>
-                </div>
+        <div style={{
+            backgroundColor:'#1E2227',
+            color:'white',
+        }}>
+            <SearchAppBar/>
+            <ThemeProvider theme={theme}>
+            <div style={{
+                height:'20px'
+            }}></div>
+            <Grid container>
+                <Grid item xs={12} md={2}>
+                    <div style={{padding: 10}}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <div style={{
+                                textAlign:'center'
+                            }}>
+                                <Button fullWidth variant="outlined" color="primary" startIcon={<CloudUploadIcon/>} onClick={updateRenderConfig}>
+                                    Submit config
+                                </Button>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <div style={{
+                                textAlign:'center'
+                            }}>
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    color="primary"
+                                    startIcon={<CameraEnhanceIcon />}
+                                    onClick={updateSnapshot}
+                                >
+                                        Update As Preview
+                                </Button>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <div style={{
+                                textAlign:'center'
+                            }}>
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    color="primary"
+                                    startIcon={<SaveIcon />}
+                                    onClick={downloadSnapshot}
+                                >
+                                    Download Snapshot
+                                </Button>
+                            </div>
+                        </Grid>
+                    </Grid>
+                    </div>
+                </Grid>
+                <Grid item xs={12} md={7}>
+                    <div className='canvas-frame-wrapper'>
+                    <div id='edit-frame'  className='canvas-frame' style={{
+                        background:canvasBg,
+                        borderRadius: '10px',
+                        overflow: 'hidden'
+                    }}></div>
+                    <Render 
+                        onBgColor={setCanvasBg} 
+                        model={model}
+                        frameid='edit-frame'
+                        openCtrl={openCtrl}
+                        onhandle={updateHandle}
+                        onlightmove={setLightmoving}
+                    />
+                    <div className={classes.ctrl}>
+                        <IconButton onClick={()=>setOpenCtrl(!openCtrl)} size='small' color='inherit'>
+                            <SettingsIcon />
+                        </IconButton>
+                    </div>
+                    </div>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                    {
+                        lights ?
+                        <LightControl lights={lights} lightmoving={lightmoving}/>
+                        :
+                        null
+                    }
+                </Grid>
             </Grid>
-            <Grid item xs={12} md={4}>
-                {
-                    lights ?
-                    <LightControl lights={lights} lightmoving={lightmoving}/>
-                    :
-                    null
-                }
-                <Button variant="outlined" color="primary" startIcon={<CloudUploadIcon/>} onClick={updateRenderConfig}>
-                    Submit
-                </Button>
-                <Button
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<CameraEnhanceIcon />}
-                    onClick={updateSnapshot}
-                >
-                        Update As Preview
-                </Button>
-                <Button
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<SaveIcon />}
-                    onClick={downloadSnapshot}
-                >
-                    Download Snapshot
-                </Button>
-            </Grid>
-        </Grid>
+            </ThemeProvider>
+        </div>
     )
 }
 
