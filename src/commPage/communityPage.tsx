@@ -4,14 +4,14 @@ import EnhancedTable from '../bits/billTable';
 import {D3DModel, DCommunity} from '../utils/api';
 import {D3DModels, Package} from '../homePage/homePage';
 import { MockModel, MockCommnunity } from '../utils/mock'
-import { Grid, createMuiTheme, IconButton, Paper } from '@material-ui/core';
+import { Grid, createMuiTheme, IconButton, Paper, createStyles } from '@material-ui/core';
 import { lightBlue, orange } from '@material-ui/core/colors';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider, withStyles } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar'
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs, { TabsProps } from '@material-ui/core/Tabs';
+import Tab, { TabProps } from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { profile } from '../bits/store';
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         maxHeight:'calc(100vh - 104px)',
       flexGrow: 1,
       width: '100%',
-      backgroundColor: theme.palette.background.paper,
+      // backgroundColor: theme.palette.background.paper,
     },
     button: {
         margin: theme.spacing(1),
@@ -81,6 +81,44 @@ return {
     'aria-controls': `scrollable-auto-tabpanel-${index}`,
 };
 }
+
+interface StyledTabsProps {
+    value: number;
+    onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
+  }
+  
+  const StyledTabs = withStyles({
+    indicator: {
+      display: 'flex',
+      justifyContent: 'center',
+      backgroundColor: 'transparent',
+      '& > div': {
+        maxWidth: 40,
+        width: '100%',
+        backgroundColor: '#635ee7',
+      },
+    },
+  })((props: TabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
+  
+  interface StyledTabProps {
+    label: string;
+  }
+  
+  const StyledTab = withStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        textTransform: 'none',
+        color: '#fff',
+        fontWeight: theme.typography.fontWeightRegular,
+        fontSize: theme.typography.pxToRem(15),
+        marginRight: theme.spacing(1),
+        '&:focus': {
+          opacity: 1,
+        },
+      },
+    }),
+  )((props: TabProps) => <Tab disableRipple {...props} />);
+  
 const FolderContent:React.FC=()=>{
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
@@ -89,24 +127,25 @@ const FolderContent:React.FC=()=>{
         setValue(newValue);
     };
 
-
     return(
         <div className={classes.root}>
-            <AppBar position="static" color="default">
-                <Tabs
+            <AppBar position="static" color="default" style={{
+                backgroundColor: '#11001100'
+            }}>
+                <StyledTabs
                 value={value}
-                onChange={handleChange}
+                onChange={handleChange as any}
                 indicatorColor="primary"
                 textColor="primary"
                 variant="scrollable"
                 scrollButtons="auto"
-                aria-label="scrollable auto tabs example"
+                aria-label="tabs"
                 >
-                <Tab label="Item One" {...a11yProps(0)} />
-                <Tab label="Item Two" {...a11yProps(1)} />
-                <Tab label="Item Three" {...a11yProps(2)} />
-                <Tab label="Item Four" {...a11yProps(3)} />
-                </Tabs>
+                <StyledTab label="Models" {...a11yProps(0)} />
+                <StyledTab label="Todos" {...a11yProps(1)} />
+                <StyledTab label="TS" {...a11yProps(2)} />
+                <StyledTab label="Item Four" {...a11yProps(3)} />
+                </StyledTabs>
             </AppBar>
             <TabPanel value={value} index={0}>
                 <Resource D3DModels={[MockModel(),MockModel(),MockModel()]}/>
