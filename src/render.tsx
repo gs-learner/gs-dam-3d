@@ -97,6 +97,7 @@ interface P {
     onlightscheme?: (lightman: LightManager)=>any
     edit?: boolean // it only matters when first render, change it on runtime won't work!
     onlightmove?: (moving:boolean)=>any
+    onrerenderdone?:()=>any
 }
 
 
@@ -161,6 +162,9 @@ const Render : React.FC<P> = (props)=>{
                 setProgressStatus([...progressStatus, what]);
             }, setBackground, ()=>{
                 setHideprogress(true)
+                if(props.onrerenderdone) {
+                    props.onrerenderdone()
+                }
             })
             console.log('rerender')
         }

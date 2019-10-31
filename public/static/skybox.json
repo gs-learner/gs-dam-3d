@@ -1,28 +1,28 @@
 {
     "data": {
         "Cloudy Sky": {
-            "path": "static/skybox/2.Cloudy Sky/"
+            "path": "/static/skybox/2.CloudySky/"
         },
         "Dawn": {
-            "path": "static/skybox/3.Dawn/"
+            "path": "/static/skybox/3.Dawn/"
         },
         "Sky & Lake": {
-            "path": "static/skybox/4.Sky & Lake/"
+            "path": "/static/skybox/4.SkyLake/"
         },
         "Glorious Pink": {
-            "path": "static/skybox/5.Sky & Lake"
+            "path": "/static/skybox/5.GloriousPink/"
         },
         "Moon Light": {
-            "path": "static/skybox/6.Moonlight"
+            "path": "/static/skybox/6.Moonlight/"
         },
         "Earth in Cosmos": {
-            "path": "static/skybox/7"
+            "path": "/static/skybox/7/"
         },
         "Lake": {
-            "path": "static/skybox/lake"
+            "path": "/static/skybox/lake/"
         },
         "Plants": {
-            "path": "static/skybox/plants"
+            "path": "/static/skybox/plants/"
         }
     }
 }
