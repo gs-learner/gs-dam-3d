@@ -632,6 +632,7 @@ export class LightManager {
         }
         if(newL) {
             this.lights.push(newL)
+            this.scene.add(newL)
         }
         this.lightsTypeinfo.push({
             type: light,

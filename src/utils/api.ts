@@ -85,6 +85,8 @@ export interface DCommunity {
     members: DUser[]
     document: string
     todos: Record<string, DModelTodo>
+    models: D3DModel[]
+    notice: string
 }
 
 // Hardcoded Catalog & render configs

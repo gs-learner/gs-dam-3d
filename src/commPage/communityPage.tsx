@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import SearchAppBar from '../bits/miniSearch';
 import EnhancedTable from '../bits/billTable';
 import {D3DModel, DCommunity} from '../utils/api';
@@ -35,6 +35,8 @@ const theme = createMuiTheme({
 })
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
+        minHeight:'calc(100vh - 104px)',
+        maxHeight:'calc(100vh - 104px)',
       flexGrow: 1,
       width: '100%',
       backgroundColor: theme.palette.background.paper,
@@ -54,16 +56,22 @@ function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
     
     return (
-        <Typography
+        <Paper
         component="div"
         role="tabpanel"
         hidden={value !== index}
         id={`scrollable-auto-tabpanel-${index}`}
         aria-labelledby={`scrollable-auto-tab-${index}`}
         {...other}
+        style={{
+            maxHeight: 'calc(100% - 48px)',
+            overflowY: 'auto',
+            boxShadow: 'none',
+            overflowX: 'hidden'
+        }}
         >
-        <Box p={3}>{children}</Box>
-        </Typography>
+        <Box p={3} >{children}</Box>
+        </Paper>
     );
 }
     
@@ -119,7 +127,9 @@ const FolderContent:React.FC=()=>{
 const useBriefingStyle = makeStyles((theme: Theme)=>({
     paper: {
         padding: theme.spacing(2),
-        backgroundColor: '#303237'
+        backgroundColor: '#303237',
+        fontFamily: 'Proxima Nova',
+        transition: 'height 1s'
     },
     avatarWrapper: {
         marginLeft: theme.spacing(2),
@@ -129,6 +139,31 @@ const useBriefingStyle = makeStyles((theme: Theme)=>({
         marginLeft: -14,
         border: '3px solid #42454c',
         boxShadow: '0px 2px 2px 0px rgba(0,0,0,0.2)'
+    },
+    typo: {
+        fontFamily: 'Proxima Nova'
+    },
+    subtitle: {
+        fontFamily: 'Proxima Nova',
+        color: 'rgba(200, 221, 255, 0.15)'
+    },
+    body: {
+        fontFamily: 'Proxima Nova',
+        color: 'rgba(210, 221, 255, 0.55)'
+    },
+    seperator1: {
+        height: theme.spacing(1)
+    },
+    notice: {
+        backgroundColor: '#323542',
+        padding: theme.spacing(2),
+        boxShadow: '0px 2px 6px 0px rgba(16, 32, 40,0.15)'
+    },
+    em: {
+        fontWeight: 'bold'
+    },
+    title: {
+        color: 'rgba(210, 221, 255, 0.7)'
     }
 }));
 
@@ -137,27 +172,87 @@ interface BriefingProps {
 }
 
 const Briefing: React.FC<BriefingProps> = (props) => {
-    const theuser = props.community.members.slice(0, 5)
+    const theuser = props.community.members.slice(0, 6)
     const classes = useBriefingStyle()
-
+    const [showEasternEgg, setShowEasternEgg] = useState(false)
+    
     return (
         <Paper className={classes.paper}>
-            <Typography variant='h5'>
+            <Typography variant='h5' className={classes.typo}>
                 {props.community.name}
             </Typography>
-            <Grid container className={classes.avatarWrapper}>
-            {
-            theuser.map((v, idx)=>{return(
-                <Grid key={idx} item>
-                <Avatar key={idx} alt={v.username} src={v.avatar} className={classes.avatar}/>
+            <Grid container direction="column">
+
+                <Grid item className={classes.seperator1}/>
+
+                <Grid item xs={12}>
+                <Grid container className={classes.avatarWrapper}>
+                {
+                theuser.map((v, idx)=>{return(
+                    <Grid key={idx} item>
+                    <Avatar key={idx} alt={v.username} src={v.avatar} className={classes.avatar}/>
+                    </Grid>
+                )})
+                }
                 </Grid>
-            )})
-            }
+                </Grid>
+                <Grid item xs={12}>
+                <Typography variant='subtitle2' className={classes.subtitle}>
+                    {props.community.members.length} contributors
+                </Typography>
+                </Grid>
+
+                <Grid item className={classes.seperator1}/>
+
+                <Grid item xs={12}>
+                {
+                    <Typography variant='subtitle1' className={classes.body}>
+                    {props.community.introduction}
+                    </Typography>
+                }
+                </Grid>
+
+                <Grid item className={classes.seperator1}/>
+                <Grid item className={classes.seperator1}/>
+
+                <Grid item xs={12}>
+                    <Paper className={classes.notice} onDoubleClick={()=>setShowEasternEgg(!showEasternEgg)}>
+                    <Typography variant='h6' className={classes.body}>
+                    {props.community.notice}
+                    </Typography>
+                    </Paper>
+                    
+                </Grid>
+                {
+                    showEasternEgg ?
+                    <Grid item className={classes.seperator1}/>
+                    :null
+                }
+                
+                {
+                    showEasternEgg ?
+                    <Grid item xs={12}>
+                        <Typography variant='h6' className={classes.title}>
+                            Authors
+                        </Typography>
+                        <Typography variant='subtitle1' className={classes.body}>
+                            - All mighty great incredible cleverest human being, light of Dept. CS <span className={classes.em}>ZZP</span>
+                        </Typography>
+                        <Typography variant='subtitle1' className={classes.body}>
+                            - CSS Guru  <span className={classes.em}>GXY</span>
+                        </Typography>
+                        <Typography variant='subtitle1' className={classes.body}>
+                            - Red sun, Celestial  <span className={classes.em}>WSH</span>
+                        </Typography>
+                        <Typography variant='subtitle1' className={classes.body}>
+                            - Lowest common denominator  <span className={classes.em}>LZW</span>
+                        </Typography>
+                    </Grid>
+                    :null
+                }
+                
+
             </Grid>
-            <div>
-            
-            </div>
-            
         </Paper>
     )
 }
@@ -171,14 +266,16 @@ const Resource:React.FC<D3DModels>=(props)=>{
     return(
         <div style={{
             padding:'20px',
+            
         }}>
             <Grid container spacing={2}>
                 {
                     props.D3DModels.map((v,idx)=>{
                         return(
-                            <Grid item key={idx} xs={2} md={4} lg={3} xl={2}>
+                            <Grid item key={idx} xs={2} md={6} lg={4} xl={2}>
                                 <div style={{
                                     position:'relative',
+                                    color:'black',
                                 }}>
                                     <div className="editButtons">
                                     <IconButton className={classes.button} aria-label="edit" size='small' color="primary"
@@ -204,33 +301,41 @@ const Resource:React.FC<D3DModels>=(props)=>{
 const BodyCommPage:React.FC=()=>{
     const community = MockCommnunity();
     return(
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column'
+            }}
+        >
+
+        
         <div style={{
-            paddingBottom:'40px',
+            paddingBottom:'20px',
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
         }}>
-            <Grid container>
-                <Grid item xs={12} md={4}>
-                    <div style={{
-                        padding:'20px'
-                    }}>
-                        <Briefing community={community}/>
-                    </div>
-                </Grid>
-                <Grid item xs={12} md={10}>
-                    <div style={{
-                        paddingRight:'20px',
-                        paddingLeft:'40px',
-                    }}>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <BillBoard/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FolderContent/>
-                            </Grid>
-                        </Grid>
-                    </div>
-                </Grid>
+        <Grid container>
+            <Grid item xs={12} md={4} xl={3}>
+                <div style={{
+                    padding:'20px'
+                }}>
+                    <Briefing community={community}/>
+                </div>
             </Grid>
+            <Grid item xs={12} md={8} xl={9}>
+                <div style={{
+                    paddingRight:'20px',
+                    paddingLeft:'40px',
+                    paddingTop: '20px',
+                }}>
+                    <Grid container>
+                        <FolderContent/>
+                    </Grid>
+                </div>
+            </Grid>
+        </Grid>
+        </div>
         </div>
     )
 }
@@ -239,12 +344,13 @@ export const CommPage:React.FC=()=>{
     return(
         <div style={{
             backgroundColor:'rgb(36,36,36)',
+            boxSizing: 'border-box',
         }}>
             <SearchAppBar/>
             <ThemeProvider theme={theme}>
                 <BodyCommPage/>
             </ThemeProvider>
-            <TailBar/>
+            
         </div>
     )
 }

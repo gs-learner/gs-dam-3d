@@ -21,6 +21,10 @@ export function MockCommnunity():DCommunity {
     for(let i =0; i < 10; ++i) {
         members.push(MockUser(i))
     }
+    const models = new Array<D3DModel>()
+    for(let i = 0; i < 12; ++i) {
+        models.push(MockModel())
+    }
     return {
         name: 'Mock Commnuity',
         introduction: 'This is an community enthusiastically designing poops. We really want to recruit someone who appreciates poops to join us',
@@ -39,7 +43,9 @@ export function MockCommnunity():DCommunity {
                 claimed: [],
                 done: false
             }
-        }
+        },
+        models: models,
+        notice: 'Keep calm and carry on! 😀'
     }
 }
 
