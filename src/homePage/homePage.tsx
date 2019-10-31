@@ -180,11 +180,11 @@ export const Package: React.FC<D3DModel>=(props)=>{
                 <div className="icon-mask"  >
                     <div className="zoom-icon"><ZoomInIcon htmlColor='white' fontSize='large'/></div>
                     <div className="bigger-img">
-                        <img src={props.url+'/'+'preview.png'} alt={props.name}></img>
+                        <img src={props.url+'/preview.png'} alt={props.name}></img>
                         <h2>{props.name}</h2>
                     </div>
                 </div>
-                <img className="small-img" src={props.url+'/'+'preview.png'} alt={props.name}></img>
+                <img className="small-img" src={props.url+'/preview.png'} alt={props.name}></img>
             </div>
             <div className="Package-down">
                 <div>

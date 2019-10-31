@@ -458,12 +458,37 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         }
     }, [props.model])
 
+    const downloadSnapshot = ()=>{
+        if(!handle) return;
+        if(!model) return;
+        const preview = handle.snapshot(2000, 1200)
+        const link = document.createElement('a');
+        link.download = `${model.name}-preview.2000x1200.png`;
+        link.href = preview;
+        link.click();
+    }
+
     const updateSnapshot = ()=>{
         if(!handle) return;
         if(!model) return;
         const preview = handle.snapshot(1000, 600)
         APIModelUpdatePreview({url: model.url, preview: preview})
     }
+
+    // const blendedSnapshot = (w:number, h:number)=>{
+    //     if(!handle) return;
+    //     if(!model) return;
+    //     const preview = handle.snapshot(1000, 600)
+    //     const canvas = document.createElement('canvas');
+    //     const ctx = canvas.getContext('2d')
+    //     canvas.width = w;
+    //     canvas.height = h;
+    //     const img1 = document.createElement('img')
+    //     img1.src = preview
+    //     img1.onload = ()=>{
+    //         
+    //     }
+    // }
 
     const updateRenderConfig = ()=>{
         if(!handle) return;
@@ -478,15 +503,7 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
         })
     }
 
-    const downloadSnapshot = ()=>{
-        if(!handle) return;
-        if(!model) return;
-        const preview = handle.snapshot(2000, 1200)
-        const link = document.createElement('a');
-        link.download = `${model.name}-preview.2000x1200.png`;
-        link.href = preview;
-        link.click();
-    }
+    
 
     return (
         <div style={{

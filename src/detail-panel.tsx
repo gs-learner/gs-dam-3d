@@ -9,8 +9,13 @@ import { MockModel } from './utils/mock'
 import {makeStyles, Theme, ThemeProvider} from '@material-ui/core/styles'
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton'
-import { Button, Divider, ListItemText, ListItem, ListItemAvatar, Avatar, List, Typography } from '@material-ui/core'
-import QueueIcon from '@material-ui/icons/Queue';
+import Button from '@material-ui/core/Button'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import Avatar from '@material-ui/core/Avatar'
+import List from '@material-ui/core/List'
+import Typography from '@material-ui/core/Typography'
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import TimelapseOutlinedIcon from '@material-ui/icons/TimelapseOutlined';
 import FormatListBulletedOutlinedIcon from '@material-ui/icons/FormatListBulletedOutlined';

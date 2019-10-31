@@ -328,6 +328,21 @@ const Render : React.FC<P> = (props)=>{
                     className={classes.slider}
                 >
                 </PrettoSlider>
+                <Typography variant='subtitle2'>
+                    Control Rotate Speed
+                </Typography>
+                <PrettoSlider
+                    valueLabelDisplay="auto"
+                    onChange={(e:any, v:any)=>{
+                        if(handle) { 
+                            handle.setControlRotateSpeed(v)
+                        }
+                    }} 
+                    defaultValue={10}
+                    max={15} min={1} step={0.1}
+                    className={classes.slider}
+                >
+                </PrettoSlider>
             <Grid item xs>
             <FormControl variant="filled" className={classes.select}>
                 <InputLabel htmlFor={`${props.frameid}-light-scheme`}>Light Scheme</InputLabel>
@@ -406,7 +421,7 @@ export class LightManager {
         const arr = this.exportScheme()
         this.availableLightSchemes = {
             ...this.availableLightSchemes,
-            scheme: arr
+            [scheme]: arr
         };
         this._callOnlightscheme();
     }
@@ -942,7 +957,11 @@ return {
         if(objectScene) {
             objectScene.setRotationFromAxisAngle(_yAxis, n)
         }
-    }
+    },
+    setControlRotateSpeed: (n:number)=>{
+        control.rotateSpeed = n;
+    },
+    setSkybox: setSkybox
 }
 
 

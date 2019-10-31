@@ -4,7 +4,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import SearchAppBar from '../bits/miniSearch';
 import {D3DModel, APIListModelsByUser} from '../utils/api';
 import './cataPage.css'
-import {Package, iconInfos, preViewPackages,D3DModels,} from '../homePage/homePage';
+import {Package, iconInfos, D3DModels,} from '../homePage/homePage';
 import {CenterPanel} from '../bits/centerPanel'
 import { Divider } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';

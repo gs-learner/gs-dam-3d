@@ -5,7 +5,7 @@ import Dropzone from 'react-dropzone'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles, Theme, withStyles, lighten } from '@material-ui/core/styles';
-import { DisplayFileSize, toBase64 } from './utils/utils'
+import { toBase64 } from './utils/utils'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { MakeDefaultRenderConfig, APIUploadModel, AllModelCatalogs } from './utils/api'
 import TextField from '@material-ui/core/TextField';
@@ -15,17 +15,18 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button'
-import Chip from '@material-ui/core/Chip'
-import CloseIcon from '@material-ui/icons/Close';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import clsx from 'clsx';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import './upload-model.css'
-import {  deepOrange, lightBlue } from '@material-ui/core/colors'
-import { Stepper,StepConnector,Step,StepLabel } from '@material-ui/core'
+import {  deepOrange } from '@material-ui/core/colors'
 
 interface WaitingItemProps {
     file: File
@@ -40,18 +41,18 @@ const useWaitingStyle = makeStyles((theme: Theme) => ({
     paper: {
         whiteSpace: 'normal',
         overflow: 'hidden',
-        // marginBottom: theme.spacing(1),
-        // padding:'10px',
+        border: `1px solid ${theme.palette.primary.light}`,
+        marginTop: theme.spacing(1),
+        position: 'relative',
+        boxShadow: 'none'
     },
     textField: {
         marginTop: theme.spacing(2),
         marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
         marginBottom:theme.spacing(1),
     },
     formControl: {
         marginTop: theme.spacing(2),
-        marginLeft:theme.spacing(2),
         marginRight:theme.spacing(2),
         marginBottom:theme.spacing(1),
         minWidth: 120,
@@ -59,23 +60,31 @@ const useWaitingStyle = makeStyles((theme: Theme) => ({
     progressBar: {
         height: 25,
         //backgroundColor: theme.palette.secondary.dark
-    }
+    },
+    backProgressBar: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+        height: '100%'
+    },
   }));
 
   
 
   const ColorLinearProgress = withStyles((theme:Theme)=>({
     colorSecondary:{
-      backgroundColor: deepOrange[100],
+      backgroundColor: deepOrange[50],
     },
     barColorSecondary:{
-        backgroundColor:deepOrange[300],
+        backgroundColor:deepOrange[100],
     },
     colorPrimary: {
-      backgroundColor: lighten(theme.palette.primary.light,0.3),
+      backgroundColor: lighten(theme.palette.primary.light,0.92),
     },
     barColorPrimary: {
-      backgroundColor: lighten(theme.palette.primary.main, 0.3),
+      backgroundColor: lighten(theme.palette.primary.main, 0.65),
     },
   }))(LinearProgress);
 
@@ -156,68 +165,44 @@ const WaitingItem: React.FC<WaitingItemProps> = (props)=>{
     }, []);
 
     return(
-        <Paper className={classes.paper}>
-            <TextField
-                id="outlined-uncontrolled"
-                label="Name of the Model"
-                defaultValue="foo"
-                className={classes.textField}
-                // margin="normal"
-                variant="outlined"
-                value={name}
-                onChange={e=>setName(e.target.value)}
-                margin="dense"
-            />
-            <FormControl variant="outlined" margin="dense" className={classes.formControl}>
-                <InputLabel ref={inputLabel} htmlFor="outlined-catagory-simple">
-                    Catagory
-                </InputLabel>
-                <Select
-                value={catagory}
-                onChange={(e)=>setCatagory(Number(e.target.value))}
-                labelWidth={labelWidth}
-                inputProps={{
-                    name: 'Catagory',
-                    id: 'outlined-catagory-simple',
-                }}
-                >
-                {
-                    AllModelCatalogs.map((v, idx)=>{return(
-                        <MenuItem value={idx} key={idx}>{v}</MenuItem>
-                    )})
-                }
-                </Select>
-            </FormControl>
-            <Grid container spacing={3}>
-                <Grid item xs>
-                    <div style={{position:'relative',height:'10px', zIndex:100000,color:'white',fontWeight:'bold'}}>
-                        <div style={{position:'absolute',top:'12px'}}>
-                            <Typography variant='subtitle2'>
-                                <div style={{paddingLeft:'10px',paddingRight:'10px'}}>
-                                    {DisplayFileSize(props.file.size)}
-                                </div>
-                            </Typography>
-                        </div>
-                    </div>
+        <Paper className={classes.paper} style={{borderColor: (overState && !isloaded)?deepOrange[500]:''}}>
+            <Grid container>
+            <ColorLinearProgress className={classes.backProgressBar} variant="determinate" value={completed} color={isloaded?'primary':'secondary'}/>
+                <Grid item xs={12} md={8}>
+                <TextField
+                    id="outlined-uncontrolled"
+                    label="Name"
+                    defaultValue="foo"
+                    className={classes.textField}
+                    variant="outlined"
+                    value={name}
+                    onChange={e=>setName(e.target.value)}
+                    margin="dense"
+                />
                 </Grid>
-                <Grid item xs>
-                    <div style={{position:'relative',height:'10px', zIndex:100000,color:'white',fontWeight:'bold'}}>
-                        <div style={{position:'absolute',top:'12px',width:'100%'}}>
-                            <div style={{float:'right'}}>
-                            <Typography variant='subtitle2'>
-                                <div style={{paddingLeft:'10px',paddingRight:'10px'}}>
-                                    {overState?(isloaded?
-                                        (<img src='/image/right.png' alt='avatar' width='20px' height='20px'></img>)
-                                        :(<img src='/image/wrong.png' alt='avatar' width='20px' height='20px'></img>))
-                                        :''}
-                                </div>
-                            </Typography>
-                            </div>
-                        </div>
-                    </div>
+                <Grid item xs={12} md={4}>
+                <FormControl variant="outlined" margin="dense" className={classes.formControl}>
+                    <InputLabel ref={inputLabel} htmlFor="outlined-catagory-single">
+                        Catagory
+                    </InputLabel>
+                    <Select
+                    value={catagory}
+                    onChange={(e)=>setCatagory(Number(e.target.value))}
+                    labelWidth={labelWidth}
+                    inputProps={{
+                        name: 'Catagory',
+                        id: 'outlined-catagory-single',
+                    }}
+                    >
+                    {
+                        AllModelCatalogs.map((v, idx)=>{return(
+                            <MenuItem value={idx} key={idx}>{v}</MenuItem>
+                        )})
+                    }
+                    </Select>
+                </FormControl>
                 </Grid>
             </Grid>
-            <ColorLinearProgress className={classes.progressBar} variant="determinate" value={completed} color={isloaded?'primary':'secondary'}/>
         </Paper>
     )
 }
@@ -256,12 +241,14 @@ const useStyle = makeStyles((theme: Theme) => ({
         fontFamily: 'Proxima Nova'
     },
     submitButton:{
-        width:'100%',
-        backgroundColor:'#2196f3',
-        color:'white',
-        '&:hover':{
-            color:'black',
-        },
+        // width:'100%',
+        // backgroundColor:'#2196f3',
+        // color:'white',
+        // '&:hover':{
+        //     color:'black',
+        // },
+        marginTop:theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
     margin: {
         margin: theme.spacing(1),
@@ -269,6 +256,21 @@ const useStyle = makeStyles((theme: Theme) => ({
     textField: {
         flexBasis: 200,
     },
+    delIcon: {
+        opacity: 0,
+        '&:hover': {
+            opacity: 1
+        }
+    },
+    list: {
+        paddingLeft: 10,
+    },
+    listgrid: {
+        marginLeft: '6px'
+    },
+    tags:{
+        backgroundColor: '#eeeff3'
+    }
   }));
 
 const UploadModel : React.FC = (props)=>{
@@ -285,30 +287,7 @@ const UploadModel : React.FC = (props)=>{
     if(!pro.user.username) {
          return null
     }
-    const QontoConnector = withStyles({
-        alternativeLabel: {
-          top: 10,
-          left: 'calc(-50% + 16px)',
-          right: 'calc(50% + 16px)',
-        },
-        active: {
-          '& $line': {
-            borderColor: '#784af4',
-          },
-        },
-        completed: {
-          '& $line': {
-            borderColor: '#784af4',
-          },
-        },
-        line: {
-          borderColor: lightBlue[500],
-          borderTopWidth: 3,
-          borderRadius: 4,
-          borderWidth: 3,
-        },
-      })(StepConnector);
-    
+
     function onDrop<T extends File>(acceptedFiles: T[], rejectedFiles: T[]) {
         // setUploading(0)
         setFiles(acceptedFiles)
@@ -361,57 +340,53 @@ const UploadModel : React.FC = (props)=>{
                 </Grid>
                 <Grid item xs={12}>
                     <Grid container spacing={0}>
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
                         {
-                                files.length?
+                        files.length?
+                        <div style={{
+                            padding: 8,
+                        }}>
                             <Button
+                                fullWidth
                                 variant='outlined'
                                 onClick={ClearAll}
                             >
                                 Reset
                             </Button> 
-                            :null
-                        }
-                            {
-                                files.length?
-                                <FormControl variant="outlined" margin="dense">
-                                    <InputLabel htmlFor="outlined-catagory-simple">
-                                        Set All Categories
-                                    </InputLabel>
-                                    <Select
-                                    value={catOverride}
-                                    onChange={(e)=>setCatOverride(Number(e.target.value))}
-                                    inputProps={{
-                                        name: 'Catagory',
-                                        id: 'outlined-catagory-simple',
-                                    }}
-                                    >
-                                        <MenuItem value={-1} key={-1}>None</MenuItem>
-                                    {
-                                        
-                                        AllModelCatalogs.map((v, idx)=>{return(
-                                            <MenuItem value={idx} key={idx}>{v}</MenuItem>
-                                        )})
-                                    }
-                                    </Select>
-                                </FormControl>
-                                : null
-                            }
-                            {files.length?
-                            <TextField
-                                style={{
-                                    backgroundColor:'#f1f5ff',
+                            <FormControl variant="outlined" margin="dense" fullWidth>
+                                <Select
+                                value={catOverride}
+                                onChange={(e)=>setCatOverride(Number(e.target.value))}
+                                inputProps={{
+                                    name: 'Catagory',
+                                    id: 'outlined-catagory-simple',
                                 }}
+                                >
+                                    <MenuItem value={-1} key={-1}>Set All Categories</MenuItem>
+                                {
+                                    
+                                    AllModelCatalogs.map((v, idx)=>{return(
+                                        <MenuItem value={idx} key={idx}>{v}</MenuItem>
+                                    )})
+                                }
+                                </Select>
+                            </FormControl>
+                            </div>: null
+                        }
+                        
+                        {
+                        files.length?
+                        <div className={classes.tags}>
+                            
+                            <TextField
                                 id="add-to-tags"
                                 variant="outlined"
-                                label="Add Tags for All"
+                                label="Tags for All"
                                 value={curTagIpt}
+                                margin='dense'
                                 onChange={(e)=>setCurTagIpt(e.target.value)}
                                 className={clsx(classes.margin, classes.textField)}
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start">
-                                        <LoyaltyIcon fontSize='small'></LoyaltyIcon>
-                                        </InputAdornment>,
                                     endAdornment: (
                                         <InputAdornment position="end">
                                         <IconButton
@@ -426,38 +401,36 @@ const UploadModel : React.FC = (props)=>{
                                     ),
                                 }}
                             />
-                            : <div></div>}
-                            <div style={{marginLeft:'-20px'}}>
                             {
-                                tags.length?
-                                    <Paper style={{maxHeight: '466px', overflow: 'auto'}}>
-                                    <Stepper
-                                    connector={<QontoConnector />}
-                                    orientation='vertical'
-                                    >
-                                        {
-                                            tags.map((v,idx)=>(
-                                                <Step key={idx}>
-                                                    <StepLabel StepIconComponent={QontoConnector}>
-                                                        <Chip
-                                                            icon={<LoyaltyIcon fontSize='small'></LoyaltyIcon>}
-                                                            key={idx}
-                                                            label={v}
-                                                            onDelete={() => handleDelete(idx)}
-                                                            deleteIcon={<CloseIcon />}
-                                                            />
-                                                    </StepLabel>
-                                                </Step>
-                                            ))
-                                        }
-                                    </Stepper>
-                                    </Paper>
-                                :<div></div>
+                            tags.length?
+                            <List style={{paddingTop: 0}}>
+                                {tags.map((tag, idx)=>
+                                    <ListItem button dense className={classes.list}  key={idx}>
+                                    <ListItemText
+                                        primary={tag}
+                                    />
+                                    <ListItemSecondaryAction className={classes.delIcon}>
+                                        <IconButton edge="end" aria-label="delete" onClick={()=>handleDelete(idx)}>
+                                        <DeleteIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                    </ListItem>
+                                )}
+                            </List>
+                            :null
                             }
-                            </div>
+                        </div>
+                        :null
+                        }
+
                         </Grid>
-                        <Grid item xs={9}>
-                            <Paper style={{maxHeight: '500px', overflow: 'auto'}}>
+                        <Grid item xs={8}>
+                            <Paper style={{
+                                maxHeight: '500px', 
+                                overflow: 'auto',
+                                paddingRight: files.length? 6:0
+                            }}>
+                            
                             {
                                 files.map((v, idx)=>
                                     <WaitingItem
@@ -471,8 +444,18 @@ const UploadModel : React.FC = (props)=>{
                                     />
                                 )
                             }
+                            {(uploading < 0 && files.length)? 
+                                <Button 
+                                    fullWidth
+                                    variant='outlined'
+                                    onClick={()=>setUploading(0)} 
+                                    className={classes.submitButton}
+                                    color='primary'
+                                >Submit</Button>
+                                :null
+                            }
                             </Paper>
-                            {(uploading < 0 && files.length)? <Button onClick={()=>setUploading(0)} className={classes.submitButton}>Submit</Button>:null}
+                            
                         </Grid>
                     </Grid>
                 </Grid>
@@ -480,9 +463,9 @@ const UploadModel : React.FC = (props)=>{
                     <Dropzone onDrop={onDrop}>
                         {({getRootProps, getInputProps}) => (
                             
-                            <div {...getRootProps()} style={{textAlign:"center", backgroundColor: '#f1f5ff', border:'none!important'}}>
+                            <div {...getRootProps()} style={{textAlign:"center", backgroundColor: '#f1f5ff', outline:'none'}}>
                                     <input {...getInputProps()} />
-                                    <div style={{padding:'20px', border:'none!important'}}>
+                                    <div style={{padding:'20px', outline:'none'}}>
                                         <div id="plusIcon" style={{
                                             borderStyle:"dashed",
                                             borderWidth:4,

@@ -6,10 +6,9 @@ import './userPage.css'
 import SearchAppBar from '../bits/miniSearch';
 import UploadButton from '../bits/buttonUpload';
 import FolderList from '../bits/userInfoList';
-import { Package, preViewPackages, D3DModels} from '../homePage/homePage';
-import {D3DModel, DRecommends, APIListModelsByUser } from '../utils/api';
+import { Package, D3DModels} from '../homePage/homePage';
+import {D3DModel, APIListModelsByUser } from '../utils/api';
 import TailBar from '../bits/tailBar';
-import { MockModel } from '../utils/mock';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import {lightBlue, orange} from '@material-ui/core/colors';
