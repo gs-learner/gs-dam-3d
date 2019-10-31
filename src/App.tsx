@@ -48,9 +48,7 @@ const App: React.FC = () => {
       secondary: red,
     },
   }));
-  const toPorfile = useRef<HTMLAnchorElement>(null)
-  const toEditPorfile = useRef<HTMLAnchorElement>(null)
-  const toEditRender = useRef<HTMLAnchorElement>(null)
+
   const [openDetail, setOpenDetail] = useState(false)
   const [signupOrSignin, setSignupOrSigin] = useState(true)
   const [openSignupOrSigin, setOpenSignipOrSignin] = useState(false)
