@@ -141,7 +141,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
                             {
                                 currentModel.comments.map((v,idx)=>{
                                     return(
-                                        <ListItem alignItems="flex-start">
+                                        <ListItem alignItems="flex-start" key={idx}>
                                             <ListItemAvatar>
                                             <Avatar alt="Remy Sharp" src="image/avater.jpg" />
                                             </ListItemAvatar>
