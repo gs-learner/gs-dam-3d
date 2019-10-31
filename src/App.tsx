@@ -111,7 +111,7 @@ const App: React.FC = () => {
       },
       edit_render: (model: D3DModel)=>{
         setEditingodel(model)
-        setEditingodel(MockModel())
+        // setEditingodel(MockModel())
         history.push('/model/edit');
       },
       catalog:()=>{
@@ -145,19 +145,7 @@ const App: React.FC = () => {
       <Router history={history}>
        <Route exact path='/'>
         <div className="App">
-        <div style={{position: 'fixed', left: -100, top: -200}}>
-          <a ref={toPorfile} href='/profile' >x</a>
-          <a ref={toEditPorfile} href='/profile/edit'>x</a>
-          <a ref={toEditRender} href='/model/edit'>x</a>
-        </div>
-    
-        {/* <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
-        <button onClick={()=>{
-          pro.to.profile();
-        }}>To Profile</button>
-        <button onClick={()=>{
-          pro.to.edit_render(MockModel())
-        }}>Edit Model</button>  */}
+
       
         <HomePage/>
     

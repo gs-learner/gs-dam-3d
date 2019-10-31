@@ -1,14 +1,13 @@
 import React, { useContext } from 'react';
 import SearchAppBar from '../bits/miniSearch';
 import EnhancedTable from '../bits/billTable';
-import {D3DModel} from '../utils/api';
+import {D3DModel, DCommunity} from '../utils/api';
 import {D3DModels, Package} from '../homePage/homePage';
-import { MockModel } from '../utils/mock'
-import GmailTreeView from '../bits/treeView';
-import { Grid, createMuiTheme, IconButton } from '@material-ui/core';
+import { MockModel, MockCommnunity } from '../utils/mock'
+import { Grid, createMuiTheme, IconButton, Paper } from '@material-ui/core';
 import { lightBlue, orange } from '@material-ui/core/colors';
 import { ThemeProvider } from '@material-ui/styles';
-
+import Avatar from '@material-ui/core/Avatar'
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -50,38 +49,7 @@ const BillBoard:React.FC=()=>{
         <EnhancedTable/>
     )
 }
-const BodyCommPage:React.FC=()=>{
-    return(
-        <div style={{
-            paddingBottom:'40px',
-        }}>
-            <Grid container>
-                <Grid item xs={12} md={2}>
-                    <div style={{
-                        padding:'25px'
-                    }}>
-                        <GmailTreeView/>
-                    </div>
-                </Grid>
-                <Grid item xs={12} md={10}>
-                    <div style={{
-                        paddingRight:'20px',
-                        paddingLeft:'40px',
-                    }}>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <BillBoard/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FolderContent/>
-                            </Grid>
-                        </Grid>
-                    </div>
-                </Grid>
-            </Grid>
-        </div>
-    )
-}
+
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
     
@@ -147,9 +115,59 @@ const FolderContent:React.FC=()=>{
         </div>
     )
 }
+
+const useBriefingStyle = makeStyles((theme: Theme)=>({
+    paper: {
+        padding: theme.spacing(2),
+        backgroundColor: '#303237'
+    },
+    avatarWrapper: {
+        marginLeft: theme.spacing(2),
+        marginTop: theme.spacing(1)
+    },
+    avatar: {
+        marginLeft: -14,
+        border: '3px solid #42454c',
+        boxShadow: '0px 2px 2px 0px rgba(0,0,0,0.2)'
+    }
+}));
+
+interface BriefingProps {
+    community: DCommunity
+}
+
+const Briefing: React.FC<BriefingProps> = (props) => {
+    const theuser = props.community.members.slice(0, 5)
+    const classes = useBriefingStyle()
+
+    return (
+        <Paper className={classes.paper}>
+            <Typography variant='h5'>
+                {props.community.name}
+            </Typography>
+            <Grid container className={classes.avatarWrapper}>
+            {
+            theuser.map((v, idx)=>{return(
+                <Grid key={idx} item>
+                <Avatar key={idx} alt={v.username} src={v.avatar} className={classes.avatar}/>
+                </Grid>
+            )})
+            }
+            </Grid>
+            <div>
+            
+            </div>
+            
+        </Paper>
+    )
+}
+
+
 const Resource:React.FC<D3DModels>=(props)=>{
     const classes = useStyles();
     const pro = useContext(profile);
+    
+
     return(
         <div style={{
             padding:'20px',
@@ -182,6 +200,41 @@ const Resource:React.FC<D3DModels>=(props)=>{
         </div>
     )
 }
+
+const BodyCommPage:React.FC=()=>{
+    const community = MockCommnunity();
+    return(
+        <div style={{
+            paddingBottom:'40px',
+        }}>
+            <Grid container>
+                <Grid item xs={12} md={4}>
+                    <div style={{
+                        padding:'20px'
+                    }}>
+                        <Briefing community={community}/>
+                    </div>
+                </Grid>
+                <Grid item xs={12} md={10}>
+                    <div style={{
+                        paddingRight:'20px',
+                        paddingLeft:'40px',
+                    }}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <BillBoard/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FolderContent/>
+                            </Grid>
+                        </Grid>
+                    </div>
+                </Grid>
+            </Grid>
+        </div>
+    )
+}
+
 export const CommPage:React.FC=()=>{
     return(
         <div style={{

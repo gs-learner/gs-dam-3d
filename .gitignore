@@ -27,3 +27,4 @@ yarn-error.log*
 public/static/skybox
 *.zip
 uuu.ts
+*.jpg

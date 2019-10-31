@@ -76,9 +76,10 @@ interface DModelTodo {
     aspect: string
     comment: string
     claimed: DUser[]
+    done: boolean
 }
 
-interface DCommunity {
+export interface DCommunity {
     name: string
     introduction: string
     members: DUser[]
