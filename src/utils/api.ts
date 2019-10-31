@@ -1,3 +1,5 @@
+import { D3DModels } from "../homePage/homePage";
+
 // Basics
 // -----------------------------------------------------------
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -364,6 +366,11 @@ export async function APIListModelsByUser(info: {username: string}) {
 
 export async function APIListRecommendedModels(){
     let res = await SendJSON('/api/list/categories/recommend', {catalogs: AllModelCatalogs}) as StandardResponse<DRecommends>
+    return RefineResponse(res)
+}
+
+export async function APIListModelsByCategory(category: string){
+    let res = await SendJSON('/api/list/categories/all', {catalog: category}) as StandardResponse<D3DModels[]>
     return RefineResponse(res)
 }
 
