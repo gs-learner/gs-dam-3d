@@ -5,7 +5,7 @@ import Dropzone from 'react-dropzone'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles, Theme, withStyles, lighten } from '@material-ui/core/styles';
-import { DisplayFileSize, toBase64 } from './utils/utils'
+import { toBase64 } from './utils/utils'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { MakeDefaultRenderConfig, APIUploadModel, AllModelCatalogs } from './utils/api'
 import TextField from '@material-ui/core/TextField';
@@ -19,7 +19,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import clsx from 'clsx';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -27,7 +26,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import './upload-model.css'
-import {  deepOrange, lightBlue } from '@material-ui/core/colors'
+import {  deepOrange } from '@material-ui/core/colors'
 
 interface WaitingItemProps {
     file: File

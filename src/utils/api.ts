@@ -80,9 +80,9 @@ export function MakeEmptyUser() : DUser {
 //   in render.json, allowing faster iteration of front end
 
 export const AllModelCatalogs = [
-    'Animals' , 'Architecture' , 'Cars' , 
-    'Characters' , 'History' , 'Furniture' ,
-    'Weapon' , 'Sci-fi' , 'People' , 'Place' ,
+    'Animals' , 'Architecture' , 'Sports' , 
+    'Characters' , 'Items' , 'Metal' ,
+    'Sci-fi' , 'Nature' , 'Science&Tech' ,
     'Food', 'Dinosaurs'
 ] as const;
 export type ModelCatalog = typeof AllModelCatalogs[number]
@@ -92,29 +92,27 @@ export const CatalogBound : Record<ModelCatalog, string[]> = {
     'This part contains many kinds of Animals models'],
     Architecture:['/image/building.png','/image/cin.png',
     'This part contains many kinds of Architecture models'],
-    Cars:['/image/car.png','/image/cin.png',
-    'This part contains many kinds of Cars models'],
     Characters:['/image/character.png','/image/cin.png',
     'This part contains many kinds of Characters models'],
-    History:['/image/history.png','/image/cin.png',
-    'This part contains many kinds of History models'],
-    Furniture:['/image/common.png','/image/cin.png',
-    'This part contains many kinds of Furniture models'],
-    Weapon:['/image/weapon.png','/image/cin.png',
-    'This part contains many kinds of Weapon models'],
-    "Sci-fi":['/image/scifi.png','/image/cin.png',
-    'This part contains many kinds of Sci-fi models'],
-    People:['/image/people.png','/image/cin.png',
-    'This part contains many kinds of People models'],
-    Place:['/image/common.png','/image/cin.png',
-    'This part contains many kinds of Place models'],
-    Food:['/image/common.png','/image/cin.png',
-    'This part contains many kinds of Food models'],
     Dinosaurs:['/image/common.png','/image/cin.png',
     'Dinosaurs, dragons, roar!'],
+    Food:['/image/common.png','/image/cin.png',
+    'This part contains many kinds of Food models'],
+    Items:['/image/car.png','/image/cin.png',
+    'This part contains many kinds of Cars models'],
+    Metal:['/image/weapon.png','/image/cin.png',
+    'This part contains many kinds of Weapon models'],
+    Nature:['/image/weapon.png','/image/cin.png',
+    'This part contains many kinds of Weapon models'],
+    "Science&Tech":['/image/weapon.png','/image/cin.png',
+    'This part contains many kinds of Weapon models'],
+    Sports:['/image/people.png','/image/cin.png',
+    'This part contains many kinds of People models'],
+    "Sci-fi":['/image/scifi.png','/image/cin.png',
+    'This part contains many kinds of Sci-fi models'],
 }
 
-type DRecommends = Record<ModelCatalog, D3DModel[]>
+export type DRecommends = Record<ModelCatalog, D3DModel[]>
 
 export interface DModelCatalogInfo {
     name: ModelCatalog
@@ -213,7 +211,7 @@ export function MakeDefaultRenderConfig() : RenderConfig {
 interface Comment {
     username: string
     content: string
-    rating: number
+    rating: number//Total 10
 }
 
 // Models

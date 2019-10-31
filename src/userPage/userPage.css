@@ -16,3 +16,8 @@
     padding: 50px 90px 30px 30px;
     /* background-color: #2196f3; */
 }
+.editButtons{
+    position: absolute;
+    left: 225px;
+    top: 0%;
+}

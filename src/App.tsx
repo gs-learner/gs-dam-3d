@@ -57,6 +57,7 @@ const App: React.FC = () => {
   const [openUploadModel, setOpenUploadModel] = useState(false)
   const [logState, setLogState] = useState(false)
   const [editingModel, setEditingodel] = useState<D3DModel>();
+  const [currentViewModel, setCurrentViewModel] = useState<D3DModel>(MockModel());//better to mock
   useEffect(()=>{
     const username = persGet('username')
     const password = persGet('password')
@@ -80,7 +81,11 @@ const App: React.FC = () => {
     set: {
       user: setUser,
       logState: setLogState,
-      theme: setTheme
+      theme: setTheme,
+      currentViewModel: setCurrentViewModel,
+    },
+    get:{
+      currentViewModel: ()=>{return currentViewModel},
     },
     save: {
       login: (username, password)=>{
@@ -113,7 +118,8 @@ const App: React.FC = () => {
       }
     },
     open: {
-      uploadModel: openUploadModel
+      uploadModel: openUploadModel,
+      openDetail: setOpenDetail,
     },
     State:{
       logState: logState
@@ -141,13 +147,13 @@ const App: React.FC = () => {
           <a ref={toEditRender} href='/model/edit'>x</a>
         </div>
     
-        <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
+        {/* <button onClick={()=>{setOpenDetail(true)}}>Show Detail</button>
         <button onClick={()=>{
           pro.to.profile();
         }}>To Profile</button>
         <button onClick={()=>{
           pro.to.edit_render(MockModel())
-        }}>Edit Model</button> 
+        }}>Edit Model</button>  */}
       
         <HomePage/>
     
@@ -167,6 +173,7 @@ const App: React.FC = () => {
     </Route>
     </Router>
     <SignupOrIn open={openSignupOrSigin} onClose={()=>{setOpenSignipOrSignin(false)}} isSignUp={signupOrSignin}/>
+    {/* //TODO(data) */}
     <DetailPanel open={openDetail} onClose={()=>setOpenDetail(false)}/>
     <UploadModel></UploadModel>
     </profile.Provider>

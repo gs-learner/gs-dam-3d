@@ -1,13 +1,18 @@
-import React from 'react'
-import { Divider, Grid } from '@material-ui/core';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import React, { useState, useEffect, useContext } from 'react'
+import { Divider, Grid, IconButton, createMuiTheme } from '@material-ui/core';
+import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles';
 
 import './userPage.css'
 import SearchAppBar from '../bits/miniSearch';
 import UploadButton from '../bits/buttonUpload';
 import FolderList from '../bits/userInfoList';
-import { Package, preViewPackages } from '../homePage/homePage';
+import { Package, D3DModels} from '../homePage/homePage';
+import {D3DModel, APIListModelsByUser } from '../utils/api';
 import TailBar from '../bits/tailBar';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import {lightBlue, orange} from '@material-ui/core/colors';
+import { profile } from '../bits/store';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,8 +33,27 @@ const useStyles = makeStyles((theme: Theme) =>
             gridTemplateColumns: 'repeat(12, 1fr)',
             gridGap: theme.spacing(3),
         },
+        button: {
+            margin: theme.spacing(1),
+        },
+        input: {
+            display: 'none',
+        },
     }),
 );
+
+const theme = createMuiTheme({
+    palette: {
+        type: 'dark',
+      primary: lightBlue,
+      secondary: orange,
+      background: {
+        default: '#2a2d35',
+        paper: '#2a2d35',
+      }
+    },
+    
+  })
 
 const BodyTopUserPage: React.FC = () => {
     const classes = useStyles();
@@ -55,21 +79,38 @@ const BodyTopUserPage: React.FC = () => {
         </div>
     )
 }
-const BodyLeftUserPage: React.FC<preViewPackages> = (props) => {
-    const pkgs = props.preViewPackages;
+const BodyLeftUserPage: React.FC<D3DModels> = (props) => {
+    const classes = useStyles();
+    const pro = useContext(profile);
     return (
         <div className="BodyLeftUserPage">
-            <Grid container spacing={7}>
-                {
-                    pkgs.map((v, idx) => {
-                        return (
-                            <Grid key={idx} item xs={12} md={5} lg={3} xl={2}>
-                                <Package {...v} />
-                            </Grid>
-                        )
-                    })
-                }
-            </Grid>
+            <ThemeProvider theme={theme}>
+                <Grid container spacing={7}>
+                    {
+                        props.D3DModels.map((v, idx) => {
+                            return (
+                                <Grid key={idx} item xs={12} md={5} lg={3} xl={2}>
+                                    <div style={{
+                                        position:'relative',
+                                    }}>
+                                        <div className="editButtons">
+                                        <IconButton className={classes.button} aria-label="edit" size='small' color="primary"
+                                        onClick={()=>{pro.to.edit_render(v)}}
+                                        >
+                                            <EditIcon/>
+                                        </IconButton>
+                                        <IconButton className={classes.button} aria-label="delete" size='small' color="secondary">
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                        </div>
+                                        <Package {...v} />
+                                    </div>
+                                </Grid>
+                            )
+                        })
+                    }
+                </Grid>
+            </ThemeProvider>
         </div>
     )
 }
@@ -81,21 +122,29 @@ const BodyRightUserPage: React.FC = () => {
     )
 }
 const BodyMainUserPage: React.FC = () => {
-    const pkgs: preViewPackages = {
-        preViewPackages: [
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao', avatar: '/logo192.png' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao', avatar: '/image/lol.jpg' },
-            { imgUrl: '/image/gun.jpeg', name: 'Sniper rifle', format: '.gltf', author: 'Xinzu Gao' },
-        ]
-    }
+    const [modelGroupData,setModelGroupData] = useState<D3DModel[]>();
+    useEffect(() => {
+        (async ()=>{
+            //TODO(data) the name of the user must be given
+            const modelGroup = await APIListModelsByUser({username:'lzw'});
+            if(modelGroup.ok) {
+                setModelGroupData(modelGroup.data);
+            }
+        })()
+        
+    }, []);
     return (
         <div className="BodyMainUserPage">
             <Grid container direction='row'>
                 <Grid item xs={9}>
-                    <BodyLeftUserPage preViewPackages={pkgs.preViewPackages} />
+                    {
+                        // !modelGroupData?
+                        // <BodyLeftUserPage D3DModels={[MockModel()]} />
+                        // :<div>Something wrong with proxy</div>
+                        modelGroupData?
+                        <BodyLeftUserPage D3DModels={modelGroupData} />
+                        :<div>Something wrong with proxy</div>
+                    }
                 </Grid>
                 <Grid item xs={3}>
                     <BodyRightUserPage />

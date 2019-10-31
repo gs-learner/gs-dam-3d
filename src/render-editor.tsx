@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { D3DModel, LightTypes, APIModelUpdatePreview, APIModelUpdateRenderConfig } from './utils/api'
 import './detail-panel.css'
 import Render, { LightManager, HandleType } from './render'
 import { MockModel } from './utils/mock'
+import {profile} from './bits/store';
 
 import { ChromePicker } from 'react-color'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
@@ -411,7 +412,8 @@ const RenderEditor: React.FC<EditProps> = (props)=>{
     const [model, setModel] = useState(MockModel());
     const [openCtrl, setOpenCtrl] = useState(false)
     const [lightmoving, setLightmoving] = useState(true)
-    
+    const pro = useContext(profile);
+
     const updateHandle = (h: HandleType)=>{
         if(h) {
             setHandle(h)

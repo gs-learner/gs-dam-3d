@@ -1,6 +1,7 @@
 import React from 'react'
 import { MakeEmptyUser, D3DModel } from '../utils/api'
 import { Theme } from '@material-ui/core/styles';
+import { MockModel } from '../utils/mock';
 
 type User = ReturnType<typeof MakeEmptyUser>
 
@@ -9,7 +10,11 @@ const default_profile = {
     set: {
         user: (u: User)=>{},
         logState:(v:boolean)=>{},
-        theme: (v:Theme)=>{}
+        theme: (v:Theme)=>{},
+        currentViewModel:(v:D3DModel)=>{},
+    },
+    get:{
+        currentViewModel:():D3DModel=>MockModel(),
     },
     save: {
         login: (username:string, password:string)=>{} 
@@ -29,6 +34,7 @@ const default_profile = {
     },
     open: {
         uploadModel: false,
+        openDetail:(v:boolean)=>{}
     },
     trigger: {
         uploadModel: (v:boolean)=>{},

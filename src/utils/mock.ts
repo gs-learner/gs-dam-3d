@@ -20,12 +20,28 @@ export function MockModel(): D3DModel {
         url: '/static/test/fortnite-animated',
         name: 'Beetle Car',
         publish: '2017-9-20',
-        comments: [],
-        catalog: 'Cars',
+        comments: [
+            {
+                username:'LZW',
+                content:'OHHHHHHHHHHHHHHHHHH---WSHTZ tql---OHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',
+                rating:10,
+            },
+            {
+                username:'ZZP',
+                content:'OHHHHHHHHHHHHHHHHHH---LZWDL tql---OHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',
+                rating:10,
+            },
+            {
+                username:'WSH',
+                content:'OHHHHHHHHHHHHHHHHHH---ZZPSAMA tql---OHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',
+                rating:10,
+            },
+        ],
+        catalog: 'Characters',
         num_triangles: 999,
         num_vertices: 123,
-        tags: [],
-        animated: false,
+        tags: ['I am mud iron man'],
+        animated: true,
         owner: MockUser()
     }
 }
