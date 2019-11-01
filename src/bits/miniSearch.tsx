@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function SearchAppBar() {
   const classes = useStyles();
   const pro = useContext(profile);
+  const [key, setKey] = useState('');
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -94,7 +95,14 @@ export default function SearchAppBar() {
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{ 'aria-label': 'search' }}
+              // inputProps={{ 'aria-label': 'search' }}
+              onChange={(e)=>{setKey(e.target.value)}}
+              onKeyPress={(e)=>{
+                if(e.key==='Enter'){
+                  pro.set.searchKey(key)
+                  pro.to.catalog()
+                }
+              }}
             />
           </div>
           <Container className = {classes.Container}><LogBar/></Container>

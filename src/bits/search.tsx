@@ -45,10 +45,10 @@ export default function CustomizedInputBase() {
         // inputProps={{ 'aria-label': 'Search 3D Models...' }}
         onChange={(e)=>{setKey(e.target.value)}}
         onKeyPress={(e)=>{
-          // if(e.keyCode===13){
-          //   console.log('enter down')
-          //   pro.to.catalog()
-          // }
+          if(e.key==='Enter'){
+            pro.set.searchKey(key)
+            pro.to.catalog()
+          }
           console.log(e.keyCode)
         }}
       />
