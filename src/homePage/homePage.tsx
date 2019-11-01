@@ -120,7 +120,7 @@ const HeaderHomepage: React.FC = () =>{
                     <HeaderMainHomepage/>
                 </Grid>
                 <Grid item xs={12}>
-                    <HeaderTailHomepage owner={['a','b','c']}/>
+                    <HeaderTailHomepage owner={['Dam Group']}/>
                 </Grid>
             </Grid>
         </div>
@@ -130,7 +130,8 @@ export const CataIcon: React.FC<iconInfo> = (props) =>{
     const pro = useContext(profile)
     return(
         <div className ="CataIcon">
-            <img src = {props.url} alt={props.name} onClick={()=>{
+            <img src = {props.url} alt={props.name}
+            onClick={()=>{
                 pro.to.catalog()
             }}></img>
             <div style={{

@@ -126,11 +126,12 @@ const BodyRightUserPage: React.FC = () => {
     )
 }
 const BodyMainUserPage: React.FC = () => {
+    const pro = useContext(profile);
     const [modelGroupData,setModelGroupData] = useState<D3DModel[]>();
     useEffect(() => {
         (async ()=>{
             //TODO(data) the name of the user must be given
-            const modelGroup = await APIListModelsByUser({username:'lzw'});
+            const modelGroup = await APIListModelsByUser({username:pro.user.username});
             if(modelGroup.ok) {
                 setModelGroupData(modelGroup.data);
             }
