@@ -147,9 +147,14 @@ export const LogBar: React.FC = (props) =>{
                     <div onClick={()=>{
                         pro.to.profile();
                     }}>
+                      {
+                        pro.user.avatar?
+                        <Avatar className={classes.avater} src={pro.user.avatar}>
+                        </Avatar>:
                         <Avatar className={classes.avater}>
-                            SB
+                        {pro.user.username[0]}
                         </Avatar>
+                      }
                     </div>
                 </Grid>
             </Grid>
