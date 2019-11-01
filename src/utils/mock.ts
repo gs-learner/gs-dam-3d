@@ -7,7 +7,7 @@ export function MockUser(n?:number) : DUser {
         username: 'Mock User',
         nickname: 'mua',
         biography: `Education:\n- phD at ZZPU\n- master at Standford\n- ZJU graduate\n`,
-        owned_models: [],
+        owned_models: 1,
         location: 'Hangzhou, Zhejiang',
         introduction: 'All hail DAM',
         collections: [],

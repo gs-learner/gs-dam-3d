@@ -58,6 +58,7 @@ const theme = createMuiTheme({
   })
 
 const BodyTopUserPage: React.FC = () => {
+    const pro = useContext(profile)
     const classes = useStyles();
     return (
         <div className="BodyTopUserPage">
@@ -66,7 +67,7 @@ const BodyTopUserPage: React.FC = () => {
                     <Grid container direction='row'>
                         <Grid item xs={9}>
                             <div className={classes.centerTitle}>
-                                @Author Name
+                                {pro.user.username}
                             </div>
                         </Grid>
                     </Grid>

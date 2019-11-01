@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,6 +12,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import SendIcon from '@material-ui/icons/Send';
+import {profile} from './store';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function FolderList() {
   const classes = useStyles();
-
+  const pro = useContext(profile);
   return (
     <List className={classes.root}>
       <ListItem>
@@ -37,7 +38,7 @@ export default function FolderList() {
             <FingerprintIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="UserName" secondary="LZW" />
+        <ListItemText primary="UserName" secondary={pro.user.username} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -45,7 +46,7 @@ export default function FolderList() {
             <RedditIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="NickName" secondary="LZW" />
+        <ListItemText primary="NickName" secondary={pro.user.nickname} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -53,7 +54,7 @@ export default function FolderList() {
             <ContactsIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Biography" secondary="LZW" />
+        <ListItemText primary="Biography" secondary={pro.user.biography} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -61,7 +62,7 @@ export default function FolderList() {
             <FileCopyIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Works" secondary="LZW" />
+        <ListItemText primary="Works" secondary={pro.user.owned_models} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -69,7 +70,7 @@ export default function FolderList() {
             <LocationOnIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Location" secondary="LZW" />
+        <ListItemText primary="Location" secondary={pro.user.location} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -77,7 +78,7 @@ export default function FolderList() {
             <ImportContactsIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Introduction" secondary="我是超级强无敌的林昭玮" />
+        <ListItemText primary="Introduction" secondary={pro.user.introduction} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -85,7 +86,7 @@ export default function FolderList() {
             <SendIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="E-Mail" secondary="LZW" />
+        <ListItemText primary="E-Mail" secondary={pro.user.email} />
       </ListItem>
     </List>
   );

@@ -1,4 +1,5 @@
 import { D3DModels } from "../homePage/homePage";
+import { number } from "prop-types";
 
 // Basics
 // -----------------------------------------------------------
@@ -36,7 +37,7 @@ export interface DUser {
     username: string
     nickname: string
     biography: string
-    owned_models: string[]
+    owned_models: number
     location: string // 住址
     introduction: string // 个人简介
     collections?: DCollection[]
@@ -62,7 +63,7 @@ interface URegisterUser {
 export function MakeEmptyUser() : DUser {
     return {
         username: '',
-        owned_models: new Array<string>(),
+        owned_models: 0,
         introduction: '',
         email:'',
         nickname: '',
