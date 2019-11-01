@@ -45,7 +45,8 @@ export function MockCommnunity():DCommunity {
             }
         },
         models: models,
-        notice: 'Keep calm and carry on! 😀'
+        notice: 'Keep calm and carry on! 😀',
+        public: true
     }
 }
 

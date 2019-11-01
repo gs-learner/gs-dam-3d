@@ -4,7 +4,7 @@ import EnhancedTable from '../bits/billTable';
 import {D3DModel, DCommunity} from '../utils/api';
 import {D3DModels, Package} from '../homePage/homePage';
 import { MockModel, MockCommnunity } from '../utils/mock'
-import { Grid, createMuiTheme, IconButton, Paper, createStyles } from '@material-ui/core';
+import { Grid, createMuiTheme, IconButton, Paper, createStyles, Button } from '@material-ui/core';
 import { lightBlue, orange } from '@material-ui/core/colors';
 import { ThemeProvider, withStyles } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar'
@@ -81,11 +81,6 @@ return {
     'aria-controls': `scrollable-auto-tabpanel-${index}`,
 };
 }
-
-interface StyledTabsProps {
-    value: number;
-    onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
-  }
   
   const StyledTabs = withStyles({
     indicator: {
@@ -100,9 +95,6 @@ interface StyledTabsProps {
     },
   })((props: TabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
   
-  interface StyledTabProps {
-    label: string;
-  }
   
   const StyledTab = withStyles((theme: Theme) =>
     createStyles({
@@ -193,6 +185,9 @@ const useBriefingStyle = makeStyles((theme: Theme)=>({
     seperator1: {
         height: theme.spacing(1)
     },
+    seperator2: {
+        height: theme.spacing(2)
+    },
     notice: {
         backgroundColor: '#323542',
         padding: theme.spacing(2),
@@ -209,6 +204,15 @@ const useBriefingStyle = makeStyles((theme: Theme)=>({
 interface BriefingProps {
     community: DCommunity
 }
+
+const ColorButton = withStyles((theme: Theme) => ({
+    root: {
+      color: 'rgba(210, 221, 255, 0.55)',
+      '&:hover': {
+        backgroundColor: 'rgba(210, 221, 255, 0.12)',
+      },
+    },
+  }))(Button);
 
 const Briefing: React.FC<BriefingProps> = (props) => {
     const theuser = props.community.members.slice(0, 6)
@@ -237,7 +241,7 @@ const Briefing: React.FC<BriefingProps> = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                 <Typography variant='subtitle2' className={classes.subtitle}>
-                    {props.community.members.length} contributors
+                    {props.community.members.length} contributors <span> &bull; </span> {props.community.public ? 'public' : 'restricted'}
                 </Typography>
                 </Grid>
 
@@ -251,8 +255,7 @@ const Briefing: React.FC<BriefingProps> = (props) => {
                 }
                 </Grid>
 
-                <Grid item className={classes.seperator1}/>
-                <Grid item className={classes.seperator1}/>
+                <Grid item className={classes.seperator2}/>
 
                 <Grid item xs={12}>
                     <Paper className={classes.notice} onDoubleClick={()=>setShowEasternEgg(!showEasternEgg)}>
@@ -260,8 +263,17 @@ const Briefing: React.FC<BriefingProps> = (props) => {
                     {props.community.notice}
                     </Typography>
                     </Paper>
-                    
                 </Grid>
+
+                <Grid item className={classes.seperator2}/>
+                <Grid item className={classes.seperator1}/>
+
+                <Grid item xs={12}>
+                    <ColorButton fullWidth variant='outlined'>
+                        {props.community.public ? 'Join' : 'Apply'}
+                    </ColorButton>
+                </Grid>
+
                 {
                     showEasternEgg ?
                     <Grid item className={classes.seperator1}/>

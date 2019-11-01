@@ -88,6 +88,7 @@ export interface DCommunity {
     todos: Record<string, DModelTodo>
     models: D3DModel[]
     notice: string
+    public: boolean
 }
 
 // Hardcoded Catalog & render configs
@@ -325,7 +326,7 @@ function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to
 // APIs
 // -----------------------------------------------------------
 export async function APITotalModelNum(){
-    let res = await SendJSON('',{}) as StandardResponse<number>
+    let res = await SendJSON('/api/getModelNum',{}) as StandardResponse<number>
     return RefineResponse(res)
 }
 

@@ -739,7 +739,6 @@ const loadCubicMap = (path:string) => {
 const setSkybox = (path:string) => {
     const skymap = loadCubicMap(path);
     scene.background = skymap;
-    console.log('set bg')
 }
 
 let mixer: AnimationMixer|null = null;
@@ -802,14 +801,12 @@ const ReRender = async (
 
     reportstatus('Downloading models & assets');
     loader.load(minfo.url + '/scene.gltf', (m)=>{
-
+        if(!renderConfig) return;
         reportstatus('Piping data to GPU & Updating scene');
-        const scale = 0.00020
+        const scale = renderConfig.scale
         m.scene.scale.set(scale, scale, scale)
-        if(renderConfig) {
-            setEnvMap(renderConfig.envMap, m.scene)
-            setSkybox(renderConfig.envMap)
-        }
+        setEnvMap(renderConfig.envMap, m.scene)
+        setSkybox(renderConfig.envMap)
         
         
         if(skeletonHelper) {

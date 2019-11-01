@@ -138,7 +138,7 @@ const BodyMainUserPage: React.FC = () => {
             }
         })()
         
-    }, []);
+    }, [pro.user]);
     return (
         <div className="BodyMainUserPage">
             <Grid container direction='row'>
