@@ -12,6 +12,7 @@ const default_profile = {
         logState:(v:boolean)=>{},
         theme: (v:Theme)=>{},
         currentViewModel:(v:D3DModel)=>{},
+        searchKey:(v:string)=>{},
     },
     get:{
         currentViewModel:():D3DModel=>MockModel(),
@@ -32,6 +33,7 @@ const default_profile = {
     },
     State:{
         logState: false,
+        searchKey: String(''),
     },
     open: {
         uploadModel: false,

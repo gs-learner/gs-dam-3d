@@ -133,6 +133,7 @@ export const CataIcon: React.FC<iconInfo> = (props) =>{
             <img src = {props.url} alt={props.name}
             onClick={()=>{
                 pro.to.catalog()
+                pro.set.searchKey(props.name)
             }}></img>
             <div style={{
                 // fontFamily:'Author',

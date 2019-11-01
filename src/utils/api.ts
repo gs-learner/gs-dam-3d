@@ -371,7 +371,7 @@ export async function APIListRecommendedModels(){
     let res = await SendJSON('/api/list/categories/recommend', {catalogs: AllModelCatalogs}) as StandardResponse<DRecommends>
     return RefineResponse(res)
 }
-
+//TODO search by cata on server
 export async function APIListModelsByCategory(category: string){
     let res = await SendJSON('/api/list/categories/all', {catalog: category}) as StandardResponse<D3DModels[]>
     return RefineResponse(res)
@@ -391,9 +391,9 @@ export async function APIModelUpdatePreview(info: {url: string /* url used in d3
     let res = await SendJSON('/api/model/update/preview', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
-
+// TODO add on button 
 export async function APISearch(info:string) {
-    let res = await SendJSON('/api/search', {key:info}) as StandardResponse<{results:D3DModel[]}>
+    let res = await SendJSON('/api/search', {key:info}) as StandardResponse<D3DModel[]>
     return RefineResponse(res)
 }
 

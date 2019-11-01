@@ -49,6 +49,7 @@ const App: React.FC = () => {
     },
   }));
 
+  const [searchKey, setSearchKey] = useState('Catalog')
   const [openDetail, setOpenDetail] = useState(false)
   const [signupOrSignin, setSignupOrSigin] = useState(true)
   const [openSignupOrSigin, setOpenSignipOrSignin] = useState(false)
@@ -82,6 +83,7 @@ const App: React.FC = () => {
       logState: setLogState,
       theme: setTheme,
       currentViewModel: setCurrentViewModel,
+      searchKey: setSearchKey,
     },
     get:{
       currentViewModel: ()=>{return currentViewModel},
@@ -124,7 +126,8 @@ const App: React.FC = () => {
       openDetail: setOpenDetail,
     },
     State:{
-      logState: logState
+      logState: logState,
+      searchKey: searchKey,
     },
     trigger: {
       uploadModel: setOpenUploadModel,

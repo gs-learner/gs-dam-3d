@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import SearchAppBar from '../bits/miniSearch';
-import {D3DModel, APIListModelsByUser} from '../utils/api';
+import {D3DModel, APIListModelsByUser, APISearch} from '../utils/api';
 import './cataPage.css'
 import {Package, iconInfos, D3DModels,} from '../homePage/homePage';
 import {CenterPanel} from '../bits/centerPanel'
 import { Divider } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import TailBar from '../bits/tailBar';
+import { profile } from '../bits/store';
+import { MockModel } from '../utils/mock';
 
+interface CataPageInfo{
+    title:string,
+    number:number,
+}
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -51,16 +57,16 @@ const HeaderNavCataPage:React.FC<iconInfos> = (props)=>{
         </div>
     )
 }
-const BodyTopCataPage:React.FC =()=>{
+const BodyTopCataPage:React.FC<CataPageInfo> =(props)=>{
     const classes = useStyles();
     return(
         <div className="BodyTopCataPage">
             <Breadcrumbs separator="/" aria-label="breadcrumb">
                 <div className={classes.cataTag}>
-                    Catalog
+                    {props.title}
                 </div>
                 <div className={classes.count}>
-                    total
+                    total: {props.number}
                 </div>
             </Breadcrumbs>
         </div>
@@ -102,6 +108,7 @@ const HeaderCataPage: React.FC=()=>{
     )
 }
 const BodyCataPage:React.FC=()=>{
+    const pro = useContext(profile)
     const classes = useStyles();
     // const pkgs:preViewPackages = {preViewPackages:[
     //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/logo192.png'},
@@ -111,21 +118,18 @@ const BodyCataPage:React.FC=()=>{
     //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao', avatar:'/image/lol.jpg'},
     //     {imgUrl:'/image/gun.jpeg',name:'Sniper rifle',format:'.gltf',author:'Xinzu Gao'},
     // ]}
-    //TODO(data)API
-    const [modelGroupData,setModelGroupData] = useState<D3DModel[]>();
+    const [modelGroupData,setModelGroupData] = useState<D3DModel[]>([]);
     useEffect(() => {
         (async ()=>{
-            //TODO(data) search result API
-            const modelGroup = await APIListModelsByUser({username:'lzw'});
+            const modelGroup = await APISearch(pro.State.searchKey)
             if(modelGroup.ok) {
                 setModelGroupData(modelGroup.data);
             }
         })()
-        
-    }, []);
+    }, [pro.State.searchKey]);
     return(
         <div className="BodyCataPage">
-            <BodyTopCataPage/>
+            <BodyTopCataPage title={pro.State.searchKey} number={modelGroupData.length}/>
             <Divider className={classes.divider}/>
             {
                 modelGroupData?
