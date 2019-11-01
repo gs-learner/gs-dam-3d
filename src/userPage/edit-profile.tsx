@@ -117,10 +117,8 @@ const EditProfile : React.FC = (props)=>{
         }
     }
 
-
-    const handleImageDrop = ()=> [
-
-    ]
+    //TODO: handle it
+    const handleImageDrop = ()=> {}
         
     return(
         <div>
@@ -150,6 +148,7 @@ const EditProfile : React.FC = (props)=>{
                 onChange={(e, v)=>setTab(v)}
                 aria-label="Vertical tabs example"
                 className={classes.tabs}
+                
             >
                 <Tab label="Profile" {...a11yProps(0)} />
                 <Tab label="Avatar" {...a11yProps(1)} />
@@ -239,6 +238,15 @@ const EditProfile : React.FC = (props)=>{
                         </div>
                     )}
                 </Dropzone>
+                <div style={{
+                    width: '100px',
+                    height: '150px'
+                }}>
+
+                </div>
+                <Button variant="contained" color="primary" className={classes.button}>
+                    Update
+                </Button>
             </TabPanel>
             <TabPanel value={tab} index={2}>
                 <Typography variant='h6'>

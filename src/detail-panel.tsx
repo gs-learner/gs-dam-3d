@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme:Theme)=>({
     },
     container:{
         backgroundColor:'#1e2127',
-        backgroundImage:'url(floating-cogs.svg)',
+        backgroundImage:'url(/floating-cogs.svg)',
         backgroundRepeat:'repeat',
     },
     avatarIcon: {
@@ -149,7 +149,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
                                     return(
                                         <ListItem alignItems="flex-start" key={idx}>
                                             <ListItemAvatar>
-                                            <Avatar alt="Remy Sharp" src="image/avater.jpg" />
+                                            <Avatar alt="Remy Sharp" src="/image/avater.jpg" />
                                             </ListItemAvatar>
                                             <ListItemText
                                             primary={v.username}
@@ -284,7 +284,7 @@ const DetailPanel : React.FC<Props> = (props)=>{
                                                 <LoyaltyOutlinedIcon />
                                             </Avatar>
                                             </ListItemAvatar>
-                                            <ListItemText primary="Tags" secondary={currentModel.tags} />
+                                            <ListItemText primary="Tags" secondary={currentModel.tags.join(',')} />
                                         </ListItem>
                                         <ListItem>
                                             <ListItemAvatar>

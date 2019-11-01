@@ -15,7 +15,6 @@ import {CenterPanel} from '../bits/centerPanel'
 import { ModelCatalog, D3DModel, DModelCatalogInfo,CatalogBound,
     APIListRecommendedModels, DRecommends, APITotalModelNum} from '../utils/api';
 import { lightGreen } from '@material-ui/core/colors'
-import { async } from 'q';
 
 
 interface TotalNum{

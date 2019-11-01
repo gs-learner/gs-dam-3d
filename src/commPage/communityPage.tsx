@@ -4,7 +4,7 @@ import EnhancedTable from '../bits/billTable';
 import {D3DModel, DCommunity} from '../utils/api';
 import {D3DModels, Package} from '../homePage/homePage';
 import { MockModel, MockCommnunity } from '../utils/mock'
-import { Grid, createMuiTheme, IconButton, Paper, createStyles, Button } from '@material-ui/core';
+import { Grid, createMuiTheme, IconButton, Paper, createStyles, Button, Link } from '@material-ui/core';
 import { lightBlue, orange } from '@material-ui/core/colors';
 import { ThemeProvider, withStyles } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar'
@@ -17,7 +17,7 @@ import Box from '@material-ui/core/Box';
 import { profile } from '../bits/store';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import TailBar from '../bits/tailBar';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -35,8 +35,8 @@ const theme = createMuiTheme({
 })
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        minHeight:'calc(100vh - 104px)',
-        maxHeight:'calc(100vh - 104px)',
+        minHeight:'calc(100vh - 94px)',
+        maxHeight:'calc(100vh - 94px)',
       flexGrow: 1,
       width: '100%',
       // backgroundColor: theme.palette.background.paper,
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     button: {
         margin: theme.spacing(1),
     },
+
 }));
 
 const BillBoard:React.FC=()=>{
@@ -67,10 +68,14 @@ function TabPanel(props: TabPanelProps) {
             maxHeight: 'calc(100% - 48px)',
             overflowY: 'auto',
             boxShadow: 'none',
-            overflowX: 'hidden'
+            overflowX: 'hidden',
+            background: 'none'
         }}
         >
-        <Box p={3} >{children}</Box>
+        <Box p={3} style={{
+            backgroundColor: '#303237',
+            borderRadius: '5px'
+        }}>{children}</Box>
         </Paper>
     );
 }
@@ -122,7 +127,8 @@ const FolderContent:React.FC=()=>{
     return(
         <div className={classes.root}>
             <AppBar position="static" color="default" style={{
-                backgroundColor: '#11001100'
+                backgroundColor: '#11001100',
+                boxShadow: 'none'
             }}>
                 <StyledTabs
                 value={value}
@@ -198,6 +204,10 @@ const useBriefingStyle = makeStyles((theme: Theme)=>({
     },
     title: {
         color: 'rgba(210, 221, 255, 0.7)'
+    },
+    smallIcon: {
+        color: 'rgba(200, 221, 255, 0.15)',
+        marginBottom: '-5px'
     }
 }));
 
@@ -211,6 +221,7 @@ const ColorButton = withStyles((theme: Theme) => ({
       '&:hover': {
         backgroundColor: 'rgba(210, 221, 255, 0.12)',
       },
+      borderColor: 'rgba(210, 221, 255, 0.15)'
     },
   }))(Button);
 
@@ -313,11 +324,11 @@ const Resource:React.FC<D3DModels>=(props)=>{
     const classes = useStyles();
     const pro = useContext(profile);
     
+    
 
     return(
         <div style={{
-            padding:'20px',
-            
+            padding:'20px'
         }}>
             <Grid container spacing={2}>
                 {
@@ -351,6 +362,7 @@ const Resource:React.FC<D3DModels>=(props)=>{
 
 const BodyCommPage:React.FC=()=>{
     const community = MockCommnunity();
+    const classes = useBriefingStyle();
     return(
         <div
             style={{
@@ -369,16 +381,26 @@ const BodyCommPage:React.FC=()=>{
         <Grid container>
             <Grid item xs={12} md={4} xl={3}>
                 <div style={{
-                    padding:'20px'
+                    padding:'20px',
+                    marginTop: '6px'
                 }}>
                     <Briefing community={community}/>
+                    <Grid className={classes.seperator1} />
+                    <Grid container spacing={1} alignItems="center">
+                        <Grid item> 
+                            <HelpOutlineIcon fontSize='small' className={classes.smallIcon} /> 
+                        </Grid>
+                        <Grid item> 
+                            <Link href='https://github.com/gs-learner/gs-dam-3d/blob/master/README-CN.md' className={classes.subtitle}>What is a community?</Link> 
+                        </Grid>
+                    </Grid>
                 </div>
             </Grid>
             <Grid item xs={12} md={8} xl={9}>
                 <div style={{
                     paddingRight:'20px',
                     paddingLeft:'40px',
-                    paddingTop: '20px',
+                    paddingTop: '10px',
                 }}>
                     <Grid container>
                         <FolderContent/>

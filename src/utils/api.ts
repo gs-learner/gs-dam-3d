@@ -1,5 +1,4 @@
-import { D3DModels } from "../homePage/homePage";
-import { number } from "prop-types";
+
 
 // Basics
 // -----------------------------------------------------------
@@ -326,7 +325,7 @@ function SendJSONProgress<U, T>(url: string, data: T, onprogress: (progress_0_to
 // APIs
 // -----------------------------------------------------------
 export async function APITotalModelNum(){
-    let res = await SendJSON('/api/getModelNum',{}) as StandardResponse<number>
+    let res = await SendJSON('/api/model/count',{}) as StandardResponse<number>
     return RefineResponse(res)
 }
 
@@ -375,7 +374,7 @@ export async function APIListRecommendedModels(){
 }
 //TODO search by cata on server
 export async function APIListModelsByCategory(category: string){
-    let res = await SendJSON('/api/list/categories/all', {catalog: category}) as StandardResponse<D3DModels[]>
+    let res = await SendJSON('/api/list/categories/all', {catalog: category}) as StandardResponse<D3DModel[]>
     return RefineResponse(res)
 }
 
@@ -399,10 +398,10 @@ export async function APISearch(info:string) {
     return RefineResponse(res)
 }
 
-export async function APISearchByCatalog(info:string) {
-    let res = await SendJSON('/api/getModelByCatalog', {key:info}) as StandardResponse<D3DModel[]>
-    return RefineResponse(res)
-}
+// export async function APISearchByCatalog(info:string) {
+//     let res = await SendJSON('/api/getModelByCatalog', {key:info}) as StandardResponse<D3DModel[]>
+//     return RefineResponse(res)
+// }
 
 export async function APICommunityCreate(info:{name:string}) {
     let res = await SendJSON('/api/community/create', info) as StandardResponse<undefined>

@@ -5,8 +5,6 @@ import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
-import {APISearch} from '../utils/api';
-import { async } from 'q';
 import {profile} from './store';
 
 const useStyles = makeStyles((theme: Theme) =>
