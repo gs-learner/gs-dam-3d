@@ -391,9 +391,14 @@ export async function APIModelUpdatePreview(info: {url: string /* url used in d3
     let res = await SendJSON('/api/model/update/preview', info) as StandardResponse<undefined>
     return RefineResponse(res)
 }
-// TODO add on button 
+
 export async function APISearch(info:string) {
     let res = await SendJSON('/api/search', {key:info}) as StandardResponse<D3DModel[]>
+    return RefineResponse(res)
+}
+
+export async function APISearchByCatalog(info:string) {
+    let res = await SendJSON('/api/getModelByCatalog', {key:info}) as StandardResponse<D3DModel[]>
     return RefineResponse(res)
 }
 

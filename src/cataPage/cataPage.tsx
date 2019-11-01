@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import SearchAppBar from '../bits/miniSearch';
-import {D3DModel, APIListModelsByUser, APISearch} from '../utils/api';
+import {D3DModel, APISearch, CatalogBound,APISearchByCatalog} from '../utils/api';
 import './cataPage.css'
 import {Package, iconInfos, D3DModels,} from '../homePage/homePage';
 import {CenterPanel} from '../bits/centerPanel'
@@ -121,9 +121,19 @@ const BodyCataPage:React.FC=()=>{
     const [modelGroupData,setModelGroupData] = useState<D3DModel[]>([]);
     useEffect(() => {
         (async ()=>{
-            const modelGroup = await APISearch(pro.State.searchKey)
-            if(modelGroup.ok) {
-                setModelGroupData(modelGroup.data);
+            if(pro.State.searchKey in CatalogBound){
+                //TODO new API interface catalog
+                // const modelGroup = await APISearch(pro.State.searchKey)
+                const modelGroup = await APISearchByCatalog(pro.State.searchKey)
+                if(modelGroup.ok) {
+                    setModelGroupData(modelGroup.data);
+                }
+            }
+            else{
+                const modelGroup = await APISearch(pro.State.searchKey)
+                if(modelGroup.ok) {
+                    setModelGroupData(modelGroup.data);
+                }
             }
         })()
     }, [pro.State.searchKey]);
