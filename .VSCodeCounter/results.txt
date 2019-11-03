@@ -1,15 +1,15 @@
-Date : 2019-10-31 17:55:01
+Date : 2019-11-02 00:22:06
 Directory : c:\src\gs-dam-3d\src
-Total : 50 files,  6586 codes, 287 comments, 854 blanks, all 7727 lines
+Total : 50 files,  6884 codes, 293 comments, 885 blanks, all 8062 lines
 
 Languages
 +------------------+------------+------------+------------+------------+------------+
 | language         | files      | code       | comment    | blank      | total      |
 +------------------+------------+------------+------------+------------+------------+
-| TypeScript React |         30 |      5,001 |        158 |        405 |      5,564 |
-| TypeScript       |          7 |        648 |         78 |        125 |        851 |
+| TypeScript React |         30 |      5,256 |        159 |        433 |      5,848 |
+| TypeScript       |          7 |        689 |         83 |        128 |        900 |
 | JavaScript       |          1 |        443 |         20 |        291 |        754 |
-| CSS              |          9 |        417 |         31 |         20 |        468 |
+| CSS              |          9 |        419 |         31 |         20 |        470 |
 | Markdown         |          2 |         76 |          0 |         13 |         89 |
 | XML              |          1 |          1 |          0 |          0 |          1 |
 +------------------+------------+------------+------------+------------+------------+
@@ -18,13 +18,13 @@ Directories
 +-----------------------------+------------+------------+------------+------------+------------+
 | path                        | files      | code       | comment    | blank      | total      |
 +-----------------------------+------------+------------+------------+------------+------------+
-| .                           |         50 |      6,586 |        287 |        854 |      7,727 |
-| bits                        |         20 |      1,823 |         41 |        407 |      2,271 |
-| homePage                    |          2 |        546 |         48 |         25 |        619 |
-| userPage                    |          3 |        449 |         11 |         28 |        488 |
-| utils                       |          3 |        428 |         41 |         74 |        543 |
-| commPage                    |          1 |        187 |          0 |         10 |        197 |
-| cataPage                    |          2 |        166 |         10 |          5 |        181 |
+| .                           |         50 |      6,884 |        293 |        885 |      8,062 |
+| bits                        |         20 |      1,852 |         43 |        405 |      2,300 |
+| homePage                    |          2 |        558 |         49 |         25 |        632 |
+| utils                       |          3 |        469 |         46 |         77 |        592 |
+| userPage                    |          3 |        458 |         12 |         28 |        498 |
+| commPage                    |          1 |        387 |          1 |         41 |        429 |
+| cataPage                    |          2 |        181 |         10 |          4 |        195 |
 | .VSCodeCounter              |          2 |         76 |          0 |         13 |         89 |
 | fonts                       |          1 |         42 |          0 |          2 |         44 |
 +-----------------------------+------------+------------+------------+------------+------------+
@@ -35,9 +35,9 @@ Files
 +-----------------------------+------------------+------------+------------+------------+------------+
 | .VSCodeCounter\details.md   | Markdown         |         52 |          0 |          6 |         58 |
 | .VSCodeCounter\results.md   | Markdown         |         24 |          0 |          7 |         31 |
-| App.css                     | CSS              |         21 |          0 |          4 |         25 |
+| App.css                     | CSS              |         22 |          0 |          4 |         26 |
 | App.test.tsx                | TypeScript React |          8 |          0 |          2 |         10 |
-| App.tsx                     | TypeScript React |        172 |          6 |         15 |        193 |
+| App.tsx                     | TypeScript React |        164 |          2 |         16 |        182 |
 | bits\TrackballControls.d.ts | TypeScript       |         37 |          2 |         20 |         59 |
 | bits\TrackballControls.js   | JavaScript       |        443 |         20 |        291 |        754 |
 | bits\billTable.tsx          | TypeScript React |        365 |          0 |         30 |        395 |
@@ -48,40 +48,40 @@ Files
 | bits\centerPanel.css        | CSS              |         22 |          1 |          0 |         23 |
 | bits\centerPanel.tsx        | TypeScript React |         17 |          0 |          2 |         19 |
 | bits\edit.tsx               | TypeScript React |         40 |          2 |          6 |         48 |
-| bits\logBar.tsx             | TypeScript React |        153 |          4 |          7 |        164 |
-| bits\miniSearch.tsx         | TypeScript React |        102 |          2 |          1 |        105 |
+| bits\logBar.tsx             | TypeScript React |        158 |          4 |          7 |        169 |
+| bits\miniSearch.tsx         | TypeScript React |        109 |          3 |          1 |        113 |
 | bits\pretto-slider.tsx      | TypeScript React |         32 |          0 |          2 |         34 |
 | bits\rate.tsx               | TypeScript React |         47 |          0 |          3 |         50 |
-| bits\search.tsx             | TypeScript React |         46 |          0 |          3 |         49 |
-| bits\store.tsx              | TypeScript React |         44 |          0 |          5 |         49 |
+| bits\search.tsx             | TypeScript React |         59 |          1 |          2 |         62 |
+| bits\store.tsx              | TypeScript React |         46 |          0 |          5 |         51 |
 | bits\tab.tsx                | TypeScript React |         85 |          0 |          9 |         94 |
 | bits\tailBar.tsx            | TypeScript React |         43 |          2 |          3 |         48 |
 | bits\treeView.tsx           | TypeScript React |        162 |          0 |          8 |        170 |
-| bits\userInfoList.tsx       | TypeScript React |         89 |          0 |          3 |         92 |
+| bits\userInfoList.tsx       | TypeScript React |         91 |          0 |          2 |         93 |
 | canvas.ts                   | TypeScript       |         84 |          3 |         16 |        103 |
 | cataPage\cataPage.css       | CSS              |         34 |          0 |          0 |         34 |
-| cataPage\cataPage.tsx       | TypeScript React |        132 |         10 |          5 |        147 |
-| commPage\communityPage.tsx  | TypeScript React |        187 |          0 |         10 |        197 |
+| cataPage\cataPage.tsx       | TypeScript React |        147 |         10 |          4 |        161 |
+| commPage\communityPage.tsx  | TypeScript React |        387 |          1 |         41 |        429 |
 | detail-panel.css            | CSS              |         15 |          4 |          1 |         20 |
 | detail-panel.tsx            | TypeScript React |        307 |          3 |          9 |        319 |
 | fonts\proxima-nova.css      | CSS              |         42 |          0 |          2 |         44 |
-| homePage\homePage.css       | CSS              |        243 |         25 |         11 |        279 |
-| homePage\homePage.tsx       | TypeScript React |        303 |         23 |         14 |        340 |
+| homePage\homePage.css       | CSS              |        244 |         25 |         11 |        280 |
+| homePage\homePage.tsx       | TypeScript React |        314 |         24 |         14 |        352 |
 | index.css                   | CSS              |         12 |          0 |          2 |         14 |
 | index.tsx                   | TypeScript React |         10 |          3 |          3 |         16 |
 | logo.svg                    | XML              |          1 |          0 |          0 |          1 |
 | react-app-env.d.ts          | TypeScript       |          0 |          1 |          1 |          2 |
 | render-editor.tsx           | TypeScript React |        592 |         23 |         56 |        671 |
-| render.tsx                  | TypeScript React |        810 |         49 |        113 |        972 |
+| render.tsx                  | TypeScript React |        809 |         49 |        112 |        970 |
 | serviceWorker.ts            | TypeScript       |         99 |         31 |         14 |        144 |
 | signup-or-in.tsx            | TypeScript React |        270 |          0 |         17 |        287 |
 | upload-model.css            | CSS              |          6 |          0 |          0 |          6 |
 | upload-model.tsx            | TypeScript React |        462 |         13 |         37 |        512 |
-| userPage\edit-profile.tsx   | TypeScript React |        255 |          6 |         19 |        280 |
+| userPage\edit-profile.tsx   | TypeScript React |        262 |          7 |         19 |        288 |
 | userPage\userPage.css       | CSS              |         22 |          1 |          0 |         23 |
-| userPage\userPage.tsx       | TypeScript React |        172 |          4 |          9 |        185 |
-| utils\api.ts                | TypeScript       |        362 |         41 |         68 |        471 |
-| utils\mock.ts               | TypeScript       |         44 |          0 |          3 |         47 |
+| userPage\userPage.tsx       | TypeScript React |        174 |          4 |          9 |        187 |
+| utils\api.ts                | TypeScript       |        369 |         46 |         69 |        484 |
+| utils\mock.ts               | TypeScript       |         78 |          0 |          5 |         83 |
 | utils\utils.ts              | TypeScript       |         22 |          0 |          3 |         25 |
-| Total                       |                  |      6,586 |        287 |        854 |      7,727 |
+| Total                       |                  |      6,884 |        293 |        885 |      8,062 |
 +-----------------------------+------------------+------------+------------+------------+------------+

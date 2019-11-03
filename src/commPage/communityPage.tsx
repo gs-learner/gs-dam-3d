@@ -142,7 +142,7 @@ const FolderContent:React.FC=()=>{
                 <StyledTab label="Models" {...a11yProps(0)} />
                 <StyledTab label="Todos" {...a11yProps(1)} />
                 <StyledTab label="TS" {...a11yProps(2)} />
-                <StyledTab label="Item Four" {...a11yProps(3)} />
+                <StyledTab label="Billboard" {...a11yProps(3)} />
                 </StyledTabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -285,6 +285,12 @@ const Briefing: React.FC<BriefingProps> = (props) => {
                     </ColorButton>
                 </Grid>
 
+                <Grid item xs={12}>
+                    <ColorButton fullWidth variant='outlined'>
+                        Contribute
+                    </ColorButton>
+                </Grid>
+
                 {
                     showEasternEgg ?
                     <Grid item className={classes.seperator1}/>
@@ -298,7 +304,7 @@ const Briefing: React.FC<BriefingProps> = (props) => {
                             Authors
                         </Typography>
                         <Typography variant='subtitle1' className={classes.body}>
-                            - All mighty great incredible cleverest human being, light of Dept. CS <span className={classes.em}>ZZP</span>
+                            - All mighty great incredible cleverest human being, light of Dept. CS, Goddness <span className={classes.em}>ZZP</span>
                         </Typography>
                         <Typography variant='subtitle1' className={classes.body}>
                             - CSS Guru  <span className={classes.em}>GXY</span>
@@ -323,8 +329,6 @@ const Briefing: React.FC<BriefingProps> = (props) => {
 const Resource:React.FC<D3DModels>=(props)=>{
     const classes = useStyles();
     const pro = useContext(profile);
-    
-    
 
     return(
         <div style={{
