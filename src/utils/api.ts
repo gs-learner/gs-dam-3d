@@ -220,8 +220,8 @@ export function MakeDefaultRenderConfig() : RenderConfig {
         renderSky: 'col',
         backgroundColor: 'radial-gradient(circle, rgba(35,162,244,1) 0%, rgba(26,26,186,1) 96%, rgba(25,18,144,1) 100%);',
         backgroundGradient: true,
-        skybox: '',
-        envMap: '/static/skybox/hills2/',
+        skybox: '/static/skybox/7/',
+        envMap: '/static/skybox/7/',
         scale: 0.05,
         lights: ['default'],
         lights_schemes: {}
