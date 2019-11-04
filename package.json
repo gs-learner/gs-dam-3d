@@ -14,7 +14,7 @@
     "dam",
     "digital assets management"
   ],
-  "proxy": "http://127.0.0.1:5000",
+  "proxy": "https://127.0.0.1:8080",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.5.1",

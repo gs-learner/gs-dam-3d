@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import {HomePage} from './homePage/homePage';
 import {CataPage} from './cataPage/cataPage';

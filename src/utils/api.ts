@@ -475,7 +475,6 @@ export function MakeEmptySkyboxList():DSkyboxList {return{
 
 export async function APIListSkybox() {
     const res = await StaticGetJsonFile<DSkyboxList>('/static/skybox.json', ()=>{})
-    console.log('list skybox', res)
     return res
 }
 

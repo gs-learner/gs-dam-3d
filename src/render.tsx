@@ -18,7 +18,8 @@ import * as THREE from 'three';
 import { MeshStandardMaterial, Mesh, AnimationMixer, PointLight, SpotLight } from 'three'
 // import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import { TrackballControls } from './bits/TrackballControls'
-import { DeviceOrientationControls } from 'three/examples/jsm/controls/DeviceOrientationControls';
+// import { DeviceOrientationControls } from 'three/examples/jsm/controls/DeviceOrientationControls';
+import { DeviceOrientationControls } from './bits/DeviceOrientationControls';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -327,10 +328,11 @@ const Render : React.FC<P> = (props)=>{
                         }
                     }} 
                     defaultValue={0}
-                    max={3} min={-2} step={0.01}
+                    max={3} min={-3} step={0.01}
                     className={classes.slider}
                 >
                 </PrettoSlider>
+                
                 <Typography variant='subtitle2'>
                     Mouse Sensitivity
                 </Typography>
@@ -373,6 +375,51 @@ const Render : React.FC<P> = (props)=>{
                 Reset Camera
             </Button>
             </Grid>
+            <Typography variant='subtitle2'>
+                    Device Alpha
+            </Typography>
+            <PrettoSlider
+                valueLabelDisplay="auto"
+                onChange={(e:any, v:any)=>{
+                    if(handle) { 
+                        handle.setDevAlphaOffset(v)
+                    }
+                }} 
+                defaultValue={0}
+                max={3} min={-3} step={0.01}
+                className={classes.slider}
+            >
+            </PrettoSlider>
+            <Typography variant='subtitle2'>
+                    Device Beta
+            </Typography>
+            <PrettoSlider
+                valueLabelDisplay="auto"
+                onChange={(e:any, v:any)=>{
+                    if(handle) { 
+                        handle.setDevBetaOffset(v)
+                    }
+                }} 
+                defaultValue={0}
+                max={3} min={-3} step={0.01}
+                className={classes.slider}
+            >
+            </PrettoSlider>
+            <Typography variant='subtitle2'>
+                    Device Gamma
+            </Typography>
+            <PrettoSlider
+                valueLabelDisplay="auto"
+                onChange={(e:any, v:any)=>{
+                    if(handle) { 
+                        handle.setDevGammaOffset(v)
+                    }
+                }} 
+                defaultValue={0}
+                max={3} min={-3} step={0.01}
+                className={classes.slider}
+            >
+            </PrettoSlider>
             </Grid>
             </Paper>
         </div>
@@ -670,8 +717,8 @@ const lights = new LightManager(scene, camera, frame);
 const cubicLoader = new THREE.CubeTextureLoader()
 let envMap: THREE.CubeTexture | null = null
 lights.onlightscheme = onLightScheme
-let deviceControl = new DeviceOrientationControls(camera)
-deviceControl.enabled = false
+let deviceControl: DeviceOrientationControls | null = null
+// deviceControl.enabled = false
 // const renderScene = new RenderPass(scene, camera);
 // const bloomPass = new UnrealBloomPass(new THREE.Vector2(canvas.w, canvas.h), 1.5, 0.4, 0.85);
 // const composer = new EffectComposer(renderer);
@@ -688,7 +735,7 @@ camera.position.z = 5;
 // camera.position.x = 2;
 
 // flatCamera.position.z = 5
-const control = new TrackballControls(camera, frame) 
+let control: TrackballControls | null = new TrackballControls(camera, frame) 
 let autoRotate = false
 let autoRotateCount = 0
 let maxRotateCount = 0
@@ -698,7 +745,9 @@ const TriggerStart = ()=>{
     autoRotate = true
     autoRotateCount = 0
     maxRotateCount = 60
-    control.zoomDelta(-2)
+    if(control) {
+        control.zoomDelta(-2)
+    }
 }
 
 const AutoRotate = ()=>{
@@ -709,8 +758,10 @@ const AutoRotate = ()=>{
     }
     ++autoRotateCount;
     
-    control.zoomDelta(0.26 / maxRotateCount)
-    control.mockRotateX(0.0101)
+    if(control) {
+        control.zoomDelta(0.26 / maxRotateCount)
+        control.mockRotateX(0.0101)
+    }
 }
 //TODO(leon): Add render info cache
 const fileLoader = new  THREE.FileLoader();
@@ -785,15 +836,19 @@ const ReRender = async (
     }
     onprogress(0.06)
 
-    control.reset()
+    
     scene.children = []
 
-    control.target.set(0, 0, 0)
-    control.rotateSpeed = 10.0;
-    control.noPan = false
-    control.maxDistance = 20
-    control.keys = []
-    control.noRoll = true
+    if(control) {
+        control.reset()
+        control.target.set(0, 0, 0)
+        control.rotateSpeed = 10.0;
+        control.noPan = false
+        control.maxDistance = 20
+        control.keys = []
+        control.noRoll = true
+    }
+    
     
     reportstatus('Setting up lights')
     lights.useScheme(renderConfig.lights[0]);
@@ -848,11 +903,13 @@ function render() {
     }
     // console.log('render')
     requestAnimationFrame(render);
-    if(control.enabled) {
+    if(control && control.enabled) {
         control.update();
     }
     
-    deviceControl.update()
+    if(deviceControl) {
+        deviceControl.update()
+    }
     AutoRotate()
     const delta = clock.getDelta()
     if(mixer) {
@@ -914,7 +971,8 @@ return {
         }
     },
     resetCamara: ()=>{
-        control.reset()
+        if(control)
+            control.reset()
     },
     rerender: ReRender,
     setSkeleton: (bool : boolean)=>{
@@ -935,13 +993,25 @@ return {
         objectScene.visible = !bool
     },
     setDeviceControl: (bool: boolean)=> {
-        deviceControl.enabled = bool
-        control.enabled = !bool
+        if(deviceControl) {
+            if (bool) return
+            deviceControl.dispose()
+            deviceControl = null
+            
+        }
+        else {
+            if(!bool) return;
+            deviceControl = new DeviceOrientationControls(camera)
+        }
+        if(control) {
+            control.enabled = !bool
+        }
+        
     },
     setRotateLights: (bool: boolean)=> lights.rotating = bool,
     setRotateLightsSpeed: (speed: number)=> { lights.rotateRad = speed },
-    detachCamEvent: ()=>{ control.dispose() },
-    retachCamEvent: ()=>{ control.reregister() },
+    detachCamEvent: ()=>{ if(control) control.dispose() },
+    retachCamEvent: ()=>{ if(control) control.reregister() },
     lights: lights,
     snapshot: Snapshot,
     pause: pause,
@@ -961,9 +1031,29 @@ return {
         }
     },
     setControlRotateSpeed: (n:number)=>{
-        control.rotateSpeed = n;
+        if(control) {
+            control.rotateSpeed = n;
+        }
     },
-    setSkybox: setSkybox
+    setSkybox: setSkybox,
+    enableTrackballCtrl: ()=>{
+        control = new TrackballControls(camera, frame)
+    },
+    setDevAlphaOffset: (n:number) => {
+        if(deviceControl) {
+            deviceControl.alphaOffset = n
+        }
+    },
+    setDevBetaOffset: (n:number) => {
+        if(deviceControl) {
+            deviceControl.betaOffset = n
+        }
+    },
+    setDevGammaOffset: (n:number) => {
+        if(deviceControl) {
+            deviceControl.gammaOffset = n
+        }
+    },
 }
 
 
