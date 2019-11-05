@@ -164,7 +164,7 @@ const BodyUserPage: React.FC = () => {
     return (
         <div className="BodyUserPage">
             <BodyTopUserPage />
-            <Divider className={classes.divider}></Divider>
+            {/* <Divider className={classes.divider}></Divider> */}
             <BodyMainUserPage />
         </div>
     )

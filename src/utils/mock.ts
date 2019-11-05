@@ -53,7 +53,7 @@ export function MockCommnunity():DCommunity {
 
 export function MockModel(): D3DModel {
     return {
-        url: '/static/test/fortnite-animated',
+        url: '/static/test/maria',
         name: 'Beetle Car',
         publish: '2017-9-20',
         comments: [

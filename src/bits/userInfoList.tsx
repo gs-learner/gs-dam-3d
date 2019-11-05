@@ -19,74 +19,90 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: '100%',
       maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: '#f4fcff',
+      color:'#2f4c56',//#2f4c56, 
     },
     divider:{
       margin: theme.spacing(2, 1),
     },
+    primary:{
+      color:'#2f4c56',
+    },
+    secondary:{
+      color:'#4f666e'
+    },
+    avater:{
+      backgroundColor:'#2f4c56'
+    }
   }),
 );
+
+
 
 export default function FolderList() {
   const classes = useStyles();
   const pro = useContext(profile);
+  const textStyle = {
+    primaryTypographyProps: {className: classes.primary},
+    secondaryTypographyProps: {className: classes.secondary}
+  }
   return (
     <List className={classes.root}>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avater}>
             <FingerprintIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="UserName" secondary={pro.user.username} />
+        <ListItemText {...textStyle}  primary="UserName" secondary={pro.user.username} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avater}>
             <RedditIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="NickName" secondary={pro.user.nickname} />
+        <ListItemText {...textStyle} primary="NickName" secondary={pro.user.nickname} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avater}>
             <ContactsIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Biography" secondary={pro.user.biography} />
+        <ListItemText {...textStyle} primary="Biography" secondary={pro.user.biography} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avater}>
             <FileCopyIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Works" secondary={pro.user.owned_models} />
+        <ListItemText {...textStyle} primary="Works" secondary={pro.user.owned_models} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avater}>
             <LocationOnIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Location" secondary={pro.user.location} />
+        <ListItemText {...textStyle} primary="Location" secondary={pro.user.location} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avater}>
             <ImportContactsIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Introduction" secondary={pro.user.introduction} />
+        <ListItemText {...textStyle} primary="Introduction" secondary={pro.user.introduction} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avater}>
             <SendIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="E-Mail" secondary={pro.user.email} />
+        <ListItemText {...textStyle} primary="E-Mail" secondary={pro.user.email} />
       </ListItem>
     </List>
   );

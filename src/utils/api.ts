@@ -366,8 +366,6 @@ export async function APIListModelsByUser(info: {username: string}) {
     return RefineResponse(res)
 }
 
-
-
 export async function APIListRecommendedModels(){
     let res = await SendJSON('/api/list/categories/recommend', {catalogs: AllModelCatalogs}) as StandardResponse<DRecommends>
     return RefineResponse(res)

@@ -86,6 +86,7 @@ const EditProfile : React.FC = (props)=>{
 
     const updateProfile = async ()=>{
         let response = await APIUpdateUserProfile(p);
+        console.log(response)
         if(response.ok) {
             pro.set.user({
                 ...pro.user,
