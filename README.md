@@ -1,5 +1,7 @@
 # Quick Access
 
+See [Documents](https://github.com/linwe2012/dam-3d-docs), where our user manul & overall design
+
 [中文文档](README-CN.md)
 
 [TODO List](TODO.md)
