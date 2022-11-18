@@ -34,7 +34,7 @@
     "react-dom": "^16.10.2",
     "react-dropzone": "^10.1.10",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
+    "react-scripts": "5.0.1",
     "react-swipeable-views": "^0.13.3",
     "three": "^0.109.0",
     "typescript": "3.6.4",
